@@ -20,7 +20,9 @@ class MainActivity : ComponentActivity() {
         installSplashScreen()
 
         setContent {
-            DeSignTheme {
+            DeSignTheme(
+//                darkTheme = true,
+            ) {
                 // A surface container using the 'background' color from the theme
                 Surface(
                     modifier = Modifier.fillMaxSize(),
