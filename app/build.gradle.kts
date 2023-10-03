@@ -5,7 +5,7 @@ plugins {
     id("org.jetbrains.kotlin.android")
 }
 
-//val cocktailDBApiKey: String = gradleLocalProperties(rootDir).getProperty("COCKTAIL_DB_API_KEY")
+val googleClientId: String = gradleLocalProperties(rootDir).getProperty("GOOGLE_CLIENT_ID")
 
 android {
     namespace = "com.wreckingballsoftware.design"
@@ -26,11 +26,11 @@ android {
 
     buildTypes {
         debug {
-//            buildConfigField(name = "COCKTAILDB_AUTH_KEY", type = "String", value = "\"$cocktailDBApiKey\"")
+            buildConfigField(name = "GOOGLE_CLIENT_ID", type = "String", value = "\"$googleClientId\"")
             buildConfigField(name = "COCKTAILDB_URL", type = "String", value = "\"https://www.thecocktaildb.com/api/\"")
         }
         release {
-//            buildConfigField(name = "COCKTAILDB_AUTH_KEY", type = "String", value = "\"$cocktailDBApiKey\"")
+            buildConfigField(name = "GOOGLE_CLIENT_ID", type = "String", value = "\"$googleClientId\"")
             buildConfigField(name = "COCKTAILDB_URL", type = "String", value = "\"https://www.thecocktaildb.com/api/\"")
 
             isMinifyEnabled = false
@@ -72,6 +72,9 @@ dependencies {
     implementation("androidx.compose.ui:ui-tooling-preview")
     implementation("androidx.compose.material3:material3")
     implementation("androidx.core:core-splashscreen:1.0.1")
+    implementation("androidx.navigation:navigation-compose:2.7.3")
+
+    implementation("com.google.android.gms:play-services-auth:20.7.0")
 
     testImplementation("junit:junit:4.13.2")
     androidTestImplementation("androidx.test.ext:junit:1.1.5")
