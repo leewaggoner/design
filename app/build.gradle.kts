@@ -73,8 +73,11 @@ dependencies {
     implementation("androidx.compose.material3:material3")
     implementation("androidx.core:core-splashscreen:1.0.1")
     implementation("androidx.navigation:navigation-compose:2.7.3")
+    implementation("androidx.datastore:datastore-preferences:1.1.0-alpha05")
 
     implementation("com.google.android.gms:play-services-auth:20.7.0")
+    implementation("io.insert-koin:koin-android:3.4.3")
+    implementation("io.insert-koin:koin-androidx-compose:3.4.6")
 
     testImplementation("junit:junit:4.13.2")
     androidTestImplementation("androidx.test.ext:junit:1.1.5")
