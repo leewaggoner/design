@@ -4,17 +4,19 @@ import androidx.navigation.NavController
 
 object Destinations {
     const val AuthScreen = "AuthScreen"
-    const val MainScreen = "MainScreen"
+    const val CampaignsScreen = "Campaigns"
+    const val MapScreen = "Map"
+    const val SignsScreen = "Signs"
 }
 
 class Actions(navController: NavController) {
-    val navigateToMainScreen: () -> Unit = {
-        navController.navigate(
-            Destinations.MainScreen
-        ) {
-            popUpTo(navController.graph.id) {
-                inclusive = true
-            }
-        }
+    val navigateToCampaignsScreen: () -> Unit = {
+        navController.navigate(Destinations.CampaignsScreen)
+    }
+    val navigateToMapScreen: () -> Unit = {
+        navController.navigate(Destinations.MapScreen)
+    }
+    val navigateToSignsScreen: () -> Unit = {
+        navController.navigate(Destinations.SignsScreen)
     }
 }

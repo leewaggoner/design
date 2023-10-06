@@ -1,15 +1,22 @@
 package com.wreckingballsoftware.design.ui.login
 
+import android.content.Context
+import android.content.Intent
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContract
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.tooling.preview.Preview
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.android.gms.tasks.Task
 import com.wreckingballsoftware.design.Actions
@@ -17,6 +24,8 @@ import com.wreckingballsoftware.design.R
 import com.wreckingballsoftware.design.ui.compose.DeSignErrorAlert
 import com.wreckingballsoftware.design.ui.compose.GoogleAuthButton
 import com.wreckingballsoftware.design.ui.login.models.AuthScreenState
+import com.wreckingballsoftware.design.ui.theme.customTypography
+import com.wreckingballsoftware.design.ui.theme.dimensions
 import org.koin.androidx.compose.koinViewModel
 
 @Composable
@@ -45,7 +54,8 @@ fun AuthScreenContent(
 ) {
     Column(
         modifier = Modifier
-            .fillMaxSize(),
+            .fillMaxSize()
+            .padding(horizontal = MaterialTheme.dimensions.SpaceMedium),
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
@@ -57,7 +67,23 @@ fun AuthScreenContent(
         }
 
         Text(
-            text = stringResource(id = R.string.sign_in_with_google)
+            text = stringResource(id = R.string.app_name),
+            style = MaterialTheme.customTypography.DeSignTitle,
+        )
+
+        Spacer(
+            modifier = Modifier
+                .height(MaterialTheme.dimensions.SpaceBig)
+        )
+
+        Text(
+            text = stringResource(id = R.string.sign_in_with_google),
+            style = MaterialTheme.customTypography.DeSignSubtitle,
+        )
+
+        Spacer(
+            modifier = Modifier
+                .height(MaterialTheme.dimensions.SpaceBig)
         )
 
         GoogleAuthButton(
@@ -80,4 +106,30 @@ fun AuthScreenContent(
             )
         }
     }
+}
+
+@Preview(name = "AuthScreenContent Preview")
+@Composable
+fun AuthScreenContentPreview() {
+    AuthScreenContent(
+        state = AuthScreenState(),
+        startSignIn = { },
+        getContract = {
+            object : ActivityResultContract<Int, Task<GoogleSignInAccount>?>() {
+                override fun createIntent(context: Context, input: Int): Intent {
+                    return Intent()
+                }
+
+                override fun parseResult(
+                    resultCode: Int,
+                    intent: Intent?
+                ): Task<GoogleSignInAccount>? {
+                    return null
+                }
+            }
+         },
+        handleAuthResult = { _, _ -> },
+        signOut = { },
+        onDismissAlert = { }
+    )
 }

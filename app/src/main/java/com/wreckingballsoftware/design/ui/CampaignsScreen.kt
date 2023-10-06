@@ -10,13 +10,13 @@ import androidx.compose.ui.Modifier
 import com.wreckingballsoftware.design.Actions
 
 @Composable
-fun MainScreen(actions: Actions) {
+fun CampaignsScreen(actions: Actions) {
     Column(
         modifier = Modifier
             .fillMaxSize(),
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
-        Text(text = "Main Screen")
+        Text(text = "Campaigns Screen")
     }
 }

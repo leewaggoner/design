@@ -20,6 +20,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.wreckingballsoftware.design.R
+import com.wreckingballsoftware.design.ui.theme.dimensions
 
 @Composable
 fun GoogleAuthButton(
@@ -42,7 +43,7 @@ fun GoogleAuthButton(
     ) {
         Row(
             modifier = Modifier
-                .padding(horizontal = 16.dp, vertical = 16.dp),
+                .padding(all = MaterialTheme.dimensions.SpaceMedium),
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.Center,
         ) {
@@ -51,7 +52,7 @@ fun GoogleAuthButton(
                 contentDescription = stringResource(id = R.string.content_description),
                 tint = Color.Unspecified
             )
-            Spacer(modifier = Modifier.width(8.dp))
+            Spacer(modifier = Modifier.width(MaterialTheme.dimensions.SpaceSmall))
             Text(text = if (isLoading) {
                     stringResource(id = R.string.signing_in)
                 } else {
