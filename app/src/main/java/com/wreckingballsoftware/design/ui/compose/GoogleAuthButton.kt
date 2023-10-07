@@ -26,14 +26,14 @@ import com.wreckingballsoftware.design.ui.theme.dimensions
 fun GoogleAuthButton(
     modifier: Modifier = Modifier,
     text: String,
-    isLoading: Boolean = false,
+    isSigningIn: Boolean = false,
     onClick: () -> Unit,
 ) {
     Surface(
         modifier = modifier.then(
             Modifier
                 .clickable(
-                    enabled = !isLoading,
+                    enabled = !isSigningIn,
                     onClick = onClick,
                 )
         ),
@@ -53,7 +53,7 @@ fun GoogleAuthButton(
                 tint = Color.Unspecified
             )
             Spacer(modifier = Modifier.width(MaterialTheme.dimensions.SpaceSmall))
-            Text(text = if (isLoading) {
+            Text(text = if (isSigningIn) {
                     stringResource(id = R.string.signing_in)
                 } else {
                     text
@@ -68,7 +68,7 @@ fun GoogleAuthButton(
 fun GoogleAuthButtonPreview() {
     GoogleAuthButton(
         text = stringResource(id = R.string.sign_in),
-        isLoading = false,
+        isSigningIn = false,
         onClick = { }
     )
 }

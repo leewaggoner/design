@@ -9,6 +9,7 @@ import androidx.datastore.preferences.core.emptyPreferences
 import androidx.datastore.preferences.preferencesDataStoreFile
 import com.wreckingballsoftware.design.domain.GoogleAuth
 import com.wreckingballsoftware.design.repos.UserRepo
+import com.wreckingballsoftware.design.ui.campaigns.CampaignsViewModel
 import com.wreckingballsoftware.design.ui.login.AuthViewModel
 import com.wreckingballsoftware.design.utils.DataStoreWrapper
 import kotlinx.coroutines.CoroutineScope
@@ -28,13 +29,20 @@ val appModule = module {
         )
     }
 
+    viewModel {
+        CampaignsViewModel(
+            googleAuth = get(),
+            userRepo = get(),
+        )
+    }
+
     factory {
         UserRepo(
             dataStore = get(),
         )
     }
 
-    factory {
+    single {
         DataStoreWrapper(getDataStore(androidContext()))
     }
 

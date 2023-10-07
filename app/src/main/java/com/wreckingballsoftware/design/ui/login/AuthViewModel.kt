@@ -8,11 +8,14 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.android.gms.tasks.Task
-import com.wreckingballsoftware.design.R
 import com.wreckingballsoftware.design.domain.GoogleAuth
+import com.wreckingballsoftware.design.domain.models.ApiUser
 import com.wreckingballsoftware.design.repos.UserRepo
+import com.wreckingballsoftware.design.ui.login.models.AuthNavigation
 import com.wreckingballsoftware.design.ui.login.models.AuthScreenState
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.channels.BufferOverflow
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.launch
 
 class AuthViewModel(
@@ -20,17 +23,17 @@ class AuthViewModel(
     private val userRepo: UserRepo,
 ) : ViewModel() {
     var state by mutableStateOf(AuthScreenState())
+    val navigation = MutableSharedFlow<AuthNavigation>(
+        extraBufferCapacity = 1,
+        onBufferOverflow = BufferOverflow.DROP_LATEST,
+    )
 
     init {
-        val isSignedIn = isSignedIn()
-        val buttonText = if (isSignedIn) R.string.sign_out else R.string.sign_in
-        state = state.copy(isSignedIn = isSignedIn, buttonTextId = buttonText)
+        state = state.copy(isSignedIn = googleAuth.isSignedIn())
     }
 
-    fun isSignedIn(): Boolean = googleAuth.isSignedIn()
-
     fun startSignIn() {
-        state = state.copy(isLoading = true)
+        state = state.copy(isSigningIn = true)
     }
 
     fun getContract(): ActivityResultContract<Int, Task<GoogleSignInAccount>?> =
@@ -38,32 +41,15 @@ class AuthViewModel(
 
     fun handleAuthResult(task: Task<GoogleSignInAccount>?, signInFailedMessage: String) {
         val result = googleAuth.handleAuthResult(task, signInFailedMessage)
-        if (result.errorMessage.isEmpty()) {
+        state = if (result.errorMessage.isEmpty()) {
             //successfully signed in
-            signedIn(
-                givenName = result.givenName,
-                familyName = result.familyName,
-                email = result.email
-            )
-            state = state.copy(
-                isLoading = false,
-                isSignedIn = true,
-                buttonTextId = R.string.sign_out
+            onSignedIn(result)
+            state.copy(
+                isSigningIn = false,
             )
         } else {
             //sign in failed
-            state = state.copy(isLoading = false, errorMessage = result.errorMessage)
-        }
-    }
-
-    fun signOut() {
-        googleAuth.signOut {
-            viewModelScope.launch(Dispatchers.Main) {
-                userRepo.putUserGivenName("")
-                userRepo.putUserFamilyName("")
-                userRepo.putUserEmail("")
-            }
-            state = state.copy(isSignedIn = false, buttonTextId = R.string.sign_in)
+            state.copy(isSigningIn = false, errorMessage = result.errorMessage)
         }
     }
 
@@ -71,8 +57,18 @@ class AuthViewModel(
         state = state.copy(errorMessage = "")
     }
 
-    private fun signedIn(givenName: String?, familyName: String?, email: String?) {
+    private fun onSignedIn(user: ApiUser) {
+        saveAccountData(givenName = user.givenName, familyName = user.familyName, email = user.email)
+
+        //go to campaign screen
         viewModelScope.launch(Dispatchers.Main) {
+            navigation.emit(AuthNavigation.CampaignScreen)
+        }
+    }
+
+    private fun saveAccountData(givenName: String?, familyName: String?, email: String?) {
+        viewModelScope.launch(Dispatchers.Main) {
+            //save sign in data
             givenName?.let { name ->
                 userRepo.putUserGivenName(name)
             }

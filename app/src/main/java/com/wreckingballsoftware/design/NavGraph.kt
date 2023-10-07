@@ -11,7 +11,12 @@ object Destinations {
 
 class Actions(navController: NavController) {
     val navigateToCampaignsScreen: () -> Unit = {
-        navController.navigate(Destinations.CampaignsScreen)
+        navController.navigate(Destinations.CampaignsScreen) {
+            //clear the whole backstack
+            popUpTo(navController.graph.id) {
+                inclusive = true
+            }
+        }
     }
     val navigateToMapScreen: () -> Unit = {
         navController.navigate(Destinations.MapScreen)
