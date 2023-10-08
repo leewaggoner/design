@@ -1,25 +1,28 @@
 package com.wreckingballsoftware.design.ui.compose
 
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.Home
 import androidx.compose.material3.Icon
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.res.stringResource
+import com.wreckingballsoftware.design.ui.Screen
 
 @Composable
-fun BottomBar(screens: List<String>) {
+fun BottomBar(
+    screens: List<Screen>,
+) {
     NavigationBar() {
-        screens.forEach { screenName ->
+        screens.forEach { screen ->
+            val title = stringResource(id = screen.titleId)
             NavigationBarItem(
-                label = { Text(text = screenName) },
+                label = { Text(text = title) },
                 selected = false,
-                onClick = { /*TODO*/ },
+                onClick = { screen.action() },
                 icon = { 
                     Icon(
-                        imageVector = Icons.Outlined.Home,
-                        contentDescription = screenName,
+                        imageVector = screen.icon,
+                        contentDescription = title,
                     )
                 },
             )

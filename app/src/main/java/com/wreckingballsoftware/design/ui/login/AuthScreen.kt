@@ -4,16 +4,13 @@ import android.content.Context
 import android.content.Intent
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContract
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -27,15 +24,12 @@ import com.wreckingballsoftware.design.Actions
 import com.wreckingballsoftware.design.R
 import com.wreckingballsoftware.design.ui.compose.DeSignErrorAlert
 import com.wreckingballsoftware.design.ui.compose.GoogleAuthButton
-import com.wreckingballsoftware.design.ui.compose.TopBar
 import com.wreckingballsoftware.design.ui.login.models.AuthNavigation
 import com.wreckingballsoftware.design.ui.login.models.AuthScreenState
-import com.wreckingballsoftware.design.ui.theme.customColorsPalette
 import com.wreckingballsoftware.design.ui.theme.customTypography
 import com.wreckingballsoftware.design.ui.theme.dimensions
 import org.koin.androidx.compose.koinViewModel
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AuthScreen(
     actions: Actions,
@@ -54,24 +48,13 @@ fun AuthScreen(
             }
         }
 
-        Scaffold(
-            topBar = { TopBar(title = stringResource(id = R.string.app_name)) },
-        ) {
-            Column(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .padding(it)
-                    .background(MaterialTheme.customColorsPalette.background)
-            ) {
-                AuthScreenContent(
-                    state = viewModel.state,
-                    startSignIn = viewModel::startSignIn,
-                    getContract = viewModel::getContract,
-                    handleAuthResult = viewModel::handleAuthResult,
-                    onDismissAlert = viewModel::onDismissAlert,
-                )
-            }
-        }
+        AuthScreenContent(
+            state = viewModel.state,
+            startSignIn = viewModel::startSignIn,
+            getContract = viewModel::getContract,
+            handleAuthResult = viewModel::handleAuthResult,
+            onDismissAlert = viewModel::onDismissAlert,
+        )
     }
 }
 

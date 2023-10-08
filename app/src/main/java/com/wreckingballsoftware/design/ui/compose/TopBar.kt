@@ -16,6 +16,7 @@ import com.wreckingballsoftware.design.ui.theme.customColorsPalette
 fun TopBar(
     title: String,
     modifier: Modifier = Modifier,
+    topBarAction: @Composable () -> Unit,
 ) {
     TopAppBar(
         modifier = modifier,
@@ -25,6 +26,7 @@ fun TopBar(
                 style = MaterialTheme.typography.titleMedium,
             )
         },
+        actions = { topBarAction() },
         colors = TopAppBarDefaults.smallTopAppBarColors(
             containerColor = MaterialTheme.customColorsPalette.primary,
             titleContentColor = White,
@@ -36,6 +38,7 @@ fun TopBar(
 @Composable
 fun TopBarPreview() {
     TopBar(
-        title = "My App"
+        title = "My App",
+        topBarAction = { },
     )
 }

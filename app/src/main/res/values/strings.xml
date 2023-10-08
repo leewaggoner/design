@@ -8,4 +8,8 @@
     <string name="error">Error</string>
     <string name="ok">Ok</string>
     <string name="sign_out">Sign out</string>
+    <string name="campaigns">Campaigns</string>
+    <string name="map">Map</string>
+    <string name="signs">Signs</string>
+    <string name="account">Account</string>
 </resources>
