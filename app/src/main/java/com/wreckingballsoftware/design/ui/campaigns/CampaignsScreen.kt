@@ -1,28 +1,31 @@
 package com.wreckingballsoftware.design.ui.campaigns
 
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.Text
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import com.wreckingballsoftware.design.ui.navigation.Actions
 import org.koin.androidx.compose.getViewModel
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun CampaignsScreen(
     actions: Actions,
     viewModel: CampaignsViewModel = getViewModel()
 ) {
-    Column(
+    val campaigns by viewModel.campaigns.collectAsState(
+        initial = listOf()
+    )
+    LazyColumn(
         modifier = Modifier
             .fillMaxSize(),
-        verticalArrangement = Arrangement.Center,
-        horizontalAlignment = Alignment.CenterHorizontally,
     ) {
-        Text(text = "Campaigns Screen")
+        items(
+            items = campaigns,
+        ) {campaign ->
+            campaign.name
+        }
     }
 }

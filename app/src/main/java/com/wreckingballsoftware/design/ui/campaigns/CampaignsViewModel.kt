@@ -1,23 +1,12 @@
 package com.wreckingballsoftware.design.ui.campaigns
 
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
-import com.wreckingballsoftware.design.domain.GoogleAuth
-import com.wreckingballsoftware.design.repos.UserRepo
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
+import com.wreckingballsoftware.design.database.DBCampaign
+import com.wreckingballsoftware.design.repos.CampaignRepo
+import kotlinx.coroutines.flow.Flow
 
 class CampaignsViewModel(
-    private val googleAuth: GoogleAuth,
-    private val userRepo: UserRepo,
+    private val campaignRepo: CampaignRepo,
 ) : ViewModel() {
-    fun onSignOut() {
-        googleAuth.signOut {
-            viewModelScope.launch(Dispatchers.Main) {
-                userRepo.putUserGivenName("")
-                userRepo.putUserFamilyName("")
-                userRepo.putUserEmail("")
-            }
-        }
-    }
+    val campaigns: Flow<List<DBCampaign>> = campaignRepo.getAllCampaigns()
 }

@@ -7,7 +7,11 @@ import androidx.datastore.preferences.core.PreferenceDataStoreFactory
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.emptyPreferences
 import androidx.datastore.preferences.preferencesDataStoreFile
+import androidx.room.Room
+import com.wreckingballsoftware.design.database.CampaignsDao
+import com.wreckingballsoftware.design.database.DeSignDatabase
 import com.wreckingballsoftware.design.domain.GoogleAuth
+import com.wreckingballsoftware.design.repos.CampaignRepo
 import com.wreckingballsoftware.design.repos.UserRepo
 import com.wreckingballsoftware.design.ui.campaigns.CampaignsViewModel
 import com.wreckingballsoftware.design.ui.login.AuthViewModel
@@ -20,6 +24,7 @@ import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.dsl.module
 
 private const val DATA_STORE_NAME = "com.wreckingballsoftware.design"
+private const val DB_NAME = "design_db"
 
 val appModule = module {
     viewModel {
@@ -31,8 +36,7 @@ val appModule = module {
 
     viewModel {
         CampaignsViewModel(
-            googleAuth = get(),
-            userRepo = get(),
+            campaignRepo = get(),
         )
     }
 
@@ -43,11 +47,30 @@ val appModule = module {
     }
 
     single {
+        CampaignRepo(
+            campaignsDao = get()
+        )
+    }
+
+    single {
         DataStoreWrapper(getDataStore(androidContext()))
     }
 
     single {
         GoogleAuth(androidContext())
+    }
+
+    single<CampaignsDao> {
+        val database = get<DeSignDatabase>()
+        database.getCampaignsDao()
+    }
+
+    single {
+        Room.databaseBuilder(
+            context = androidContext(),
+            klass = DeSignDatabase::class.java,
+            name = DB_NAME,
+        ).build()
     }
 }
 
