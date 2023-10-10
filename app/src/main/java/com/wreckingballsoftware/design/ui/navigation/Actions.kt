@@ -1,4 +1,4 @@
-package com.wreckingballsoftware.design
+package com.wreckingballsoftware.design.ui.navigation
 
 import androidx.navigation.NavController
 

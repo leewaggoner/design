@@ -12,4 +12,5 @@
     <string name="map">Map</string>
     <string name="signs">Signs</string>
     <string name="account">Account</string>
+    <string name="open_menu">Open menu</string>
 </resources>

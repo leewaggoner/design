@@ -20,12 +20,12 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.android.gms.tasks.Task
-import com.wreckingballsoftware.design.Actions
 import com.wreckingballsoftware.design.R
 import com.wreckingballsoftware.design.ui.compose.DeSignErrorAlert
 import com.wreckingballsoftware.design.ui.compose.GoogleAuthButton
 import com.wreckingballsoftware.design.ui.login.models.AuthNavigation
 import com.wreckingballsoftware.design.ui.login.models.AuthScreenState
+import com.wreckingballsoftware.design.ui.navigation.Actions
 import com.wreckingballsoftware.design.ui.theme.customTypography
 import com.wreckingballsoftware.design.ui.theme.dimensions
 import org.koin.androidx.compose.koinViewModel
@@ -35,27 +35,22 @@ fun AuthScreen(
     actions: Actions,
     viewModel: AuthViewModel = koinViewModel()
 ) {
-    if (viewModel.state.isSignedIn) {
-        actions.navigateToCampaignsScreen()
-    } else {
-
-        val navigation = viewModel.navigation.collectAsStateWithLifecycle(null)
-        navigation.value?.let { nav ->
-            when (nav) {
-                AuthNavigation.CampaignScreen -> {
-                    actions.navigateToCampaignsScreen()
-                }
+    val navigation = viewModel.navigation.collectAsStateWithLifecycle(null)
+    navigation.value?.let { nav ->
+        when (nav) {
+            AuthNavigation.CampaignScreen -> {
+                actions.navigateToCampaignsScreen()
             }
         }
-
-        AuthScreenContent(
-            state = viewModel.state,
-            startSignIn = viewModel::startSignIn,
-            getContract = viewModel::getContract,
-            handleAuthResult = viewModel::handleAuthResult,
-            onDismissAlert = viewModel::onDismissAlert,
-        )
     }
+
+    AuthScreenContent(
+        state = viewModel.state,
+        startSignIn = viewModel::startSignIn,
+        getContract = viewModel::getContract,
+        handleAuthResult = viewModel::handleAuthResult,
+        onDismissAlert = viewModel::onDismissAlert,
+    )
 }
 
 @Composable

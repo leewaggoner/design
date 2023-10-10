@@ -4,7 +4,7 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
-import com.wreckingballsoftware.design.ui.Framework
+import com.wreckingballsoftware.design.ui.framework.Framework
 import com.wreckingballsoftware.design.ui.theme.DeSignTheme
 
 class MainActivity : ComponentActivity() {

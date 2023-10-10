@@ -6,22 +6,22 @@ import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.stringResource
-import com.wreckingballsoftware.design.ui.Screen
+import com.wreckingballsoftware.design.ui.framework.NavBarItem
 
 @Composable
-fun BottomBar(
-    screens: List<Screen>,
+fun BottomNavBar(
+    navBarItems: List<NavBarItem>,
 ) {
     NavigationBar() {
-        screens.forEach { screen ->
-            val title = stringResource(id = screen.titleId)
+        navBarItems.forEach { item ->
+            val title = stringResource(id = item.titleId)
             NavigationBarItem(
                 label = { Text(text = title) },
                 selected = false,
-                onClick = { screen.action() },
+                onClick = { item.action() },
                 icon = { 
                     Icon(
-                        imageVector = screen.icon,
+                        imageVector = item.icon,
                         contentDescription = title,
                     )
                 },

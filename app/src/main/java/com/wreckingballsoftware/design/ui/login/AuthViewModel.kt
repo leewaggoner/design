@@ -28,10 +28,6 @@ class AuthViewModel(
         onBufferOverflow = BufferOverflow.DROP_LATEST,
     )
 
-    init {
-        state = state.copy(isSignedIn = googleAuth.isSignedIn())
-    }
-
     fun startSignIn() {
         state = state.copy(isSigningIn = true)
     }
