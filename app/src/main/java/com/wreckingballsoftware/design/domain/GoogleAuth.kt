@@ -48,6 +48,7 @@ class GoogleAuth(
                 apiUser.copy(errorMessage = signInFailedMessage)
             } else {
                 apiUser.copy(
+                    displayName = account.displayName ?: "",
                     givenName = account.givenName ?: "",
                     familyName = account.familyName ?: "",
                     email = account.email ?: "",

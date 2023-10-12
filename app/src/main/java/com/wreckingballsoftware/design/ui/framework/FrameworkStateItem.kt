@@ -1,23 +1,30 @@
 package com.wreckingballsoftware.design.ui.framework
 
+import androidx.compose.runtime.Composable
+
 sealed class FrameworkStateItem(
     val isTopBarActionAvailable: Boolean,
     val isNavBarVisible: Boolean,
+    val fabAction: @Composable () -> Unit,
 ) {
-    data object AuthFrameworkStateItem: FrameworkStateItem(
+    class AuthFrameworkStateItem : FrameworkStateItem(
         isTopBarActionAvailable = false,
         isNavBarVisible = false,
+        fabAction = { },
     )
-    data object CampaignsFrameworkStateItem: FrameworkStateItem(
+    class CampaignsFrameworkStateItem(fab: @Composable () -> Unit): FrameworkStateItem(
         isTopBarActionAvailable = true,
         isNavBarVisible = true,
+        fabAction = fab,
     )
-    data object MapFrameworkStateItem: FrameworkStateItem(
+    class MapFrameworkStateItem : FrameworkStateItem(
         isTopBarActionAvailable = true,
         isNavBarVisible = true,
+        fabAction = { },
     )
-    data object SignsFrameworkStateItem: FrameworkStateItem(
+    class SignsFrameworkStateItem : FrameworkStateItem(
         isTopBarActionAvailable = true,
         isNavBarVisible = true,
+        fabAction = { },
     )
 }

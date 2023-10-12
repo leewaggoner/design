@@ -54,7 +54,12 @@ class AuthViewModel(
     }
 
     private fun onSignedIn(user: ApiUser) {
-        saveAccountData(givenName = user.givenName, familyName = user.familyName, email = user.email)
+        saveAccountData(
+            displayName = user.displayName,
+            givenName = user.givenName,
+            familyName = user.familyName,
+            email = user.email
+        )
 
         //go to campaign screen
         viewModelScope.launch(Dispatchers.Main) {
@@ -62,17 +67,25 @@ class AuthViewModel(
         }
     }
 
-    private fun saveAccountData(givenName: String?, familyName: String?, email: String?) {
+    private fun saveAccountData(
+        displayName: String?,
+        givenName: String?,
+        familyName: String?,
+        email: String?
+    ) {
         viewModelScope.launch(Dispatchers.Main) {
             //save sign in data
-            givenName?.let { name ->
-                userRepo.putUserGivenName(name)
+            displayName?.let { fullName ->
+                userRepo.putUserDisplayName(fullName)
             }
-            familyName?.let { name ->
-                userRepo.putUserFamilyName(name)
+            givenName?.let { firstName ->
+                userRepo.putUserGivenName(firstName)
             }
-            email?.let { email ->
-                userRepo.putUserEmail(email)
+            familyName?.let { lastName ->
+                userRepo.putUserFamilyName(lastName)
+            }
+            email?.let { mail ->
+                userRepo.putUserEmail(mail)
             }
         }
     }

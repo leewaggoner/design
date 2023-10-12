@@ -6,4 +6,5 @@ import kotlinx.coroutines.flow.Flow
 
 class CampaignRepo(private val campaignsDao: CampaignsDao) {
     fun getAllCampaigns(): Flow<List<DBCampaign>> = campaignsDao.getAllCampaigns()
+    suspend fun addCampaign(campaign: DBCampaign) = campaignsDao.insertCampaign(campaign)
 }

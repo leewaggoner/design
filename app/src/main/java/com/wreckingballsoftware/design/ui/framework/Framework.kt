@@ -13,6 +13,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.navigation.compose.rememberNavController
 import com.wreckingballsoftware.design.R
+import com.wreckingballsoftware.design.ui.campaigns.getCampaignFrameworkStateItem
 import com.wreckingballsoftware.design.ui.compose.BottomNavBar
 import com.wreckingballsoftware.design.ui.compose.TopBar
 import com.wreckingballsoftware.design.ui.compose.TopBarAction
@@ -29,7 +30,8 @@ fun Framework() {
     val navController = rememberNavController()
     val actions = remember(navController) { Actions(navController) }
     val frameworkState = rememberFrameworkState(
-        navController,
+        navController = navController,
+        campaignsFrameworkStateItem = getCampaignFrameworkStateItem()
     )
 
     Scaffold(
@@ -54,6 +56,7 @@ fun Framework() {
                 )
             }
         },
+        floatingActionButton = frameworkState.fabAction ?: { }
     ) {
         Column(
             modifier = Modifier

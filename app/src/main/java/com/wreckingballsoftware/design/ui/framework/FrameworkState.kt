@@ -14,6 +14,7 @@ import com.wreckingballsoftware.design.ui.navigation.Destinations
 @Stable
 class FrameworkState(
     private val navController: NavController,
+    private val campaignsFrameworkStateItem: FrameworkStateItem.CampaignsFrameworkStateItem
 ) {
     private val currentScreenRoute: String?
         @Composable get() = navController
@@ -25,13 +26,15 @@ class FrameworkState(
         @Composable get() = currentFrameworkStateItem?.isNavBarVisible == true
     val isTopBarActionAvailable: Boolean
         @Composable get() = currentFrameworkStateItem?.isTopBarActionAvailable == true
+    val fabAction: @Composable (() -> Unit)?
+        @Composable get() = currentFrameworkStateItem?.fabAction
 
     private fun getScreen(route: String?): FrameworkStateItem? =
         when (route) {
-            Destinations.CampaignsScreen -> FrameworkStateItem.CampaignsFrameworkStateItem
-            Destinations.MapScreen -> FrameworkStateItem.MapFrameworkStateItem
-            Destinations.SignsScreen -> FrameworkStateItem.SignsFrameworkStateItem
-            Destinations.AuthScreen -> FrameworkStateItem.AuthFrameworkStateItem
+            Destinations.CampaignsScreen -> campaignsFrameworkStateItem
+            Destinations.MapScreen -> FrameworkStateItem.MapFrameworkStateItem()
+            Destinations.SignsScreen -> FrameworkStateItem.SignsFrameworkStateItem()
+            Destinations.AuthScreen -> FrameworkStateItem.AuthFrameworkStateItem()
             else -> null
         }
 }
@@ -39,8 +42,10 @@ class FrameworkState(
 @Composable
 fun rememberFrameworkState(
     navController: NavController,
+    campaignsFrameworkStateItem: FrameworkStateItem.CampaignsFrameworkStateItem
 ) = remember {
     FrameworkState(
         navController,
+        campaignsFrameworkStateItem,
     )
 }

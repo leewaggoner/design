@@ -37,6 +37,7 @@ val appModule = module {
     viewModel {
         CampaignsViewModel(
             campaignRepo = get(),
+            userRepo = get(),
         )
     }
 

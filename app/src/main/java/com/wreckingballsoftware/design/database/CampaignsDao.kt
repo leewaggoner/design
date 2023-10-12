@@ -11,6 +11,6 @@ interface CampaignsDao {
     @Query("SELECT * FROM campaigns")
     fun getAllCampaigns(): Flow<List<DBCampaign>>
 
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insertCampaign(campaign: DBCampaign)
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    suspend fun insertCampaign(campaign: DBCampaign)
 }

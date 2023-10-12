@@ -16,10 +16,11 @@ class DataStoreWrapper(private val dataStore: DataStore<Preferences>) {
     private object PreferencesKey {
         val USER_GIVEN_NAME_KEY = stringPreferencesKey("PlayerFirstName")
         val USER_FAMILY_NAME_KEY = stringPreferencesKey("PlayerLastName")
+        val USER_FULL_NAME = stringPreferencesKey("PlayerFullName")
         val USER_EMAIL_KEY = stringPreferencesKey("UserEmail")
     }
 
-    suspend fun getUserGivenName(default: String) : String = withContext(Dispatchers.IO) {
+    suspend fun getUserGivenName(default: String): String = withContext(Dispatchers.IO) {
         dataStore.data.catch { exception ->
             if (exception is IOException) {
                 emit(emptyPreferences())
@@ -35,7 +36,7 @@ class DataStoreWrapper(private val dataStore: DataStore<Preferences>) {
         }
     }
 
-    suspend fun getUserFamilyName(default: String) : String = withContext(Dispatchers.IO) {
+    suspend fun getUserFamilyName(default: String): String = withContext(Dispatchers.IO) {
         dataStore.data.catch { exception ->
             if (exception is IOException) {
                 emit(emptyPreferences())
@@ -51,7 +52,24 @@ class DataStoreWrapper(private val dataStore: DataStore<Preferences>) {
         }
     }
 
-    suspend fun getUserEmail(default: String) : String = withContext(Dispatchers.IO) {
+    suspend fun getUserFullName(default: String): String = withContext(Dispatchers.IO) {
+        dataStore.data.catch { exception ->
+            if (exception is IOException) {
+                emit(emptyPreferences())
+            } else {
+                throw exception
+            }
+        }.first()[PreferencesKey.USER_FULL_NAME] ?: default
+    }
+
+    suspend fun putUserFullName(fullName: String) = withContext(Dispatchers.IO) {
+        dataStore.edit { preferences ->
+            preferences[PreferencesKey.USER_FULL_NAME] = fullName
+
+        }
+    }
+
+    suspend fun getUserEmail(default: String): String = withContext(Dispatchers.IO) {
         dataStore.data.catch { exception ->
             if (exception is IOException) {
                 emit(emptyPreferences())

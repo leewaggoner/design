@@ -13,4 +13,11 @@
     <string name="signs">Signs</string>
     <string name="account">Account</string>
     <string name="open_menu">Open menu</string>
+    <string name="create_campaign">Create Campaign</string>
+    <string name="cancel">Cancel</string>
+    <string name="add_campaign_dialog_title">Create New Campaign</string>
+    <string name="add_campaign_dialog_message">Please enter a name and a note for your new campaign. The note is optional.</string>
+    <string name="required_field">This is a required field.</string>
+    <string name="campaign_name_label">Campaign Name</string>
+    <string name="campaign_notes_label">Campaign Notes</string>
 </resources>

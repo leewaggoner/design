@@ -19,6 +19,14 @@ class UserRepo(private val dataStore: DataStoreWrapper) {
         return dataStore.getUserFamilyName("")
     }
 
+    suspend fun putUserDisplayName(fullName: String) {
+        dataStore.putUserFullName(fullName)
+    }
+
+    suspend fun getUserDisplayName(): String {
+        return dataStore.getUserFullName("")
+    }
+
     suspend fun putUserEmail(email: String) {
         dataStore.putUserEmail(email)
     }
