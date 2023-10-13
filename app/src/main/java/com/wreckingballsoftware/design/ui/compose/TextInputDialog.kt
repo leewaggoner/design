@@ -74,7 +74,9 @@ fun TextInputDialog(
                 inputParams.forEach { params ->
                     OutlinedTextField(
                         value = params.text,
-                        placeholder = { Text(text = params.label) },
+                        placeholder = {
+                            Text(text = stringResource(id = params.labelId))
+                        },
                         singleLine = params.singleLine,
                         onValueChange = { text -> params.onValueChange(text) },
                         keyboardOptions = params.keyboardOptions,
@@ -113,7 +115,7 @@ fun TextInputDialogPreview() {
         inputParams = listOf(
             TextInputParams(
                 text = "",
-                label = "Campaign Name",
+                labelId = R.string.campaign_name_label,
                 singleLine = true,
                 onValueChange = { },
                 keyboardOptions = KeyboardOptions.Default,
@@ -121,7 +123,7 @@ fun TextInputDialogPreview() {
             ),
             TextInputParams(
                 text = "This is a long piece of notes text that describes a signage campaign.\nIt has multiple line breaks.\nLike this.",
-                label = "Campaign Notes",
+                labelId = R.string.campaign_notes_label,
                 singleLine = false,
                 onValueChange = { },
                 keyboardOptions = KeyboardOptions.Default,

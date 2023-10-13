@@ -1,15 +1,21 @@
 package com.wreckingballsoftware.design.ui.campaigns
 
+import androidx.compose.foundation.text.KeyboardActions
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.wreckingballsoftware.design.R
 import com.wreckingballsoftware.design.database.DBCampaign
 import com.wreckingballsoftware.design.domain.ValidInput
 import com.wreckingballsoftware.design.repos.CampaignRepo
 import com.wreckingballsoftware.design.repos.UserRepo
 import com.wreckingballsoftware.design.ui.campaigns.models.CampaignsScreenState
+import com.wreckingballsoftware.design.ui.compose.TextInputParams
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
@@ -22,7 +28,6 @@ class CampaignsViewModel(
     private val userRepo: UserRepo,
 ) : ViewModel() {
     val campaigns: Flow<List<DBCampaign>> = campaignRepo.getAllCampaigns()
-    var state by mutableStateOf(CampaignsScreenState())
 
     fun onAddCampaign() {
         viewModelScope.launch(Dispatchers.Main) {
@@ -31,33 +36,60 @@ class CampaignsViewModel(
             val strDate = currentDate.format(formatter)
             val displayName = userRepo.getUserDisplayName()
             val newCampaign = DBCampaign(
-                name = state.campaignName,
+                name = campaignsScreenState.campaignName,
                 createdBy = displayName,
                 dateCreated = strDate,
-                notes = state.campaignNotes,
+                notes = campaignsScreenState.campaignNotes,
             )
             campaignRepo.addCampaign(newCampaign)
             onCloseAddCampaignDialog()
         }
     }
 
-    fun onCampaignNameChange(text: String) {
-        state = state.copy(campaignName = text)
-    }
-
-    fun onCampaignNotesChange(text: String) {
-        state = state.copy(campaignNotes = text)
-    }
-
     fun onCloseAddCampaignDialog() {
-        state = state.copy(campaignName = "", campaignNotes = "")
-        show = false
+        campaignsScreenState = campaignsScreenState.copy(
+            showDialog = false,
+            campaignName = "",
+            campaignNotes = ""
+        )
+    }
+
+    fun getTextInputParamsForDialog(): List<TextInputParams> {
+        return listOf(
+            TextInputParams(
+                text = campaignsScreenState.campaignName,
+                labelId = R.string.campaign_name_label,
+                singleLine = true,
+                onValueChange = { name ->
+                    campaignsScreenState = campaignsScreenState.copy(campaignName = name)
+                },
+                keyboardOptions = KeyboardOptions(
+                    keyboardType = KeyboardType.Text,
+                    imeAction = ImeAction.Next,
+                ),
+            ),
+            TextInputParams(
+                text = campaignsScreenState.campaignNotes,
+                labelId = R.string.campaign_notes_label,
+                singleLine = false,
+                onValueChange = { notes->
+                    campaignsScreenState = campaignsScreenState.copy(campaignNotes = notes)
+                },
+                keyboardOptions = KeyboardOptions(
+                    keyboardType = KeyboardType.Text,
+                    imeAction = ImeAction.Done,
+                ),
+                keyboardActions = KeyboardActions(
+                    onDone = { onAddCampaign() }
+                )
+            )
+        )
     }
 
     companion object {
-        var show by mutableStateOf(false)
+        var campaignsScreenState: CampaignsScreenState by mutableStateOf(CampaignsScreenState())
         fun showAddCampaignDialog() {
-            show = true
+            campaignsScreenState = campaignsScreenState.copy(showDialog = true)
         }
     }
 }

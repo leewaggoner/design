@@ -5,7 +5,7 @@ import androidx.compose.foundation.text.KeyboardOptions
 
 data class TextInputParams(
     val text: String,
-    val label: String,
+    val labelId: Int,
     val singleLine: Boolean,
     val onValueChange: (String) -> Unit,
     val keyboardOptions: KeyboardOptions = KeyboardOptions.Default,
