@@ -42,19 +42,19 @@ class CampaignsViewModel(
                 notes = campaignsScreenState.campaignNotes,
             )
             campaignRepo.addCampaign(newCampaign)
-            onCloseAddCampaignDialog()
+            onDismissBottomSheet()
         }
     }
 
-    fun onCloseAddCampaignDialog() {
+    fun onDismissBottomSheet() {
         campaignsScreenState = campaignsScreenState.copy(
-            showDialog = false,
+            showBottomSheet = false,
             campaignName = "",
             campaignNotes = ""
         )
     }
 
-    fun getTextInputParamsForDialog(): List<TextInputParams> {
+    fun getTextInputParams(): List<TextInputParams> {
         return listOf(
             TextInputParams(
                 text = campaignsScreenState.campaignName,
@@ -89,7 +89,7 @@ class CampaignsViewModel(
     companion object {
         var campaignsScreenState: CampaignsScreenState by mutableStateOf(CampaignsScreenState())
         fun showAddCampaignDialog() {
-            campaignsScreenState = campaignsScreenState.copy(showDialog = true)
+            campaignsScreenState = campaignsScreenState.copy(showBottomSheet = true)
         }
     }
 }

@@ -17,9 +17,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import com.wreckingballsoftware.design.R
 import com.wreckingballsoftware.design.database.DBCampaign
 import com.wreckingballsoftware.design.ui.campaigns.CampaignsViewModel.Companion.campaignsScreenState
-import com.wreckingballsoftware.design.ui.campaigns.models.CampaignsScreenState
-import com.wreckingballsoftware.design.ui.compose.TextInputDialog
-import com.wreckingballsoftware.design.ui.compose.TextInputParams
 import com.wreckingballsoftware.design.ui.framework.FrameworkStateItem
 import com.wreckingballsoftware.design.ui.navigation.Actions
 import org.koin.androidx.compose.getViewModel
@@ -34,21 +31,21 @@ fun CampaignsScreen(
     )
 
     CampaignsScreenContent(
-        state = campaignsScreenState,
         campaigns = campaigns,
-        textInputParams = viewModel.getTextInputParamsForDialog(),
-        onAddCampaign = viewModel::onAddCampaign,
-        onCloseAddCampaignDialog = viewModel::onCloseAddCampaignDialog,
     )
+
+    if (campaignsScreenState.showBottomSheet) {
+        AddCampaignBottomSheet(
+            textInputParams = viewModel.getTextInputParams(),
+            onAddCampaign = viewModel::onAddCampaign,
+            onDismissBottomSheet = viewModel::onDismissBottomSheet,
+        )
+    }
 }
 
 @Composable
 fun CampaignsScreenContent(
-    state: CampaignsScreenState,
     campaigns: List<DBCampaign>,
-    textInputParams: List<TextInputParams>,
-    onAddCampaign: () -> Unit,
-    onCloseAddCampaignDialog: () -> Unit,
 ) {
     LazyColumn(
         modifier = Modifier
@@ -59,17 +56,6 @@ fun CampaignsScreenContent(
         ) {campaign ->
             Text(text = campaign.name)
         }
-    }
-
-    if (state.showDialog) {
-        TextInputDialog(
-            title = stringResource(id = R.string.add_campaign_dialog_title),
-            message = stringResource(id = R.string.add_campaign_dialog_message),
-            inputParams = textInputParams,
-            okText = stringResource(id = R.string.create_campaign),
-            okAction = onAddCampaign,
-            cancelAction = onCloseAddCampaignDialog
-        )
     }
 }
 
@@ -93,10 +79,6 @@ fun getCampaignFrameworkStateItem(): FrameworkStateItem.CampaignsFrameworkStateI
 @Composable
 fun CampaignScreensContentPreview() {
     CampaignsScreenContent(
-        state = CampaignsScreenState(),
         campaigns = listOf(),
-        textInputParams = listOf(),
-        onAddCampaign = { },
-        onCloseAddCampaignDialog = { },
     )
 }
