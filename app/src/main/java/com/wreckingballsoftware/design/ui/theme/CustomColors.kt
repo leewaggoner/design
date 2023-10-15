@@ -11,6 +11,7 @@ data class CustomColorsPalette(
     val secondary: Color = Color.Unspecified,
     val tertiary: Color = Color.Unspecified,
     val background: Color = Color.Unspecified,
+    val surface: Color = Color.Unspecified,
 )
 
 val LightCustomColorsPalette = CustomColorsPalette(
@@ -18,6 +19,7 @@ val LightCustomColorsPalette = CustomColorsPalette(
     secondary = AppRed,
     tertiary = AppGold,
     background = AppLightBackgroundGold,
+    surface = AppLightSurfaceRed,
 )
 
 val DarkCustomColorsPalette = CustomColorsPalette(
@@ -25,6 +27,7 @@ val DarkCustomColorsPalette = CustomColorsPalette(
     secondary = AppRed,
     tertiary = AppGold,
     background = AppDarkBackgroundGold,
+    surface = AppDarkSurfaceRed,
 )
 
 val LocalCustomColorsPalette = staticCompositionLocalOf { CustomColorsPalette() }

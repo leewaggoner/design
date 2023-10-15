@@ -25,20 +25,31 @@ data class CustomTypeStyles(
         lineHeight = 28.sp,
         textAlign = TextAlign.Center,
     ),
-    val DeSignBody: TextStyle = TextStyle(
+    val DeSignTitleBody: TextStyle = TextStyle(
         fontFamily = FontFamily.Default,
         fontWeight = FontWeight.Normal,
         fontSize = 20.sp,
         lineHeight = 24.sp,
         textAlign = TextAlign.Center,
     ),
-    val DeSignInstructions: TextStyle = TextStyle(
+    val DeSignStandardSubtitle: TextStyle = TextStyle(
+        fontFamily = FontFamily.Default,
+        fontWeight = FontWeight.SemiBold,
+        fontSize = 24.sp,
+        lineHeight = 28.sp,
+    ),
+    val DeSignStandardBody: TextStyle = TextStyle(
         fontFamily = FontFamily.Default,
         fontWeight = FontWeight.Normal,
-        fontSize = 16.sp,
-        lineHeight = 20.sp,
-        textAlign = TextAlign.Center,
-    )
+        fontSize = 20.sp,
+        lineHeight = 24.sp,
+    ),
+    val DeSignSmallPrint: TextStyle = TextStyle(
+        fontFamily = FontFamily.Default,
+        fontWeight = FontWeight.Light,
+        fontSize = 12.sp,
+        lineHeight = 16.sp,
+    ),
 )
 
 val CustomTypography = CustomTypeStyles()

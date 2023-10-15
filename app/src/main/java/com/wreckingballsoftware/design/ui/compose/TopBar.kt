@@ -27,7 +27,7 @@ fun TopBar(
             )
         },
         actions = { topBarAction() },
-        colors = TopAppBarDefaults.smallTopAppBarColors(
+        colors = TopAppBarDefaults.topAppBarColors(
             containerColor = MaterialTheme.customColorsPalette.primary,
             titleContentColor = White,
         ),

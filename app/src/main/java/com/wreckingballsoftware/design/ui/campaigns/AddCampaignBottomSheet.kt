@@ -22,30 +22,37 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.wreckingballsoftware.design.R
-import com.wreckingballsoftware.design.ui.compose.TextInputParams
+import com.wreckingballsoftware.design.ui.campaigns.models.CampaignInput
+import com.wreckingballsoftware.design.ui.campaigns.models.CampaignsScreenState
+import com.wreckingballsoftware.design.ui.theme.customColorsPalette
 import com.wreckingballsoftware.design.ui.theme.customTypography
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AddCampaignBottomSheet(
-    textInputParams: List<TextInputParams>,
-    onAddCampaign: () -> Unit,
+    state: CampaignsScreenState,
+    onValueChanged: (CampaignInput, String) -> Unit,
+    onAddCampaign: () -> Boolean,
     onDismissBottomSheet: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     val scope = rememberCoroutineScope()
     val sheetState = rememberModalBottomSheetState(
-        skipPartiallyExpanded = true
+        skipPartiallyExpanded = true,
     )
     ModalBottomSheet(
         modifier = modifier,
         onDismissRequest = { onDismissBottomSheet() },
         sheetState = sheetState,
+        containerColor = MaterialTheme.customColorsPalette.surface,
     ) {
         Column(
             modifier = Modifier
@@ -55,42 +62,97 @@ fun AddCampaignBottomSheet(
         ) {
             Column(modifier = Modifier.weight(1.0f)) {
                 Text(
+                    modifier = Modifier.fillMaxWidth(),
                     text = stringResource(id = R.string.add_campaign_dialog_title),
-                    style = MaterialTheme.customTypography.DeSignSubtitle
+                    style = MaterialTheme.customTypography.DeSignSubtitle,
                 )
-                Spacer(
-                    modifier = Modifier
-                        .height(8.dp)
-                )
+
+                Spacer(modifier = Modifier.height(8.dp))
+
                 Text(
+                    modifier = Modifier.fillMaxWidth(),
                     text = stringResource(id = R.string.add_campaign_dialog_message),
-                    style = MaterialTheme.customTypography.DeSignBody
+                    style = MaterialTheme.customTypography.DeSignTitleBody,
                 )
-                Spacer(
-                    modifier = Modifier
-                        .height(32.dp)
+
+                Spacer(modifier = Modifier.height(32.dp))
+
+                var label = stringResource(id = R.string.campaign_name_label)
+                OutlinedTextField(
+                    modifier = Modifier.fillMaxWidth(),
+                    value = state.campaignName,
+                    label = {
+                        Text(text = label)
+                    },
+                    placeholder = {
+                        Text(text = label)
+                    },
+                    supportingText = {
+                        if (state.campaignNameErrorId == 0) {
+                            Text(
+                                text = "${state.nameCharactersUsed}/${CampaignsViewModel.MAX_NAME_LENGTH}"
+                            )
+                        } else {
+                            Text(
+                                text = stringResource(id = state.campaignNameErrorId),
+                                color = Color.Red,
+                            )
+                        }
+                    },
+                    singleLine = true,
+                    onValueChange = { text -> onValueChanged(CampaignInput.Name, text) },
+                    keyboardOptions = KeyboardOptions(
+                        keyboardType = KeyboardType.Text,
+                        imeAction = ImeAction.Next,
+                    ),
                 )
-                textInputParams.forEach { params ->
-                    OutlinedTextField(
-                        modifier = Modifier.fillMaxWidth(),
-                        value = params.text,
-                        placeholder = {
-                            Text(text = stringResource(id = params.labelId))
-                        },
-                        singleLine = params.singleLine,
-                        onValueChange = { text -> params.onValueChange(text) },
-                        keyboardOptions = params.keyboardOptions,
-                        keyboardActions = params.keyboardActions,
-                    )
-                    Spacer(modifier = Modifier.height(16.dp))
-                }
+
                 Spacer(modifier = Modifier.height(16.dp))
+
+                label = stringResource(id = R.string.campaign_notes_label)
+                OutlinedTextField(
+                    modifier = Modifier.fillMaxWidth(),
+                    value = state.campaignNotes,
+                    label = {
+                        Text(text = label)
+                    },
+                    placeholder = {
+                        Text(text = label)
+                    },
+                    supportingText = {
+                        if (state.campaignNotesErrorId == 0) {
+                            Text(
+                                text = "${state.notesCharactersUsed}/${CampaignsViewModel.MAX_NOTES_LENGTH}"
+                            )
+                        } else {
+                            Text(
+                                text = stringResource(id = state.campaignNotesErrorId),
+                                color = Color.Red,
+                            )
+                        }
+                    },
+                    singleLine = false,
+                    onValueChange = { text -> onValueChanged(CampaignInput.Notes, text) },
+                    keyboardOptions = KeyboardOptions(
+                        keyboardType = KeyboardType.Text,
+                        imeAction = ImeAction.Done,
+                    ),
+                    keyboardActions = KeyboardActions(
+                        onDone = {
+                            onAddCampaign()
+                            scope.launch { sheetState.hide() }
+                        }
+                    ),
+                )
+
+                Spacer(modifier = Modifier.height(32.dp))
             }
+
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(bottom = 16.dp),
-                horizontalArrangement = Arrangement.SpaceAround
+                horizontalArrangement = Arrangement.SpaceAround,
             ) {
                 Button(
                     modifier = Modifier.width(160.dp),
@@ -98,17 +160,18 @@ fun AddCampaignBottomSheet(
                         scope.launch { sheetState.hide() }.invokeOnCompletion {
                             onDismissBottomSheet()
                         }
-                    }
+                    },
                 ) {
                     Text(text = stringResource(id = R.string.cancel))
                 }
+
                 Button(
                     modifier = Modifier.width(160.dp),
                     onClick = {
-                        scope.launch { sheetState.hide() }.invokeOnCompletion {
-                            onAddCampaign()
+                        if (onAddCampaign()) {
+                            scope.launch { sheetState.hide() }
                         }
-                    }
+                    },
                 ) {
                     Text(text = stringResource(id = R.string.create_campaign))
                 }
@@ -121,24 +184,9 @@ fun AddCampaignBottomSheet(
 @Composable
 fun AddCampaignBottomSheetPreview() {
     AddCampaignBottomSheet(
-        textInputParams = listOf(
-            TextInputParams(
-                text = "",
-                labelId = R.string.campaign_name_label,
-                singleLine = true,
-                onValueChange = { },
-                keyboardOptions = KeyboardOptions.Default,
-                keyboardActions = KeyboardActions.Default,
-            ),
-            TextInputParams(
-                text = "This is a long piece of notes text that describes a signage campaign.\nIt has multiple line breaks.\nLike this.",
-                labelId = R.string.campaign_notes_label,
-                singleLine = false,
-                onValueChange = { },
-                keyboardOptions = KeyboardOptions.Default,
-                keyboardActions = KeyboardActions.Default,
-            )
-        ),
-        onAddCampaign = { },
-        onDismissBottomSheet = { })
+        state = CampaignsScreenState(),
+        onValueChanged = { _, _ -> },
+        onAddCampaign = { true },
+        onDismissBottomSheet = { },
+    )
 }

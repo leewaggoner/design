@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">DeSign</string>
     <string name="content_description">Image</string>
-    <string name="signing_in">Signing in...</string>
+    <string name="signing_in">Signing in…</string>
     <string name="sign_in">Sign in with Google</string>
     <string name="sign_in_failed">Google sign in failed.</string>
     <string name="sign_in_with_google">Sign in with your Google account.</string>
@@ -17,7 +17,9 @@
     <string name="cancel">Cancel</string>
     <string name="add_campaign_dialog_title">Create New Campaign</string>
     <string name="add_campaign_dialog_message">Please enter a name and a note for your new campaign. The note is optional.</string>
-    <string name="required_field">This is a required field.</string>
+    <string name="required_field">Required field</string>
     <string name="campaign_name_label">Campaign Name</string>
     <string name="campaign_notes_label">Campaign Notes</string>
+    <string name="created_by">Created by %1$s on %2$s</string>
+    <string name="too_many">Character limit exceeded</string>
 </resources>

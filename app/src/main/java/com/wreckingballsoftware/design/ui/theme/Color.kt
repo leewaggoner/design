@@ -11,3 +11,7 @@ val AppGold = Color(0xFFBF9B30)
 
 val AppDarkBackgroundGold = Color(0xFF2C240C)
 val AppLightBackgroundGold = Color(0xFFF8F4E6)
+
+val AppDarkSurfaceRed = Color(0xFF5F221F)
+val AppLightSurfaceRed = Color(0xFFE6DDDD)
+

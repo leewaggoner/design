@@ -3,20 +3,16 @@ package com.wreckingballsoftware.design.ui.campaigns
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.Add
-import androidx.compose.material3.FloatingActionButton
-import androidx.compose.material3.Icon
-import androidx.compose.material3.Text
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
-import com.wreckingballsoftware.design.R
-import com.wreckingballsoftware.design.database.DBCampaign
-import com.wreckingballsoftware.design.ui.campaigns.CampaignsViewModel.Companion.campaignsScreenState
+import com.wreckingballsoftware.design.ui.campaigns.CampaignsViewModel.Companion.showAddCampaignBottomSheet
+import com.wreckingballsoftware.design.ui.campaigns.CampaignsViewModel.Companion.showBottomSheet
+import com.wreckingballsoftware.design.ui.campaigns.models.CampaignsScreenState
+import com.wreckingballsoftware.design.ui.compose.DeSignFab
 import com.wreckingballsoftware.design.ui.framework.FrameworkStateItem
 import com.wreckingballsoftware.design.ui.navigation.Actions
 import org.koin.androidx.compose.getViewModel
@@ -29,14 +25,16 @@ fun CampaignsScreen(
     val campaigns by viewModel.campaigns.collectAsState(
         initial = listOf()
     )
+    viewModel.updateCampaigns(campaigns)
 
     CampaignsScreenContent(
-        campaigns = campaigns,
+        state = viewModel.state,
     )
 
-    if (campaignsScreenState.showBottomSheet) {
+    if (showBottomSheet) {
         AddCampaignBottomSheet(
-            textInputParams = viewModel.getTextInputParams(),
+            state = viewModel.state,
+            onValueChanged = viewModel::onValueChanged,
             onAddCampaign = viewModel::onAddCampaign,
             onDismissBottomSheet = viewModel::onDismissBottomSheet,
         )
@@ -45,16 +43,16 @@ fun CampaignsScreen(
 
 @Composable
 fun CampaignsScreenContent(
-    campaigns: List<DBCampaign>,
+    state: CampaignsScreenState,
 ) {
     LazyColumn(
         modifier = Modifier
             .fillMaxSize(),
     ) {
         items(
-            items = campaigns,
+            items = state.campaigns,
         ) {campaign ->
-            Text(text = campaign.name)
+            CampaignCard(campaign = campaign)
         }
     }
 }
@@ -62,15 +60,8 @@ fun CampaignsScreenContent(
 @Composable
 fun getCampaignFrameworkStateItem(): FrameworkStateItem.CampaignsFrameworkStateItem {
     return FrameworkStateItem.CampaignsFrameworkStateItem {
-        FloatingActionButton(
-            onClick = {
-                CampaignsViewModel.showAddCampaignDialog()
-            },
-        ) {
-            Icon(
-                imageVector = Icons.Outlined.Add,
-                contentDescription = stringResource(id = R.string.create_campaign),
-            )
+        DeSignFab{
+            showAddCampaignBottomSheet()
         }
     }
 }
@@ -79,6 +70,6 @@ fun getCampaignFrameworkStateItem(): FrameworkStateItem.CampaignsFrameworkStateI
 @Composable
 fun CampaignScreensContentPreview() {
     CampaignsScreenContent(
-        campaigns = listOf(),
+        state = CampaignsScreenState(),
     )
 }
