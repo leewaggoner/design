@@ -9,7 +9,6 @@ import com.wreckingballsoftware.design.database.DBCampaign
 import com.wreckingballsoftware.design.domain.ValidInput
 import com.wreckingballsoftware.design.repos.CampaignRepo
 import com.wreckingballsoftware.design.repos.UserRepo
-import com.wreckingballsoftware.design.ui.campaigns.models.CampaignInput
 import com.wreckingballsoftware.design.ui.campaigns.models.CampaignsScreenState
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
@@ -29,17 +28,22 @@ class CampaignsViewModel(
         state = state.copy(campaigns = campaigns)
     }
 
-    fun onValueChanged(campaignInput: CampaignInput, text: String) {
-        state = when (campaignInput) {
-            CampaignInput.Name -> text.updateCampaignText(
-                state = state,
-                campaignInput = CampaignInput.Name,
-            )
-            CampaignInput.Notes -> text.updateCampaignText(
-                state = state,
-                campaignInput = CampaignInput.Notes
-            )
-        }
+    fun onNameValueChanged(text: String) {
+        val sanitizedString = text.sanitize()
+        state = state.copy(
+            campaignName = sanitizedString,
+            campaignNameErrorId = 0,
+            nameCharactersUsed = sanitizedString.length
+        )
+    }
+
+    fun onNotesValueChanged(text: String) {
+        val sanitizedString = text.sanitize()
+        state = state.copy(
+            campaignNotes = sanitizedString,
+            campaignNotesErrorId = 0,
+            notesCharactersUsed = sanitizedString.length
+        )
     }
 
     fun onAddCampaign(): Boolean {
@@ -70,7 +74,9 @@ class CampaignsViewModel(
         showBottomSheet = false
         state = state.copy(
             campaignName = "",
-            campaignNotes = ""
+            nameCharactersUsed = 0,
+            campaignNotes = "",
+            notesCharactersUsed = 0,
         )
     }
 
@@ -114,36 +120,15 @@ class CampaignsViewModel(
     }
 }
 
-fun String.updateCampaignText(
-    campaignInput: CampaignInput,
-    state: CampaignsScreenState
-): CampaignsScreenState {
-    //sanitize the input
-    val sanitizedString = this.replace("\\", "")
-        .replace(";", "").replace("%", "")
-        .replace("\"", "").replace("\'", "")
-
-    return when (campaignInput) {
-        CampaignInput.Name -> {
-            state.copy(
-                campaignName = sanitizedString,
-                campaignNameErrorId = 0,
-                nameCharactersUsed = sanitizedString.length
-            )
-        }
-        CampaignInput.Notes -> {
-            state.copy(
-                campaignNotes = sanitizedString,
-                campaignNotesErrorId = 0,
-                notesCharactersUsed = sanitizedString.length
-            )
-        }
-    }
-}
-
 fun String.validateCampaignText(optional: Boolean, maxLength: Int) : ValidInput {
-    if (!optional && this.isEmpty()) return ValidInput.InputError.RequiredField()
-    if (this.length > maxLength) return ValidInput.InputError.CharacterOverflow()
+    var result: ValidInput = ValidInput.InputOk(this)
+    if (!optional && this.isEmpty()) result = ValidInput.InputError.RequiredField()
+    if (this.length > maxLength) result = ValidInput.InputError.CharacterOverflow()
 
-    return ValidInput.InputOk(this)
+    return result
 }
+
+fun String.sanitize() =
+    this.replace("\\", "_")
+        .replace(";", "_").replace("%", "_")
+        .replace("\"", "_").replace("\'", "_")

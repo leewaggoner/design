@@ -33,7 +33,8 @@ fun CampaignsScreen(
     if (showBottomSheet) {
         AddCampaignBottomSheet(
             state = viewModel.state,
-            onValueChanged = viewModel::onValueChanged,
+            onNameValueChanged = viewModel::onNameValueChanged,
+            onNotesValueChanged = viewModel::onNotesValueChanged,
             onAddCampaign = viewModel::onAddCampaign,
             onDismissBottomSheet = viewModel::onDismissBottomSheet,
         )

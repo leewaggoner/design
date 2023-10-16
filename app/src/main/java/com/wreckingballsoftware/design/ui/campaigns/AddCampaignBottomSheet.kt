@@ -28,7 +28,6 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import com.wreckingballsoftware.design.R
-import com.wreckingballsoftware.design.ui.campaigns.models.CampaignInput
 import com.wreckingballsoftware.design.ui.campaigns.models.CampaignsScreenState
 import com.wreckingballsoftware.design.ui.theme.customColorsPalette
 import com.wreckingballsoftware.design.ui.theme.customTypography
@@ -39,7 +38,8 @@ import kotlinx.coroutines.launch
 @Composable
 fun AddCampaignBottomSheet(
     state: CampaignsScreenState,
-    onValueChanged: (CampaignInput, String) -> Unit,
+    onNameValueChanged: (String) -> Unit,
+    onNotesValueChanged: (String) -> Unit,
     onAddCampaign: () -> Boolean,
     onDismissBottomSheet: () -> Unit,
     modifier: Modifier = Modifier,
@@ -100,7 +100,7 @@ fun AddCampaignBottomSheet(
                         }
                     },
                     singleLine = true,
-                    onValueChange = { text -> onValueChanged(CampaignInput.Name, text) },
+                    onValueChange = { text -> onNameValueChanged(text) },
                     keyboardOptions = KeyboardOptions(
                         keyboardType = KeyboardType.Text,
                         imeAction = ImeAction.Next,
@@ -132,7 +132,7 @@ fun AddCampaignBottomSheet(
                         }
                     },
                     singleLine = false,
-                    onValueChange = { text -> onValueChanged(CampaignInput.Notes, text) },
+                    onValueChange = { text -> onNotesValueChanged(text) },
                     keyboardOptions = KeyboardOptions(
                         keyboardType = KeyboardType.Text,
                         imeAction = ImeAction.Done,
@@ -185,7 +185,8 @@ fun AddCampaignBottomSheet(
 fun AddCampaignBottomSheetPreview() {
     AddCampaignBottomSheet(
         state = CampaignsScreenState(),
-        onValueChanged = { _, _ -> },
+        onNameValueChanged = { _ -> },
+        onNotesValueChanged = { _ -> },
         onAddCampaign = { true },
         onDismissBottomSheet = { },
     )
