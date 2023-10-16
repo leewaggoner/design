@@ -19,6 +19,14 @@ class Actions(navController: NavController) {
             }
         }
     }
+    val navigateToCampaignDetailsScreen: (Long) -> Unit = { campaignId ->
+        navController.navigate(
+            Destinations.CampaignDetailsScreen.replace(
+                oldValue = "{campaignId}",
+                newValue = campaignId.toString()
+            )
+        )
+    }
     val navigateToMapScreen: () -> Unit = {
         navController.navigate(Destinations.MapScreen) {
             //clear the whole backstack

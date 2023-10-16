@@ -7,7 +7,7 @@ import androidx.room.PrimaryKey
 @Entity(tableName = "campaigns")
 data class DBCampaign(
     @PrimaryKey(autoGenerate = true)
-    val id: Int = 0,
+    val id: Long = 0,
     val name: String,
     @ColumnInfo(name = "created_by")
     val createdBy: String,

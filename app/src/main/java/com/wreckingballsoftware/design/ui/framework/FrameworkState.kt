@@ -31,10 +31,11 @@ class FrameworkState(
 
     private fun getScreen(route: String?): FrameworkStateItem? =
         when (route) {
+            Destinations.AuthScreen -> FrameworkStateItem.AuthFrameworkStateItem()
             Destinations.CampaignsScreen -> campaignsFrameworkStateItem
+            Destinations.CampaignDetailsScreen -> FrameworkStateItem.CampaignDetailsStateItem()
             Destinations.MapScreen -> FrameworkStateItem.MapFrameworkStateItem()
             Destinations.SignsScreen -> FrameworkStateItem.SignsFrameworkStateItem()
-            Destinations.AuthScreen -> FrameworkStateItem.AuthFrameworkStateItem()
             else -> null
         }
 }

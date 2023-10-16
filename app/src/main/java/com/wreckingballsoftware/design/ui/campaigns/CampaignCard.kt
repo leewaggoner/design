@@ -1,5 +1,6 @@
 package com.wreckingballsoftware.design.ui.campaigns
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -23,13 +24,17 @@ import com.wreckingballsoftware.design.ui.theme.dimensions
 @Composable
 fun CampaignCard(
     campaign: DBCampaign,
+    onCampaignClick: (Long) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Card(
         modifier = modifier.then(
             Modifier
                 .fillMaxWidth()
-                .padding(all = MaterialTheme.dimensions.SpaceSmall),
+                .padding(all = MaterialTheme.dimensions.SpaceSmall)
+                .clickable {
+                    onCampaignClick(campaign.id)
+                },
         ),
         elevation = CardDefaults.cardElevation(
             defaultElevation = MaterialTheme.dimensions.CardElevation
@@ -75,6 +80,7 @@ fun CampaignCardPreview() {
             createdBy = "Lee Waggoner",
             dateCreated = "10-15-2023 10:46:32 AM",
             notes = "This is my test DeSign campaign."
-        )
+        ),
+        onCampaignClick = { }
     )
 }

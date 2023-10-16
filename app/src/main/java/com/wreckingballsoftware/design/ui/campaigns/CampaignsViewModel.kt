@@ -7,22 +7,29 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.wreckingballsoftware.design.database.DBCampaign
 import com.wreckingballsoftware.design.domain.ValidInput
-import com.wreckingballsoftware.design.repos.CampaignRepo
+import com.wreckingballsoftware.design.repos.CampaignsRepo
 import com.wreckingballsoftware.design.repos.UserRepo
+import com.wreckingballsoftware.design.ui.campaigns.models.CampaignsScreenNavigation
 import com.wreckingballsoftware.design.ui.campaigns.models.CampaignsScreenState
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.channels.BufferOverflow
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.launch
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 import java.time.format.FormatStyle
 
 class CampaignsViewModel(
-    private val campaignRepo: CampaignRepo,
+    private val campaignsRepo: CampaignsRepo,
     private val userRepo: UserRepo,
 ) : ViewModel() {
+    val navigation = MutableSharedFlow<CampaignsScreenNavigation>(
+        extraBufferCapacity = 1,
+        onBufferOverflow = BufferOverflow.DROP_LATEST,
+    )
     var state by mutableStateOf(CampaignsScreenState())
-    val campaigns: Flow<List<DBCampaign>> = campaignRepo.getAllCampaigns()
+    val campaigns: Flow<List<DBCampaign>> = campaignsRepo.getAllCampaigns()
 
     fun updateCampaigns(campaigns: List<DBCampaign>) {
         state = state.copy(campaigns = campaigns)
@@ -62,7 +69,7 @@ class CampaignsViewModel(
                     dateCreated = strDate,
                     notes = state.campaignNotes,
                 )
-                campaignRepo.addCampaign(newCampaign)
+                campaignsRepo.addCampaign(newCampaign)
                 onDismissBottomSheet()
             }
             result = true
@@ -78,6 +85,12 @@ class CampaignsViewModel(
             campaignNotes = "",
             notesCharactersUsed = 0,
         )
+    }
+
+    fun onCampaignClick(campaignId: Long) {
+        viewModelScope.launch(Dispatchers.Main) {
+            navigation.emit(CampaignsScreenNavigation.DisplayCampaign(campaignId))
+        }
     }
 
     private fun validateCampaignName(campaignName: String): Boolean {

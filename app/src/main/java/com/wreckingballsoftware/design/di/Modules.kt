@@ -11,9 +11,10 @@ import androidx.room.Room
 import com.wreckingballsoftware.design.database.CampaignsDao
 import com.wreckingballsoftware.design.database.DeSignDatabase
 import com.wreckingballsoftware.design.domain.GoogleAuth
-import com.wreckingballsoftware.design.repos.CampaignRepo
+import com.wreckingballsoftware.design.repos.CampaignsRepo
 import com.wreckingballsoftware.design.repos.UserRepo
 import com.wreckingballsoftware.design.ui.campaigns.CampaignsViewModel
+import com.wreckingballsoftware.design.ui.details.CampaignDetailsViewModel
 import com.wreckingballsoftware.design.ui.login.AuthViewModel
 import com.wreckingballsoftware.design.utils.DataStoreWrapper
 import kotlinx.coroutines.CoroutineScope
@@ -36,8 +37,14 @@ val appModule = module {
 
     viewModel {
         CampaignsViewModel(
-            campaignRepo = get(),
+            campaignsRepo = get(),
             userRepo = get(),
+        )
+    }
+
+    viewModel {
+        CampaignDetailsViewModel(
+            campaignsRepo = get(),
         )
     }
 
@@ -48,7 +55,7 @@ val appModule = module {
     }
 
     single {
-        CampaignRepo(
+        CampaignsRepo(
             campaignsDao = get()
         )
     }

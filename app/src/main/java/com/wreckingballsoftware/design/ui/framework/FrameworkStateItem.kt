@@ -17,6 +17,11 @@ sealed class FrameworkStateItem(
         isNavBarVisible = true,
         fabAction = fab,
     )
+    class CampaignDetailsStateItem : FrameworkStateItem(
+        isTopBarActionAvailable = true,
+        isNavBarVisible = true,
+        fabAction = { }
+    )
     class MapFrameworkStateItem : FrameworkStateItem(
         isTopBarActionAvailable = true,
         isNavBarVisible = true,

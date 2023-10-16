@@ -185,8 +185,8 @@ fun AddCampaignBottomSheet(
 fun AddCampaignBottomSheetPreview() {
     AddCampaignBottomSheet(
         state = CampaignsScreenState(),
-        onNameValueChanged = { _ -> },
-        onNotesValueChanged = { _ -> },
+        onNameValueChanged = { },
+        onNotesValueChanged = { },
         onAddCampaign = { true },
         onDismissBottomSheet = { },
     )
