@@ -64,7 +64,7 @@ fun AuthScreenContent(
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .padding(horizontal = MaterialTheme.dimensions.SpaceMedium),
+            .padding(horizontal = MaterialTheme.dimensions.Space),
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
@@ -82,7 +82,7 @@ fun AuthScreenContent(
 
         Spacer(
             modifier = Modifier
-                .height(MaterialTheme.dimensions.SpaceBig)
+                .height(MaterialTheme.dimensions.SpaceLarge)
         )
 
         Text(
@@ -92,7 +92,7 @@ fun AuthScreenContent(
 
         Spacer(
             modifier = Modifier
-                .height(MaterialTheme.dimensions.SpaceBig)
+                .height(MaterialTheme.dimensions.SpaceLarge)
         )
 
         GoogleAuthButton(

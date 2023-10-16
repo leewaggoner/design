@@ -27,12 +27,12 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
 import com.wreckingballsoftware.design.R
 import com.wreckingballsoftware.design.ui.campaigns.models.CampaignInput
 import com.wreckingballsoftware.design.ui.campaigns.models.CampaignsScreenState
 import com.wreckingballsoftware.design.ui.theme.customColorsPalette
 import com.wreckingballsoftware.design.ui.theme.customTypography
+import com.wreckingballsoftware.design.ui.theme.dimensions
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -57,7 +57,7 @@ fun AddCampaignBottomSheet(
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(all = 16.dp),
+                .padding(all = MaterialTheme.dimensions.Space),
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
             Column(modifier = Modifier.weight(1.0f)) {
@@ -67,7 +67,7 @@ fun AddCampaignBottomSheet(
                     style = MaterialTheme.customTypography.DeSignSubtitle,
                 )
 
-                Spacer(modifier = Modifier.height(8.dp))
+                Spacer(modifier = Modifier.height(MaterialTheme.dimensions.SpaceSmall))
 
                 Text(
                     modifier = Modifier.fillMaxWidth(),
@@ -75,7 +75,7 @@ fun AddCampaignBottomSheet(
                     style = MaterialTheme.customTypography.DeSignTitleBody,
                 )
 
-                Spacer(modifier = Modifier.height(32.dp))
+                Spacer(modifier = Modifier.height(MaterialTheme.dimensions.SpaceLarge))
 
                 var label = stringResource(id = R.string.campaign_name_label)
                 OutlinedTextField(
@@ -107,7 +107,7 @@ fun AddCampaignBottomSheet(
                     ),
                 )
 
-                Spacer(modifier = Modifier.height(16.dp))
+                Spacer(modifier = Modifier.height(MaterialTheme.dimensions.Space))
 
                 label = stringResource(id = R.string.campaign_notes_label)
                 OutlinedTextField(
@@ -145,17 +145,17 @@ fun AddCampaignBottomSheet(
                     ),
                 )
 
-                Spacer(modifier = Modifier.height(32.dp))
+                Spacer(modifier = Modifier.height(MaterialTheme.dimensions.SpaceLarge))
             }
 
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(bottom = 16.dp),
+                    .padding(bottom = MaterialTheme.dimensions.Space),
                 horizontalArrangement = Arrangement.SpaceAround,
             ) {
                 Button(
-                    modifier = Modifier.width(160.dp),
+                    modifier = Modifier.width(MaterialTheme.dimensions.ButtonWidth),
                     onClick = {
                         scope.launch { sheetState.hide() }.invokeOnCompletion {
                             onDismissBottomSheet()
@@ -166,7 +166,7 @@ fun AddCampaignBottomSheet(
                 }
 
                 Button(
-                    modifier = Modifier.width(160.dp),
+                    modifier = Modifier.width(MaterialTheme.dimensions.ButtonWidth),
                     onClick = {
                         if (onAddCampaign()) {
                             scope.launch { sheetState.hide() }

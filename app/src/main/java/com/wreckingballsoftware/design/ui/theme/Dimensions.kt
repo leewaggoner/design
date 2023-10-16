@@ -8,10 +8,13 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 
 data class Dimensions(
-    val ButtonWidth: Dp = 200.dp,
-    val SpaceBig: Dp = 32.dp,
-    val SpaceMedium: Dp = 16.dp,
+    val SpaceLarge: Dp = 32.dp,
+    val Space: Dp = 16.dp,
     val SpaceSmall: Dp = 8.dp,
+
+    val BorderStroke: Dp = 1.dp,
+    val ButtonWidth: Dp = 160.dp,
+    val CardElevation: Dp = 4.dp,
 )
 
 val CustomDimensions = Dimensions()

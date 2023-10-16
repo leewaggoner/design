@@ -14,11 +14,11 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
 import com.wreckingballsoftware.design.R
 import com.wreckingballsoftware.design.database.DBCampaign
 import com.wreckingballsoftware.design.ui.theme.customColorsPalette
 import com.wreckingballsoftware.design.ui.theme.customTypography
+import com.wreckingballsoftware.design.ui.theme.dimensions
 
 @Composable
 fun CampaignCard(
@@ -29,10 +29,10 @@ fun CampaignCard(
         modifier = modifier.then(
             Modifier
                 .fillMaxWidth()
-                .padding(all = 8.dp),
+                .padding(all = MaterialTheme.dimensions.SpaceSmall),
         ),
         elevation = CardDefaults.cardElevation(
-            defaultElevation = 4.dp
+            defaultElevation = MaterialTheme.dimensions.CardElevation
         ),
         colors = CardDefaults.cardColors(
             containerColor = MaterialTheme.customColorsPalette.surface
@@ -41,14 +41,14 @@ fun CampaignCard(
         Column(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(all = 16.dp),
+                .padding(all = MaterialTheme.dimensions.Space),
             horizontalAlignment = Alignment.Start
         ) {
             Text(
                 text = campaign.name,
                 style = MaterialTheme.customTypography.DeSignStandardSubtitle,
             )
-            Spacer(modifier = Modifier.height(8.dp))
+            Spacer(modifier = Modifier.height(MaterialTheme.dimensions.SpaceSmall))
             Text(
                 text = stringResource(
                     id = R.string.created_by,
@@ -57,7 +57,7 @@ fun CampaignCard(
                 ),
                 style = MaterialTheme.customTypography.DeSignSmallPrint
             )
-            Spacer(modifier = Modifier.height(16.dp))
+            Spacer(modifier = Modifier.height(MaterialTheme.dimensions.Space))
             Text(
                 text = campaign.notes,
                 style = MaterialTheme.customTypography.DeSignStandardBody

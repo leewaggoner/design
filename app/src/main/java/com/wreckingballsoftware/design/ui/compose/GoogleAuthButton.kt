@@ -18,7 +18,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
 import com.wreckingballsoftware.design.R
 import com.wreckingballsoftware.design.ui.theme.dimensions
 
@@ -38,12 +37,15 @@ fun GoogleAuthButton(
                 )
         ),
         shape = MaterialTheme.shapes.medium,
-        border = BorderStroke(width = 1.dp, color = Color.LightGray),
+        border = BorderStroke(
+            width = MaterialTheme.dimensions.BorderStroke,
+            color = Color.LightGray
+        ),
         color = MaterialTheme.colorScheme.surface,
     ) {
         Row(
             modifier = Modifier
-                .padding(all = MaterialTheme.dimensions.SpaceMedium),
+                .padding(all = MaterialTheme.dimensions.Space),
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.Center,
         ) {
