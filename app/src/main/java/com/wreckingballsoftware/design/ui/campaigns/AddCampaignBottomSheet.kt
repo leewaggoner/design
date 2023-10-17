@@ -19,9 +19,13 @@ import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
@@ -45,10 +49,16 @@ fun AddCampaignBottomSheet(
     onDismissBottomSheet: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
+    val focusRequester = remember { FocusRequester() }
     val scope = rememberCoroutineScope()
     val sheetState = rememberModalBottomSheetState(
         skipPartiallyExpanded = true,
     )
+
+    LaunchedEffect(key1 = Unit) {
+        focusRequester.requestFocus()
+    }
+
     ModalBottomSheet(
         modifier = modifier,
         onDismissRequest = { onDismissBottomSheet() },
@@ -80,15 +90,17 @@ fun AddCampaignBottomSheet(
 
                 Spacer(modifier = Modifier.height(MaterialTheme.dimensions.SpaceLarge))
 
-                var label = stringResource(id = R.string.campaign_name_label)
+                var nameLabel = stringResource(id = R.string.campaign_name_label)
                 OutlinedTextField(
-                    modifier = Modifier.fillMaxWidth(),
+                    modifier = Modifier
+                        .focusRequester(focusRequester)
+                        .fillMaxWidth(),
                     value = state.campaignName,
                     label = {
-                        Text(text = label)
+                        Text(text = nameLabel)
                     },
                     placeholder = {
-                        Text(text = label)
+                        Text(text = nameLabel)
                     },
                     supportingText = {
                         if (state.campaignNameErrorId == 0) {
@@ -112,15 +124,15 @@ fun AddCampaignBottomSheet(
 
                 Spacer(modifier = Modifier.height(MaterialTheme.dimensions.Space))
 
-                label = stringResource(id = R.string.campaign_notes_label)
+                val notesLabel = stringResource(id = R.string.campaign_notes_label)
                 OutlinedTextField(
                     modifier = Modifier.fillMaxWidth(),
                     value = state.campaignNotes,
                     label = {
-                        Text(text = label)
+                        Text(text = notesLabel)
                     },
                     placeholder = {
-                        Text(text = label)
+                        Text(text = notesLabel)
                     },
                     supportingText = {
                         if (state.campaignNotesErrorId == 0) {

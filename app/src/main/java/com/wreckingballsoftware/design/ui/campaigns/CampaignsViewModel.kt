@@ -36,7 +36,8 @@ class CampaignsViewModel(
     }
 
     fun onNameValueChanged(text: String) {
-        val sanitizedString = text.sanitize()
+        var sanitizedString = text.sanitize()
+        sanitizedString = sanitizedString.cutToLength(MAX_NAME_LENGTH)
         state = state.copy(
             campaignName = sanitizedString,
             campaignNameErrorId = 0,
@@ -45,7 +46,8 @@ class CampaignsViewModel(
     }
 
     fun onNotesValueChanged(text: String) {
-        val sanitizedString = text.sanitize()
+        var sanitizedString = text.sanitize()
+        sanitizedString = sanitizedString.cutToLength(MAX_NOTES_LENGTH)
         state = state.copy(
             campaignNotes = sanitizedString,
             campaignNotesErrorId = 0,
@@ -145,3 +147,10 @@ fun String.sanitize() =
     this.replace("\\", "_")
         .replace(";", "_").replace("%", "_")
         .replace("\"", "_").replace("\'", "_")
+
+fun String.cutToLength(length: Int): String =
+    if (this.length > length) {
+        this.substring(0, length)
+    } else {
+        this
+    }
