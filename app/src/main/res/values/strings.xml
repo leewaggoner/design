@@ -25,4 +25,7 @@
     <string name="delete">Delete</string>
     <string name="confirm_delete_title">Delete Campaign</string>
     <string name="confirm_delete_message">Are you sure you want to delete this campaign?</string>
+    <string name="grant_permissions">Grant Permissions</string>
+    <string name="permission_rationale">Your sign placements cannot be tracked without the map, which requires location permissions. Please grant permission.</string>
+    <string name="permission_text">Location permissions are required for this feature to be available. Please grant permission.</string>
 </resources>

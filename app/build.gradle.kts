@@ -7,6 +7,7 @@ plugins {
 }
 
 val googleClientId: String = gradleLocalProperties(rootDir).getProperty("GOOGLE_CLIENT_ID")
+val googleMapsKey: String = gradleLocalProperties(rootDir).getProperty("GOOGLE_MAPS_KEY")
 
 android {
     namespace = "com.wreckingballsoftware.design"
@@ -28,11 +29,11 @@ android {
     buildTypes {
         debug {
             buildConfigField(name = "GOOGLE_CLIENT_ID", type = "String", value = "\"$googleClientId\"")
-            buildConfigField(name = "COCKTAILDB_URL", type = "String", value = "\"https://www.thecocktaildb.com/api/\"")
+            manifestPlaceholders["googleMapsKey"] = googleMapsKey
         }
         release {
             buildConfigField(name = "GOOGLE_CLIENT_ID", type = "String", value = "\"$googleClientId\"")
-            buildConfigField(name = "COCKTAILDB_URL", type = "String", value = "\"https://www.thecocktaildb.com/api/\"")
+            manifestPlaceholders["googleMapsKey"] = googleMapsKey
 
             isMinifyEnabled = false
             proguardFiles(
@@ -82,6 +83,10 @@ dependencies {
     ksp("androidx.room:room-compiler:2.5.2")
 
     implementation("com.google.android.gms:play-services-auth:20.7.0")
+    implementation("com.google.maps.android:maps-compose:2.15.0")
+    implementation("com.google.android.gms:play-services-maps:18.1.0")
+    implementation("com.google.android.gms:play-services-location:21.0.1")
+    implementation("com.google.accompanist:accompanist-permissions:0.32.0")
     implementation("io.insert-koin:koin-android:3.4.3")
     implementation("io.insert-koin:koin-androidx-compose:3.4.6")
 

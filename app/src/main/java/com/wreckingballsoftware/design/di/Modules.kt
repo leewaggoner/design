@@ -8,6 +8,7 @@ import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.emptyPreferences
 import androidx.datastore.preferences.preferencesDataStoreFile
 import androidx.room.Room
+import com.google.android.gms.location.LocationServices
 import com.wreckingballsoftware.design.database.CampaignsDao
 import com.wreckingballsoftware.design.database.DeSignDatabase
 import com.wreckingballsoftware.design.domain.GoogleAuth
@@ -16,6 +17,7 @@ import com.wreckingballsoftware.design.repos.UserRepo
 import com.wreckingballsoftware.design.ui.campaigns.CampaignsViewModel
 import com.wreckingballsoftware.design.ui.details.CampaignDetailsViewModel
 import com.wreckingballsoftware.design.ui.login.AuthViewModel
+import com.wreckingballsoftware.design.ui.map.MapViewModel
 import com.wreckingballsoftware.design.utils.DataStoreWrapper
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -48,6 +50,12 @@ val appModule = module {
         )
     }
 
+    viewModel {
+        MapViewModel(
+            fusedLocationProviderClient = get()
+        )
+    }
+
     factory {
         UserRepo(
             dataStore = get(),
@@ -58,6 +66,10 @@ val appModule = module {
         CampaignsRepo(
             campaignsDao = get()
         )
+    }
+
+    single {
+        LocationServices.getFusedLocationProviderClient(androidContext())
     }
 
     single {

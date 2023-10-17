@@ -8,6 +8,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
 import com.wreckingballsoftware.design.domain.GoogleAuth
 import com.wreckingballsoftware.design.ui.campaigns.CampaignsScreen
+import com.wreckingballsoftware.design.ui.compose.CheckPermissions
 import com.wreckingballsoftware.design.ui.details.CampaignDetailsScreen
 import com.wreckingballsoftware.design.ui.login.AuthScreen
 import com.wreckingballsoftware.design.ui.map.MapScreen
@@ -45,7 +46,9 @@ fun DeSignHost(
             }
         }
         composable(Destinations.MapScreen) {
-            MapScreen(actions = actions)
+            CheckPermissions {
+                MapScreen(actions = actions)
+            }
         }
         composable(Destinations.SignsScreen) {
             SignsScreen(actions = actions)
