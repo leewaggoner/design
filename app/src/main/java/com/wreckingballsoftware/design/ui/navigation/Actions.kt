@@ -3,6 +3,9 @@ package com.wreckingballsoftware.design.ui.navigation
 import androidx.navigation.NavController
 
 class Actions(navController: NavController) {
+    val navigateUp: () -> Unit = {
+        navController.navigateUp()
+    }
     val navigateToAuthScreen: () -> Unit = {
         navController.navigate(Destinations.AuthScreen) {
             //clear the whole backstack

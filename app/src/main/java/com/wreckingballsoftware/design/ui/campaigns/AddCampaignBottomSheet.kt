@@ -26,6 +26,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import com.wreckingballsoftware.design.R
 import com.wreckingballsoftware.design.ui.campaigns.models.CampaignsScreenState
@@ -65,6 +66,7 @@ fun AddCampaignBottomSheet(
                     modifier = Modifier.fillMaxWidth(),
                     text = stringResource(id = R.string.add_campaign_dialog_title),
                     style = MaterialTheme.customTypography.DeSignSubtitle,
+                    textAlign = TextAlign.Center,
                 )
 
                 Spacer(modifier = Modifier.height(MaterialTheme.dimensions.SpaceSmall))
@@ -72,7 +74,8 @@ fun AddCampaignBottomSheet(
                 Text(
                     modifier = Modifier.fillMaxWidth(),
                     text = stringResource(id = R.string.add_campaign_dialog_message),
-                    style = MaterialTheme.customTypography.DeSignTitleBody,
+                    style = MaterialTheme.customTypography.DeSignBody,
+                    textAlign = TextAlign.Center,
                 )
 
                 Spacer(modifier = Modifier.height(MaterialTheme.dimensions.SpaceLarge))

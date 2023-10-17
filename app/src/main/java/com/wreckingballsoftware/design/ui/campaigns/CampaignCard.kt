@@ -51,7 +51,7 @@ fun CampaignCard(
         ) {
             Text(
                 text = campaign.name,
-                style = MaterialTheme.customTypography.DeSignStandardSubtitle,
+                style = MaterialTheme.customTypography.DeSignSubtitle,
             )
             Spacer(modifier = Modifier.height(MaterialTheme.dimensions.SpaceSmall))
             Text(
@@ -61,11 +61,6 @@ fun CampaignCard(
                     campaign.dateCreated,
                 ),
                 style = MaterialTheme.customTypography.DeSignSmallPrint
-            )
-            Spacer(modifier = Modifier.height(MaterialTheme.dimensions.Space))
-            Text(
-                text = campaign.notes,
-                style = MaterialTheme.customTypography.DeSignStandardBody
             )
         }
     }

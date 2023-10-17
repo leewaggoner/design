@@ -4,4 +4,5 @@ import com.wreckingballsoftware.design.database.DBCampaign
 
 data class CampaignDetailsState(
     val campaign: DBCampaign? = null,
+    val showConfirmDialog: Boolean = false,
 )
