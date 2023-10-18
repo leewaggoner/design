@@ -12,9 +12,10 @@ data class Dimensions(
     val Space: Dp = 16.dp,
     val SpaceSmall: Dp = 8.dp,
 
-    val BorderStroke: Dp = 1.dp,
+    val BorderStrokeWidth: Dp = 1.dp,
     val ButtonWidth: Dp = 160.dp,
     val CardElevation: Dp = 4.dp,
+    val CardBorderStrokeWidth: Dp = 2.dp,
 )
 
 val CustomDimensions = Dimensions()

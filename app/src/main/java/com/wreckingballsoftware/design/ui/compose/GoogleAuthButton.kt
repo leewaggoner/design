@@ -38,7 +38,7 @@ fun GoogleAuthButton(
         ),
         shape = MaterialTheme.shapes.medium,
         border = BorderStroke(
-            width = MaterialTheme.dimensions.BorderStroke,
+            width = MaterialTheme.dimensions.BorderStrokeWidth,
             color = Color.LightGray
         ),
         color = MaterialTheme.colorScheme.surface,

@@ -26,7 +26,6 @@ import com.wreckingballsoftware.design.ui.compose.DeSignAlert
 import com.wreckingballsoftware.design.ui.details.models.CampaignDetailsNavigation
 import com.wreckingballsoftware.design.ui.details.models.CampaignDetailsState
 import com.wreckingballsoftware.design.ui.navigation.Actions
-import com.wreckingballsoftware.design.ui.theme.AppRed
 import com.wreckingballsoftware.design.ui.theme.customTypography
 import com.wreckingballsoftware.design.ui.theme.dimensions
 import org.koin.androidx.compose.koinViewModel
@@ -107,7 +106,7 @@ fun CampaignDetailsScreenContent(
                 modifier = Modifier.width(MaterialTheme.dimensions.ButtonWidth),
                 onClick = onConfirmDelete,
                 colors = ButtonDefaults.buttonColors(
-                    containerColor = AppRed,
+                    containerColor = MaterialTheme.colorScheme.secondary,
                 ),
             ) {
                 Text(

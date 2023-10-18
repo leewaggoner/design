@@ -33,7 +33,7 @@ fun MapScreenContent(
         GoogleMap(
             modifier = Modifier.fillMaxSize(),
             cameraPositionState = CameraPositionState(
-                position = CameraPosition.fromLatLngZoom(state.latLng, 10f)
+                position = CameraPosition.fromLatLngZoom(state.latLng, 15f)
             ),
             properties = MapProperties(
                 isMyLocationEnabled = true,

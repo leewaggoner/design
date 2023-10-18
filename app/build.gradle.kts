@@ -4,6 +4,7 @@ plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
     id("com.google.devtools.ksp")
+    id("kotlin-parcelize")
 }
 
 val googleClientId: String = gradleLocalProperties(rootDir).getProperty("GOOGLE_CLIENT_ID")
@@ -87,8 +88,8 @@ dependencies {
     implementation("com.google.android.gms:play-services-maps:18.1.0")
     implementation("com.google.android.gms:play-services-location:21.0.1")
     implementation("com.google.accompanist:accompanist-permissions:0.32.0")
-    implementation("io.insert-koin:koin-android:3.4.3")
-    implementation("io.insert-koin:koin-androidx-compose:3.4.6")
+    implementation("io.insert-koin:koin-android:3.5.0")
+    implementation("io.insert-koin:koin-androidx-compose:3.5.0")
 
     testImplementation("junit:junit:4.13.2")
     androidTestImplementation("androidx.test.ext:junit:1.1.5")

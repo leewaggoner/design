@@ -2,7 +2,7 @@ package com.wreckingballsoftware.design.ui.campaigns
 
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -16,12 +16,12 @@ import com.wreckingballsoftware.design.ui.campaigns.models.CampaignsScreenState
 import com.wreckingballsoftware.design.ui.compose.DeSignFab
 import com.wreckingballsoftware.design.ui.framework.FrameworkStateItem
 import com.wreckingballsoftware.design.ui.navigation.Actions
-import org.koin.androidx.compose.getViewModel
+import org.koin.androidx.compose.koinViewModel
 
 @Composable
 fun CampaignsScreen(
     actions: Actions,
-    viewModel: CampaignsViewModel = getViewModel()
+    viewModel: CampaignsViewModel = koinViewModel()
 ) {
     val navigation = viewModel.navigation.collectAsStateWithLifecycle(null)
     navigation.value?.let { nav ->
@@ -39,7 +39,8 @@ fun CampaignsScreen(
 
     CampaignsScreenContent(
         state = viewModel.state,
-        onCampaignClick = viewModel::onCampaignClick,
+        onCampaignInfoClick = viewModel::onCampaignInfoClick,
+        onSelectCard = viewModel::onSelectCard
     )
 
     if (showBottomSheet) {
@@ -56,18 +57,22 @@ fun CampaignsScreen(
 @Composable
 fun CampaignsScreenContent(
     state: CampaignsScreenState,
-    onCampaignClick: (Long) -> Unit,
+    onCampaignInfoClick: (Long) -> Unit,
+    onSelectCard: (Int) -> Unit,
 ) {
     LazyColumn(
         modifier = Modifier
             .fillMaxSize(),
     ) {
-        items(
+        itemsIndexed(
             items = state.campaigns,
-        ) {campaign ->
+        ) {index, campaign ->
             CampaignCard(
+                index = index,
+                selectedIndex = state.selectedIndex,
                 campaign = campaign,
-                onCampaignClick = onCampaignClick
+                onCampaignInfoClick = onCampaignInfoClick,
+                onSelectCard = onSelectCard
             )
         }
     }
@@ -87,6 +92,7 @@ fun getCampaignFrameworkStateItem(): FrameworkStateItem.CampaignsFrameworkStateI
 fun CampaignScreensContentPreview() {
     CampaignsScreenContent(
         state = CampaignsScreenState(),
-        onCampaignClick = { },
+        onCampaignInfoClick = { },
+        onSelectCard = { },
     )
 }

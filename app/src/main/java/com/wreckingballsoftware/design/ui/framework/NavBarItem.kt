@@ -7,25 +7,30 @@ import androidx.compose.material.icons.outlined.LocationOn
 import androidx.compose.ui.graphics.vector.ImageVector
 import com.wreckingballsoftware.design.R
 import com.wreckingballsoftware.design.ui.navigation.Actions
+import com.wreckingballsoftware.design.ui.navigation.Destinations
 
 sealed class NavBarItem(
     val titleId: Int = 0,
+    val route: String = "",
     val icon: ImageVector = Icons.Outlined.Home,
     val action: () -> Unit = { },
 ) {
     class CampaignsNavItem(actions: Actions): NavBarItem(
         titleId = R.string.campaigns,
+        route = Destinations.CampaignsGraph,
         icon = Icons.Outlined.Home,
-        action = actions.navigateToCampaignsScreen,
+        action = actions.navigateToCampaignsGraph,
     )
     class MapNavItem(actions: Actions): NavBarItem(
         titleId = R.string.map,
+        route = Destinations.MapGraph,
         icon = Icons.Outlined.LocationOn,
-        action = actions.navigateToMapScreen,
+        action = actions.navigateToMapGraph,
     )
     class SignsNavItem(actions: Actions): NavBarItem(
         titleId = R.string.signs,
+        route = Destinations.SignsGraph,
         icon = Icons.Outlined.List,
-        action = actions.navigateToSignsScreen,
+        action = actions.navigateToSignsGraph,
     )
 }

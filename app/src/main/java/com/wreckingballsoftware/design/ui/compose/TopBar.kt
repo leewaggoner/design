@@ -9,7 +9,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color.Companion.White
 import androidx.compose.ui.tooling.preview.Preview
-import com.wreckingballsoftware.design.ui.theme.customColorsPalette
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -28,7 +27,7 @@ fun TopBar(
         },
         actions = { topBarAction() },
         colors = TopAppBarDefaults.topAppBarColors(
-            containerColor = MaterialTheme.customColorsPalette.primary,
+            containerColor = MaterialTheme.colorScheme.primary,
             titleContentColor = White,
         ),
     )

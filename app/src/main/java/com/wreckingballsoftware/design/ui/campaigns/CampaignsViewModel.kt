@@ -3,8 +3,11 @@ package com.wreckingballsoftware.design.ui.campaigns
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.viewmodel.compose.SavedStateHandleSaveableApi
+import androidx.lifecycle.viewmodel.compose.saveable
 import com.wreckingballsoftware.design.database.DBCampaign
 import com.wreckingballsoftware.design.domain.ValidInput
 import com.wreckingballsoftware.design.repos.CampaignsRepo
@@ -21,6 +24,7 @@ import java.time.format.DateTimeFormatter
 import java.time.format.FormatStyle
 
 class CampaignsViewModel(
+    handle: SavedStateHandle,
     private val campaignsRepo: CampaignsRepo,
     private val userRepo: UserRepo,
 ) : ViewModel() {
@@ -28,7 +32,10 @@ class CampaignsViewModel(
         extraBufferCapacity = 1,
         onBufferOverflow = BufferOverflow.DROP_LATEST,
     )
-    var state by mutableStateOf(CampaignsScreenState())
+    @OptIn(SavedStateHandleSaveableApi::class)
+    var state by handle.saveable {
+        mutableStateOf(CampaignsScreenState())
+    }
     val campaigns: Flow<List<DBCampaign>> = campaignsRepo.getAllCampaigns()
 
     fun updateCampaigns(campaigns: List<DBCampaign>) {
@@ -89,10 +96,14 @@ class CampaignsViewModel(
         )
     }
 
-    fun onCampaignClick(campaignId: Long) {
+    fun onCampaignInfoClick(campaignId: Long) {
         viewModelScope.launch(Dispatchers.Main) {
             navigation.emit(CampaignsScreenNavigation.DisplayCampaign(campaignId))
         }
+    }
+
+    fun onSelectCard(index: Int) {
+        state = state.copy(selectedIndex = index)
     }
 
     private fun validateCampaignName(campaignName: String): Boolean {

@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalBottomSheet
@@ -176,6 +177,9 @@ fun AddCampaignBottomSheet(
                             onDismissBottomSheet()
                         }
                     },
+                    colors = ButtonDefaults.buttonColors(
+                        containerColor = MaterialTheme.colorScheme.primary,
+                    ),
                 ) {
                     Text(text = stringResource(id = R.string.cancel))
                 }
@@ -187,6 +191,9 @@ fun AddCampaignBottomSheet(
                             scope.launch { sheetState.hide() }
                         }
                     },
+                    colors = ButtonDefaults.buttonColors(
+                        containerColor = MaterialTheme.colorScheme.primary,
+                    ),
                 ) {
                     Text(text = stringResource(id = R.string.create_campaign))
                 }

@@ -1,7 +1,10 @@
 package com.wreckingballsoftware.design.ui.campaigns.models
 
+import android.os.Parcelable
 import com.wreckingballsoftware.design.database.DBCampaign
+import kotlinx.parcelize.Parcelize
 
+@Parcelize
 data class CampaignsScreenState(
     val campaigns: List<DBCampaign> = listOf(),
     val campaignName: String = "",
@@ -10,4 +13,5 @@ data class CampaignsScreenState(
     val campaignNotes: String = "",
     val notesCharactersUsed: Int = 0,
     val campaignNotesErrorId: Int = 0,
-)
+    val selectedIndex: Int = 0,
+) : Parcelable

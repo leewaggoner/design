@@ -28,4 +28,5 @@
     <string name="grant_permissions">Grant Permissions</string>
     <string name="permission_rationale">Your sign placements cannot be tracked without the map, which requires location permissions. Please grant permission.</string>
     <string name="permission_text">Location permissions are required for this feature to be available. Please grant permission.</string>
+    <string name="campaign_details">Campaign details.</string>
 </resources>

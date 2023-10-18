@@ -48,11 +48,12 @@ fun Framework() {
         bottomBar = {
             if (frameworkState.isNavBarVisible) {
                 BottomNavBar(
+                    navController = navController,
                     navBarItems = listOf(
                         NavBarItem.CampaignsNavItem(actions),
                         NavBarItem.MapNavItem(actions),
                         NavBarItem.SignsNavItem(actions),
-                    )
+                    ),
                 )
             }
         },

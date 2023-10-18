@@ -14,12 +14,35 @@ class Actions(navController: NavController) {
             }
         }
     }
-    val navigateToCampaignsScreen: () -> Unit = {
-        navController.navigate(Destinations.CampaignsScreen) {
+    val navigateToCampaignsGraph: () -> Unit = {
+        navController.navigate(Destinations.CampaignsGraph) {
             //clear the whole backstack
             popUpTo(navController.graph.id) {
                 inclusive = true
             }
+            launchSingleTop = true
+        }
+    }
+    val navigateToMapGraph: () -> Unit = {
+        navController.navigate(Destinations.MapGraph) {
+            //clear the whole backstack
+            popUpTo(navController.graph.id) {
+                inclusive = true
+            }
+            launchSingleTop = true
+        }
+    }
+    val navigateToSignsGraph: () -> Unit = {
+        navController.navigate(Destinations.SignsGraph) {
+            //clear the whole backstack
+            popUpTo(navController.graph.id) {
+                inclusive = true
+            }
+            launchSingleTop = true
+        }
+    }
+    val navigateToCampaignsScreen: () -> Unit = {
+        navController.navigate(Destinations.CampaignsScreen) {
         }
     }
     val navigateToCampaignDetailsScreen: (Long) -> Unit = { campaignId ->
@@ -32,18 +55,10 @@ class Actions(navController: NavController) {
     }
     val navigateToMapScreen: () -> Unit = {
         navController.navigate(Destinations.MapScreen) {
-            //clear the whole backstack
-            popUpTo(navController.graph.id) {
-                inclusive = true
-            }
         }
     }
     val navigateToSignsScreen: () -> Unit = {
         navController.navigate(Destinations.SignsScreen) {
-            //clear the whole backstack
-            popUpTo(navController.graph.id) {
-                inclusive = true
-            }
         }
     }
 }

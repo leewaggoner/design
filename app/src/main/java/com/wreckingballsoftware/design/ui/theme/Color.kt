@@ -6,7 +6,9 @@ val White = Color(0xFFFFFFFF)
 val Black = Color(0xFF000000)
 
 val AppGreen = Color(0xFF41671C)
+val AppDarkGreen = Color(0xFF859971)
 val AppRed = Color(0xFFC8281E)
+val AppDarkRed = Color(0xFFC07C78)
 val AppGold = Color(0xFFBF9B30)
 
 val AppDarkBackgroundGold = Color(0xFF2C240C)
