@@ -17,6 +17,7 @@ import com.wreckingballsoftware.design.ui.campaigns.getCampaignFrameworkStateIte
 import com.wreckingballsoftware.design.ui.compose.BottomNavBar
 import com.wreckingballsoftware.design.ui.compose.TopBar
 import com.wreckingballsoftware.design.ui.compose.TopBarAction
+import com.wreckingballsoftware.design.ui.map.getMapFrameworkStateItem
 import com.wreckingballsoftware.design.ui.navigation.Actions
 import com.wreckingballsoftware.design.ui.navigation.DeSignHost
 import com.wreckingballsoftware.design.ui.theme.customColorsPalette
@@ -31,7 +32,8 @@ fun Framework() {
     val actions = remember(navController) { Actions(navController) }
     val frameworkState = rememberFrameworkState(
         navController = navController,
-        campaignsFrameworkStateItem = getCampaignFrameworkStateItem()
+        campaignsFrameworkStateItem = getCampaignFrameworkStateItem(),
+        mapFrameworkStateItem = getMapFrameworkStateItem(),
     )
 
     Scaffold(

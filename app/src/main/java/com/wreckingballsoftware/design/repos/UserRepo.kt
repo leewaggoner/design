@@ -34,4 +34,12 @@ class UserRepo(private val dataStore: DataStoreWrapper) {
     suspend fun getUserEmail(): String {
         return dataStore.getUserEmail("")
     }
+
+    suspend fun putSelectedCampaignIndex(index: Long) {
+        dataStore.putSelectedCampaignIndex(index)
+    }
+
+    suspend fun getSelectedCampaignIndex():Long {
+        return dataStore.getSelectedCampaignIndex(0)
+    }
 }

@@ -22,10 +22,10 @@ sealed class FrameworkStateItem(
         isNavBarVisible = true,
         fabAction = { }
     )
-    class MapFrameworkStateItem : FrameworkStateItem(
+    class MapFrameworkStateItem(fab: @Composable () -> Unit) : FrameworkStateItem(
         isTopBarActionAvailable = true,
         isNavBarVisible = true,
-        fabAction = { },
+        fabAction = fab,
     )
     class SignsFrameworkStateItem : FrameworkStateItem(
         isTopBarActionAvailable = true,

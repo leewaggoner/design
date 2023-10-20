@@ -9,7 +9,7 @@ import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.compose.SavedStateHandleSaveableApi
 import androidx.lifecycle.viewmodel.compose.saveable
 import com.wreckingballsoftware.design.database.DBCampaign
-import com.wreckingballsoftware.design.domain.ValidInput
+import com.wreckingballsoftware.design.domain.models.ValidInput
 import com.wreckingballsoftware.design.repos.CampaignsRepo
 import com.wreckingballsoftware.design.repos.UserRepo
 import com.wreckingballsoftware.design.ui.campaigns.models.CampaignsScreenNavigation
@@ -37,6 +37,13 @@ class CampaignsViewModel(
         mutableStateOf(CampaignsScreenState())
     }
     val campaigns: Flow<List<DBCampaign>> = campaignsRepo.getAllCampaigns()
+
+    init {
+        viewModelScope.launch(Dispatchers.Main) {
+            val index = userRepo.getSelectedCampaignIndex()
+            state = state.copy(selectedCampaignIndex = index)
+        }
+    }
 
     fun updateCampaigns(campaigns: List<DBCampaign>) {
         state = state.copy(campaigns = campaigns)
@@ -102,8 +109,11 @@ class CampaignsViewModel(
         }
     }
 
-    fun onSelectCard(index: Int) {
-        state = state.copy(selectedIndex = index)
+    fun onSelectCard(campaignIndex: Long) {
+        viewModelScope.launch(Dispatchers.Main) {
+            userRepo.putSelectedCampaignIndex(campaignIndex)
+            state = state.copy(selectedCampaignIndex = campaignIndex)
+        }
     }
 
     private fun validateCampaignName(campaignName: String): Boolean {

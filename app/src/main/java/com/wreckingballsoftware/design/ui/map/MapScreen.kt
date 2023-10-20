@@ -2,12 +2,12 @@ package com.wreckingballsoftware.design.ui.map
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import com.google.android.gms.maps.model.CameraPosition
-import com.google.maps.android.compose.CameraPositionState
-import com.google.maps.android.compose.GoogleMap
-import com.google.maps.android.compose.MapProperties
+import androidx.compose.ui.unit.dp
+import com.wreckingballsoftware.design.ui.compose.DeSignFab
+import com.wreckingballsoftware.design.ui.framework.FrameworkStateItem
 import com.wreckingballsoftware.design.ui.map.models.MapScreenState
 import com.wreckingballsoftware.design.ui.navigation.Actions
 import org.koin.androidx.compose.koinViewModel
@@ -24,26 +24,24 @@ fun MapScreen(
 
 @Composable
 fun MapScreenContent(
-    state: MapScreenState
+    state: MapScreenState,
+    viewModel: MapViewModel = koinViewModel()
 ) {
     Column(
         modifier = Modifier
             .fillMaxSize(),
     ) {
-        GoogleMap(
-            modifier = Modifier.fillMaxSize(),
-            cameraPositionState = CameraPositionState(
-                position = CameraPosition.fromLatLngZoom(state.latLng, 15f)
-            ),
-            properties = MapProperties(
-                isMyLocationEnabled = true,
-            )
+        viewModel.DeSignMap(latLng = state.latLng)
+    }
+}
+
+@Composable
+fun getMapFrameworkStateItem(): FrameworkStateItem.MapFrameworkStateItem {
+    return FrameworkStateItem.MapFrameworkStateItem {
+        DeSignFab(
+            modifier = Modifier.padding(end = 48.dp)
         ) {
-//            Marker(
-//                state = MarkerState(position = state.latLng),
-//                title = "Singapore",
-//                snippet = "Marker in Singapore"
-//            )
+            MapViewModel.showAddMarkerBottomSheet()
         }
     }
 }

@@ -31,11 +31,10 @@ import com.wreckingballsoftware.design.ui.theme.dimensions
 
 @Composable
 fun CampaignCard(
-    index: Int,
-    selectedIndex: Int,
+    selectedCampaignIndex: Long,
     campaign: DBCampaign,
     onCampaignInfoClick: (Long) -> Unit,
-    onSelectCard: (Int) -> Unit,
+    onSelectCard: (Long) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Card(
@@ -44,10 +43,10 @@ fun CampaignCard(
                 .fillMaxWidth()
                 .padding(all = MaterialTheme.dimensions.SpaceSmall)
                 .clickable {
-                    onSelectCard(index)
+                    onSelectCard(campaign.id)
                 },
         ),
-        border = if (selectedIndex == index) {
+        border = if (selectedCampaignIndex == campaign.id) {
             BorderStroke(MaterialTheme.dimensions.CardBorderStrokeWidth, AppGold)
         } else {
             null
@@ -104,8 +103,7 @@ fun CampaignCard(
 @Composable
 fun CampaignCardPreview() {
     CampaignCard(
-        index = 0,
-        selectedIndex = 0,
+        selectedCampaignIndex = 0,
         campaign = DBCampaign(
             name = "My Test Campaign",
             createdBy = "Lee Waggoner",

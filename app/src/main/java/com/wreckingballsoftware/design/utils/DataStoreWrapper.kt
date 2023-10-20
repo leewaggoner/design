@@ -5,6 +5,7 @@ import androidx.datastore.core.IOException
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.emptyPreferences
+import androidx.datastore.preferences.core.longPreferencesKey
 import androidx.datastore.preferences.core.stringPreferencesKey
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.catch
@@ -18,6 +19,13 @@ class DataStoreWrapper(private val dataStore: DataStore<Preferences>) {
         val USER_FAMILY_NAME_KEY = stringPreferencesKey("PlayerLastName")
         val USER_FULL_NAME = stringPreferencesKey("PlayerFullName")
         val USER_EMAIL_KEY = stringPreferencesKey("UserEmail")
+        val SELECTED_CAMPAIGN_INDEX_KEY = longPreferencesKey("SelectedCampaignIndex")
+    }
+
+    suspend fun putUserGivenName(name: String) = withContext(Dispatchers.IO) {
+        dataStore.edit { preferences ->
+            preferences[PreferencesKey.USER_GIVEN_NAME_KEY] = name
+        }
     }
 
     suspend fun getUserGivenName(default: String): String = withContext(Dispatchers.IO) {
@@ -30,9 +38,9 @@ class DataStoreWrapper(private val dataStore: DataStore<Preferences>) {
         }.first()[PreferencesKey.USER_GIVEN_NAME_KEY] ?: default
     }
 
-    suspend fun putUserGivenName(name: String) = withContext(Dispatchers.IO) {
+    suspend fun putUserFamilyName(name: String) = withContext(Dispatchers.IO) {
         dataStore.edit { preferences ->
-            preferences[PreferencesKey.USER_GIVEN_NAME_KEY] = name
+            preferences[PreferencesKey.USER_FAMILY_NAME_KEY] = name
         }
     }
 
@@ -46,9 +54,10 @@ class DataStoreWrapper(private val dataStore: DataStore<Preferences>) {
         }.first()[PreferencesKey.USER_FAMILY_NAME_KEY] ?: default
     }
 
-    suspend fun putUserFamilyName(name: String) = withContext(Dispatchers.IO) {
+    suspend fun putUserFullName(fullName: String) = withContext(Dispatchers.IO) {
         dataStore.edit { preferences ->
-            preferences[PreferencesKey.USER_FAMILY_NAME_KEY] = name
+            preferences[PreferencesKey.USER_FULL_NAME] = fullName
+
         }
     }
 
@@ -62,10 +71,9 @@ class DataStoreWrapper(private val dataStore: DataStore<Preferences>) {
         }.first()[PreferencesKey.USER_FULL_NAME] ?: default
     }
 
-    suspend fun putUserFullName(fullName: String) = withContext(Dispatchers.IO) {
+    suspend fun putUserEmail(name: String) = withContext(Dispatchers.IO) {
         dataStore.edit { preferences ->
-            preferences[PreferencesKey.USER_FULL_NAME] = fullName
-
+            preferences[PreferencesKey.USER_EMAIL_KEY] = name
         }
     }
 
@@ -79,10 +87,20 @@ class DataStoreWrapper(private val dataStore: DataStore<Preferences>) {
         }.first()[PreferencesKey.USER_EMAIL_KEY] ?: default
     }
 
-    suspend fun putUserEmail(name: String) = withContext(Dispatchers.IO) {
+    suspend fun putSelectedCampaignIndex(index: Long) {
         dataStore.edit { preferences ->
-            preferences[PreferencesKey.USER_EMAIL_KEY] = name
+            preferences[PreferencesKey.SELECTED_CAMPAIGN_INDEX_KEY] = index
         }
+    }
+
+    suspend fun getSelectedCampaignIndex(default: Long): Long = withContext(Dispatchers.IO) {
+        dataStore.data.catch { exception ->
+            if (exception is IOException) {
+                emit(emptyPreferences())
+            } else {
+                throw exception
+            }
+        }.first()[PreferencesKey.SELECTED_CAMPAIGN_INDEX_KEY] ?: default
     }
 
     suspend fun clearAll() = withContext(Dispatchers.IO) {

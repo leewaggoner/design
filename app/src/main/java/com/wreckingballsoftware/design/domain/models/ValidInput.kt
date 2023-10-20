@@ -1,4 +1,4 @@
-package com.wreckingballsoftware.design.domain
+package com.wreckingballsoftware.design.domain.models
 
 import com.wreckingballsoftware.design.R
 
