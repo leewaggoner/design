@@ -4,13 +4,11 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.wreckingballsoftware.design.ui.campaigns.CampaignsViewModel.Companion.showAddCampaignBottomSheet
-import com.wreckingballsoftware.design.ui.campaigns.CampaignsViewModel.Companion.showBottomSheet
 import com.wreckingballsoftware.design.ui.campaigns.models.CampaignsScreenNavigation
 import com.wreckingballsoftware.design.ui.campaigns.models.CampaignsScreenState
 import com.wreckingballsoftware.design.ui.compose.DeSignFab
@@ -23,7 +21,7 @@ fun CampaignsScreen(
     actions: Actions,
     viewModel: CampaignsViewModel = koinViewModel()
 ) {
-    val navigation = viewModel.navigation.collectAsStateWithLifecycle(null)
+    val navigation = viewModel.navigation.collectAsStateWithLifecycle(initialValue = null)
     navigation.value?.let { nav ->
         when (nav) {
             is CampaignsScreenNavigation.DisplayCampaign -> {
@@ -32,8 +30,8 @@ fun CampaignsScreen(
         }
     }
 
-    val campaigns by viewModel.campaigns.collectAsState(
-        initial = listOf()
+    val campaigns by viewModel.campaigns.collectAsStateWithLifecycle(
+        initialValue = listOf()
     )
     viewModel.updateCampaigns(campaigns)
 
@@ -43,7 +41,7 @@ fun CampaignsScreen(
         onSelectCard = viewModel::onSelectCard
     )
 
-    if (showBottomSheet) {
+    if (showAddCampaignBottomSheet) {
         AddCampaignBottomSheet(
             state = viewModel.state,
             onNameValueChanged = viewModel::onNameValueChanged,
@@ -68,7 +66,7 @@ fun CampaignsScreenContent(
             items = state.campaigns,
         ) {campaign ->
             CampaignCard(
-                selectedCampaignIndex = state.selectedCampaignIndex,
+                selectedCampaignIndex = state.selectedCampaignId,
                 campaign = campaign,
                 onCampaignInfoClick = onCampaignInfoClick,
                 onSelectCard = onSelectCard

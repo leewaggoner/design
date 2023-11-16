@@ -69,7 +69,7 @@ fun NavGraphBuilder.mapGraph(actions: Actions) {
     ) {
         composable(Destinations.MapScreen) {
             CheckPermissions {
-                MapScreen(actions = actions)
+                MapScreen()
             }
         }
     }

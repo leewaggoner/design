@@ -54,6 +54,8 @@ val appModule = module {
     viewModel {
         MapViewModel(
             deSignMap = get(),
+            userRepo = get(),
+            campaignsRepo = get(),
         )
     }
 

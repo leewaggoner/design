@@ -29,4 +29,9 @@
     <string name="permission_rationale">Your sign placements cannot be tracked without the map, which requires location permissions. Please grant permission.</string>
     <string name="permission_text">Location permissions are required for this feature to be available. Please grant permission.</string>
     <string name="campaign_details">Campaign details.</string>
+    <string name="create_sign_marker">Add New Sign</string>
+    <string name="add_sign_marker_dialog_title">Add a new sign to %1$s</string>
+    <string name="add_sign_marker_dialog_message">Enter a short note for your new sign. (Optional)</string>
+    <string name="sign_marker_notes_label">Sign Marker Notes</string>
+    <string name="please_add_campaign">Please add a campaign first.</string>
 </resources>

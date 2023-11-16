@@ -16,6 +16,8 @@ data class Dimensions(
     val ButtonWidth: Dp = 160.dp,
     val CardElevation: Dp = 4.dp,
     val CardBorderStrokeWidth: Dp = 2.dp,
+
+    val MapZoomOffset: Dp = 48.dp,
 )
 
 val CustomDimensions = Dimensions()

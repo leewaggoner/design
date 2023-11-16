@@ -4,7 +4,6 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
@@ -13,6 +12,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.navigation.compose.rememberNavController
 import com.wreckingballsoftware.design.R
+import com.wreckingballsoftware.design.repos.UserRepo
 import com.wreckingballsoftware.design.ui.campaigns.getCampaignFrameworkStateItem
 import com.wreckingballsoftware.design.ui.compose.BottomNavBar
 import com.wreckingballsoftware.design.ui.compose.TopBar
@@ -25,15 +25,14 @@ import com.wreckingballsoftware.design.ui.theme.customColorsPalette
 /**
  * The app container, which includes the top bar and the bottom navigation bar
  */
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun Framework() {
+fun Framework(userRepo: UserRepo) {
     val navController = rememberNavController()
     val actions = remember(navController) { Actions(navController) }
     val frameworkState = rememberFrameworkState(
         navController = navController,
         campaignsFrameworkStateItem = getCampaignFrameworkStateItem(),
-        mapFrameworkStateItem = getMapFrameworkStateItem(),
+        mapFrameworkStateItem = getMapFrameworkStateItem(userRepo),
     )
 
     Scaffold(

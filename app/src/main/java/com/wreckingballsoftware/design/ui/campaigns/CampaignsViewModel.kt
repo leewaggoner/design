@@ -40,8 +40,10 @@ class CampaignsViewModel(
 
     init {
         viewModelScope.launch(Dispatchers.Main) {
-            val index = userRepo.getSelectedCampaignIndex()
-            state = state.copy(selectedCampaignIndex = index)
+            val id = userRepo.getSelectedCampaignId()
+            if (id != 0L) {
+                onSelectCard(id)
+            }
         }
     }
 
@@ -94,7 +96,7 @@ class CampaignsViewModel(
     }
 
     fun onDismissBottomSheet() {
-        showBottomSheet = false
+        showAddCampaignBottomSheet = false
         state = state.copy(
             campaignName = "",
             nameCharactersUsed = 0,
@@ -109,10 +111,10 @@ class CampaignsViewModel(
         }
     }
 
-    fun onSelectCard(campaignIndex: Long) {
+    fun onSelectCard(campaignId: Long) {
         viewModelScope.launch(Dispatchers.Main) {
-            userRepo.putSelectedCampaignIndex(campaignIndex)
-            state = state.copy(selectedCampaignIndex = campaignIndex)
+            userRepo.putSelectedCampaignId(campaignId)
+            state = state.copy(selectedCampaignId = campaignId)
         }
     }
 
@@ -149,9 +151,9 @@ class CampaignsViewModel(
     companion object {
         const val MAX_NAME_LENGTH = 30
         const val MAX_NOTES_LENGTH = 140
-        var showBottomSheet by mutableStateOf(false)
+        var showAddCampaignBottomSheet by mutableStateOf(false)
         fun showAddCampaignBottomSheet() {
-            showBottomSheet = true
+            showAddCampaignBottomSheet = true
         }
     }
 }
