@@ -60,59 +60,57 @@ fun AddSignMarkerBottomSheet(
                 .padding(all = MaterialTheme.dimensions.Space),
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
-            Column(modifier = Modifier.weight(1.0f)) {
-                Text(
-                    modifier = Modifier.fillMaxWidth(),
-                    text = stringResource(
-                        id = R.string.add_sign_marker_dialog_title,
-                        campaignName,
-                    ),
-                    style = MaterialTheme.customTypography.DeSignSubtitle,
-                    textAlign = TextAlign.Center,
-                )
+            Text(
+                modifier = Modifier.fillMaxWidth(),
+                text = stringResource(
+                    id = R.string.add_sign_marker_dialog_title,
+                    campaignName,
+                ),
+                style = MaterialTheme.customTypography.DeSignSubtitle,
+                textAlign = TextAlign.Center,
+            )
 
-                Spacer(modifier = Modifier.height(MaterialTheme.dimensions.SpaceSmall))
+            Spacer(modifier = Modifier.height(MaterialTheme.dimensions.SpaceSmall))
 
-                Text(
-                    modifier = Modifier.fillMaxWidth(),
-                    text = stringResource(id = R.string.add_sign_marker_dialog_message),
-                    style = MaterialTheme.customTypography.DeSignBody,
-                    textAlign = TextAlign.Center,
-                )
+            Text(
+                modifier = Modifier.fillMaxWidth(),
+                text = stringResource(id = R.string.add_sign_marker_dialog_message),
+                style = MaterialTheme.customTypography.DeSignBody,
+                textAlign = TextAlign.Center,
+            )
 
-                Spacer(modifier = Modifier.height(MaterialTheme.dimensions.SpaceLarge))
+            Spacer(modifier = Modifier.height(MaterialTheme.dimensions.SpaceLarge))
 
-                val notesLabel = stringResource(id = R.string.sign_marker_notes_label)
-                OutlinedTextField(
-                    modifier = Modifier.fillMaxWidth(),
-                    value = state.signMarkerNotes,
-                    label = {
-                        Text(text = notesLabel)
-                    },
-                    placeholder = {
-                        Text(text = notesLabel)
-                    },
-                    supportingText = {
-                        Text(
-                            text = "${state.notesCharactersUsed}/${MapViewModel.MAX_NOTES_LENGTH}"
-                        )
-                    },
-                    singleLine = false,
-                    onValueChange = { text -> onNotesValueChanged(text) },
-                    keyboardOptions = KeyboardOptions(
-                        keyboardType = KeyboardType.Text,
-                        imeAction = ImeAction.Done,
-                    ),
-                    keyboardActions = KeyboardActions(
-                        onDone = {
-                            onAddSignMarker()
-                            scope.launch { sheetState.hide() }
-                        }
-                    ),
-                )
+            val notesLabel = stringResource(id = R.string.sign_marker_notes_label)
+            OutlinedTextField(
+                modifier = Modifier.fillMaxWidth(),
+                value = state.signMarkerNotes,
+                label = {
+                    Text(text = notesLabel)
+                },
+                placeholder = {
+                    Text(text = notesLabel)
+                },
+                supportingText = {
+                    Text(
+                        text = "${state.notesCharactersUsed}/${MapViewModel.MAX_NOTES_LENGTH}"
+                    )
+                },
+                singleLine = false,
+                onValueChange = { text -> onNotesValueChanged(text) },
+                keyboardOptions = KeyboardOptions(
+                    keyboardType = KeyboardType.Text,
+                    imeAction = ImeAction.Done,
+                ),
+                keyboardActions = KeyboardActions(
+                    onDone = {
+                        onAddSignMarker()
+                        scope.launch { sheetState.hide() }
+                    }
+                ),
+            )
 
-                Spacer(modifier = Modifier.height(MaterialTheme.dimensions.SpaceLarge))
-            }
+            Spacer(modifier = Modifier.height(MaterialTheme.dimensions.SpaceLarge))
 
             Row(
                 modifier = Modifier
