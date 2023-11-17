@@ -16,7 +16,7 @@ interface CampaignsDao {
     suspend fun getCampaign(id: Long): DBCampaign?
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
-    suspend fun insertCampaign(campaign: DBCampaign)
+    suspend fun insertCampaign(campaign: DBCampaign): Long
 
     @Delete
     suspend fun deleteCampaign(campaign: DBCampaign)

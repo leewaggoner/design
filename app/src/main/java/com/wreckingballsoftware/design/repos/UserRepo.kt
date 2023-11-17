@@ -1,5 +1,6 @@
 package com.wreckingballsoftware.design.repos
 
+import com.wreckingballsoftware.design.database.INVALID_CAMPAIGN_ID
 import com.wreckingballsoftware.design.utils.DataStoreWrapper
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -42,6 +43,6 @@ class UserRepo(private val dataStore: DataStoreWrapper) {
     }
 
     suspend fun getSelectedCampaignId():Long = withContext(Dispatchers.IO) {
-        dataStore.getSelectedCampaignIndex(0)
+        dataStore.getSelectedCampaignIndex(default = INVALID_CAMPAIGN_ID)
     }
 }

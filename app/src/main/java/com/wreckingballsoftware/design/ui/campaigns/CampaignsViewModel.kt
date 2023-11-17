@@ -9,6 +9,7 @@ import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.compose.SavedStateHandleSaveableApi
 import androidx.lifecycle.viewmodel.compose.saveable
 import com.wreckingballsoftware.design.database.DBCampaign
+import com.wreckingballsoftware.design.database.INVALID_CAMPAIGN_ID
 import com.wreckingballsoftware.design.domain.models.ValidInput
 import com.wreckingballsoftware.design.repos.CampaignsRepo
 import com.wreckingballsoftware.design.repos.UserRepo
@@ -18,6 +19,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.channels.BufferOverflow
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
@@ -37,15 +39,6 @@ class CampaignsViewModel(
         mutableStateOf(CampaignsScreenState())
     }
     val campaigns: Flow<List<DBCampaign>> = campaignsRepo.getAllCampaigns()
-
-    init {
-        viewModelScope.launch(Dispatchers.Main) {
-            val id = userRepo.getSelectedCampaignId()
-            if (id != 0L) {
-                onSelectCard(id)
-            }
-        }
-    }
 
     fun updateCampaigns(campaigns: List<DBCampaign>) {
         state = state.copy(campaigns = campaigns)
@@ -87,7 +80,8 @@ class CampaignsViewModel(
                     dateCreated = strDate,
                     notes = state.campaignNotes,
                 )
-                campaignsRepo.addCampaign(newCampaign)
+                val id = campaignsRepo.addCampaign(newCampaign)
+                onSelectCard(campaignId = id)
                 onDismissBottomSheet()
             }
             result = true
@@ -107,8 +101,13 @@ class CampaignsViewModel(
 
     fun onCampaignInfoClick(campaignId: Long) {
         viewModelScope.launch(Dispatchers.Main) {
+            onSelectCard(campaignId = campaignId)
             navigation.emit(CampaignsScreenNavigation.DisplayCampaign(campaignId))
         }
+    }
+
+    suspend fun onSelectInitialCard() {
+        onSelectCard(campaignId = getInitialSelection())
     }
 
     fun onSelectCard(campaignId: Long) {
@@ -146,6 +145,33 @@ class CampaignsViewModel(
             state.copy(campaignNotesErrorId = 0)
         }
         return textIsValid
+    }
+
+    private suspend fun getInitialSelection(): Long {
+        var result = INVALID_CAMPAIGN_ID
+        val id = userRepo.getSelectedCampaignId()
+        val campaignList = campaigns.first()
+        if (campaignList.isNotEmpty()) {
+            val inList = campaignList.any { dbCampaign ->
+                dbCampaign.id == id
+            }
+            // campaign list is not empty,
+            result = if (id == INVALID_CAMPAIGN_ID) {
+                // but the selected id is uninitialized -- select the first campaign
+                campaignList[0].id
+            } else {
+                if (inList) {
+                    // and the previously selected campaign is in it -- select it
+                    id
+                } else {
+                    // but the previously selected campaign is gone -- select the first campaign
+                    campaignList[0].id
+                }
+            }
+        }
+        // if the campaign list is empty, invalidate the selected campaign
+
+        return result
     }
 
     companion object {

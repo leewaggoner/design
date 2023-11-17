@@ -9,6 +9,7 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import com.wreckingballsoftware.design.R
+import com.wreckingballsoftware.design.database.INVALID_CAMPAIGN_ID
 import com.wreckingballsoftware.design.repos.UserRepo
 import com.wreckingballsoftware.design.ui.compose.DeSignErrorAlert
 import com.wreckingballsoftware.design.ui.compose.DeSignFab
@@ -66,7 +67,7 @@ fun getMapFrameworkStateItem(userRepo: UserRepo): FrameworkStateItem.MapFramewor
             modifier = Modifier.padding(end = MaterialTheme.dimensions.MapZoomOffset)
         ) {
             scope.launch(Dispatchers.Main) {
-                if (userRepo.getSelectedCampaignId() == 0L) {
+                if (userRepo.getSelectedCampaignId() == INVALID_CAMPAIGN_ID) {
                     MapViewModel.showAddCampaignMessage()
                 } else {
                     MapViewModel.showAddMarkerBottomSheet()
