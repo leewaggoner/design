@@ -10,18 +10,24 @@ import com.google.android.gms.location.LocationCallback
 import com.google.android.gms.location.LocationResult
 import com.google.android.gms.maps.model.LatLng
 import com.wreckingballsoftware.design.database.DBCampaign
+import com.wreckingballsoftware.design.database.DBSignMarker
 import com.wreckingballsoftware.design.domain.DeSignMap
 import com.wreckingballsoftware.design.repos.CampaignsRepo
+import com.wreckingballsoftware.design.repos.SignMarkersRepo
 import com.wreckingballsoftware.design.repos.UserRepo
 import com.wreckingballsoftware.design.ui.campaigns.cutToLength
 import com.wreckingballsoftware.design.ui.campaigns.sanitize
 import com.wreckingballsoftware.design.ui.map.models.MapScreenState
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
+import java.time.format.FormatStyle
 
 class MapViewModel(
     private val deSignMap: DeSignMap,
     private val userRepo: UserRepo,
+    private val signMarkersRepo: SignMarkersRepo,
     campaignsRepo: CampaignsRepo,
 ) : ViewModel() {
     var state: MapScreenState by mutableStateOf(MapScreenState())
@@ -57,29 +63,25 @@ class MapViewModel(
         )
     }
 
-    fun onAddSignMarker(): Boolean {
-//        var result = false
-//        val campaignNameIsValid = validateCampaignName(state.campaignName)
-//        val campaignNoteIsValid = validateCampaignNotes(state.campaignNotes)
-//        if (campaignNameIsValid && campaignNoteIsValid) {
-//            viewModelScope.launch(Dispatchers.Main) {
-//                val formatter = DateTimeFormatter.ofLocalizedDateTime((FormatStyle.SHORT))
-//                val currentDate = LocalDateTime.now()
-//                val strDate = currentDate.format(formatter)
-//                val displayName = userRepo.getUserDisplayName()
-//                val newCampaign = DBCampaign(
-//                    name = state.campaignName,
-//                    createdBy = displayName,
-//                    dateCreated = strDate,
-//                    notes = state.campaignNotes,
-//                )
-//                campaignsRepo.addCampaign(newCampaign)
+    fun onAddSignMarker() {
+        currentCampaign?.let { campaign ->
+            viewModelScope.launch(Dispatchers.Main) {
+                val formatter = DateTimeFormatter.ofLocalizedDateTime((FormatStyle.SHORT))
+                val currentDate = LocalDateTime.now()
+                val strDate = currentDate.format(formatter)
+                val displayName = userRepo.getUserDisplayName()
+                val newMarker = DBSignMarker(
+                    campaignId = campaign.id,
+                    createdBy = displayName,
+                    dateCreated = strDate,
+                    notes = state.signMarkerNotes,
+                    lat = state.latLng.latitude,
+                    lon = state.latLng.longitude,
+                )
+                signMarkersRepo.addSignMarker(newMarker)
                 onDismissBottomSheet()
-//            }
-//            result = true
-//        }
-//        return result
-        return true
+            }
+        }
     }
 
     fun getCurrentCampaignName(): String {

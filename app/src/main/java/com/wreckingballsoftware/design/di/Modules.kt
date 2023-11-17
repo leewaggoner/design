@@ -13,6 +13,7 @@ import com.wreckingballsoftware.design.database.DeSignDatabase
 import com.wreckingballsoftware.design.domain.DeSignMap
 import com.wreckingballsoftware.design.domain.GoogleAuth
 import com.wreckingballsoftware.design.repos.CampaignsRepo
+import com.wreckingballsoftware.design.repos.SignMarkersRepo
 import com.wreckingballsoftware.design.repos.UserRepo
 import com.wreckingballsoftware.design.ui.campaigns.CampaignsViewModel
 import com.wreckingballsoftware.design.ui.details.CampaignDetailsViewModel
@@ -56,6 +57,7 @@ val appModule = module {
             deSignMap = get(),
             userRepo = get(),
             campaignsRepo = get(),
+            signMarkersRepo = get(),
         )
     }
 
@@ -68,6 +70,12 @@ val appModule = module {
     single {
         CampaignsRepo(
             campaignsDao = get()
+        )
+    }
+
+    single {
+        SignMarkersRepo(
+            signMarkersDao = get()
         )
     }
 
@@ -95,11 +103,18 @@ val appModule = module {
     }
 
     single {
+        val database = get<DeSignDatabase>()
+        database.getSignMarkersDao()
+    }
+
+    single {
         Room.databaseBuilder(
             context = androidContext(),
             klass = DeSignDatabase::class.java,
             name = DB_NAME,
-        ).build()
+        )
+            .fallbackToDestructiveMigration()
+            .build()
     }
 }
 

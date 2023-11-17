@@ -41,7 +41,7 @@ fun AddSignMarkerBottomSheet(
     state: MapScreenState,
     campaignName: String,
     onNotesValueChanged: (String) -> Unit,
-    onAddSignMarker: () -> Boolean,
+    onAddSignMarker: () -> Unit,
     onDismissBottomSheet: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
@@ -135,9 +135,8 @@ fun AddSignMarkerBottomSheet(
                 Button(
                     modifier = Modifier.width(MaterialTheme.dimensions.ButtonWidth),
                     onClick = {
-                        if (onAddSignMarker()) {
-                            scope.launch { sheetState.hide() }
-                        }
+                        onAddSignMarker()
+                        scope.launch { sheetState.hide() }
                     },
                     colors = ButtonDefaults.buttonColors(
                         containerColor = MaterialTheme.colorScheme.primary,
