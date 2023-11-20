@@ -52,12 +52,13 @@ val appModule = module {
         )
     }
 
-    viewModel {
+    viewModel {params ->
         MapViewModel(
             deSignMap = get(),
             userRepo = get(),
             campaignsRepo = get(),
             signMarkersRepo = get(),
+            campaignId = params.get(),
         )
     }
 

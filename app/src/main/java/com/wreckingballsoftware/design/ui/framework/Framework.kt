@@ -10,6 +10,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.lifecycle.LifecycleCoroutineScope
 import androidx.navigation.compose.rememberNavController
 import com.wreckingballsoftware.design.R
 import com.wreckingballsoftware.design.repos.UserRepo
@@ -26,9 +27,9 @@ import com.wreckingballsoftware.design.ui.theme.customColorsPalette
  * The app container, which includes the top bar and the bottom navigation bar
  */
 @Composable
-fun Framework(userRepo: UserRepo) {
+fun Framework(scope: LifecycleCoroutineScope, userRepo: UserRepo) {
     val navController = rememberNavController()
-    val actions = remember(navController) { Actions(navController) }
+    val actions = remember(navController) { Actions(navController, scope, userRepo) }
     val frameworkState = rememberFrameworkState(
         navController = navController,
         campaignsFrameworkStateItem = getCampaignFrameworkStateItem(),

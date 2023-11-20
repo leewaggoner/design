@@ -8,6 +8,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.wreckingballsoftware.design.R
 import com.wreckingballsoftware.design.database.INVALID_CAMPAIGN_ID
 import com.wreckingballsoftware.design.repos.UserRepo
@@ -19,11 +20,17 @@ import com.wreckingballsoftware.design.ui.theme.dimensions
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import org.koin.androidx.compose.koinViewModel
+import org.koin.core.parameter.ParametersHolder
 
 @Composable
 fun MapScreen(
-    viewModel: MapViewModel = koinViewModel()
+    campaignId: Long,
+    viewModel: MapViewModel = koinViewModel(parameters = { ParametersHolder(mutableListOf(campaignId)) })
 ) {
+    val campaignWithMarkers = viewModel.campaignWithMarkers.collectAsStateWithLifecycle(
+        initialValue = null
+    )
+
     MapScreenContent(
         state = viewModel.state
     )

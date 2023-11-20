@@ -21,8 +21,8 @@ import org.koin.compose.koinInject
 fun DeSignHost(
     navController: NavHostController,
     actions: Actions,
-    googleAuth: GoogleAuth = koinInject())
-{
+    googleAuth: GoogleAuth = koinInject(),
+) {
     var startDestination = Destinations.AuthScreen
     if (googleAuth.isSignedIn()) {
         startDestination = Destinations.CampaignsGraph
@@ -33,7 +33,7 @@ fun DeSignHost(
             AuthScreen(actions = actions)
         }
         campaignsGraph(actions = actions)
-        mapGraph(actions = actions)
+        mapGraph()
         signsGraph(actions = actions)
     }
 }
@@ -62,14 +62,20 @@ fun NavGraphBuilder.campaignsGraph(actions: Actions) {
     }
 }
 
-fun NavGraphBuilder.mapGraph(actions: Actions) {
+fun NavGraphBuilder.mapGraph() {
     navigation(
         route = Destinations.MapGraph,
         startDestination = Destinations.MapScreen
     ) {
-        composable(Destinations.MapScreen) {
-            CheckPermissions {
-                MapScreen()
+        composable(
+            Destinations.MapScreen,
+            arguments = listOf(navArgument("campaignId") { type = NavType.LongType })
+        ) {backStackEntry ->
+            val campaignId = backStackEntry.arguments?.getLong("campaignId")
+            campaignId?.let { id ->
+                CheckPermissions {
+                    MapScreen(id)
+                }
             }
         }
     }

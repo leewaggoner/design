@@ -23,4 +23,7 @@ interface CampaignsDao {
 
     @Query("DELETE FROM campaigns")
     suspend fun deleteAll()
+
+    @Query("SELECT * FROM campaigns LEFT JOIN sign_markers ON campaigns.id = sign_markers.campaign_id WHERE campaigns.id=:campaignId")
+    fun getCampaignWithMarkersFlow(campaignId: Long): Flow<Map<DBCampaign, List<DBSignMarker>>>
 }

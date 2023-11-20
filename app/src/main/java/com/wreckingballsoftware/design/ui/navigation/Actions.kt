@@ -1,8 +1,12 @@
 package com.wreckingballsoftware.design.ui.navigation
 
+import androidx.lifecycle.LifecycleCoroutineScope
 import androidx.navigation.NavController
+import com.wreckingballsoftware.design.repos.UserRepo
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
-class Actions(navController: NavController) {
+class Actions(navController: NavController, scope: LifecycleCoroutineScope, userRepo: UserRepo) {
     val navigateUp: () -> Unit = {
         navController.navigateUp()
     }
@@ -24,12 +28,20 @@ class Actions(navController: NavController) {
         }
     }
     val navigateToMapGraph: () -> Unit = {
-        navController.navigate(Destinations.MapGraph) {
-            //clear the whole backstack
-            popUpTo(navController.graph.id) {
-                inclusive = true
+        scope.launch(Dispatchers.Main) {
+            val campaignId = userRepo.getSelectedCampaignId()
+            navController.navigate(
+                Destinations.MapScreen.replace(
+                    oldValue = "{campaignId}",
+                    newValue = campaignId.toString()
+                )
+            ) {
+                //clear the whole backstack
+                popUpTo(navController.graph.id) {
+                    inclusive = true
+                }
+                launchSingleTop = true
             }
-            launchSingleTop = true
         }
     }
     val navigateToSignsGraph: () -> Unit = {

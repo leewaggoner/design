@@ -12,6 +12,7 @@ import com.google.android.gms.maps.model.LatLng
 import com.wreckingballsoftware.design.database.DBCampaign
 import com.wreckingballsoftware.design.database.DBSignMarker
 import com.wreckingballsoftware.design.domain.DeSignMap
+import com.wreckingballsoftware.design.domain.models.CampaignWithMarkers
 import com.wreckingballsoftware.design.repos.CampaignsRepo
 import com.wreckingballsoftware.design.repos.SignMarkersRepo
 import com.wreckingballsoftware.design.repos.UserRepo
@@ -19,6 +20,8 @@ import com.wreckingballsoftware.design.ui.campaigns.cutToLength
 import com.wreckingballsoftware.design.ui.campaigns.sanitize
 import com.wreckingballsoftware.design.ui.map.models.MapScreenState
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
@@ -29,9 +32,22 @@ class MapViewModel(
     private val userRepo: UserRepo,
     private val signMarkersRepo: SignMarkersRepo,
     campaignsRepo: CampaignsRepo,
+    campaignId: Long,
 ) : ViewModel() {
     var state: MapScreenState by mutableStateOf(MapScreenState())
-    private var currentCampaign: DBCampaign? = null
+    var campaignWithMarkers: Flow<CampaignWithMarkers> =
+        campaignsRepo.getCampaignWithMarkersFlow(campaignId).map { element ->
+            if (element.keys.isNotEmpty()) {
+                val curCampaign = element.keys.toTypedArray()[0]
+                CampaignWithMarkers(
+                    campaign = curCampaign,
+                    markers = element[curCampaign] ?: listOf()
+                )
+            } else {
+                CampaignWithMarkers()
+            }
+        }
+    private var campaign: DBCampaign? = null
 
     init {
         deSignMap.requestLocationUpdates(
@@ -49,8 +65,7 @@ class MapViewModel(
             },
         )
         viewModelScope.launch(Dispatchers.Main) {
-            val currentCampaignId = userRepo.getSelectedCampaignId()
-            currentCampaign = campaignsRepo.getCampaign(currentCampaignId)
+            campaign = campaignsRepo.getCampaign(campaignId)
         }
     }
 
@@ -64,14 +79,14 @@ class MapViewModel(
     }
 
     fun onAddSignMarker() {
-        currentCampaign?.let { campaign ->
+        campaign?.let { curCampaign ->
             viewModelScope.launch(Dispatchers.Main) {
                 val formatter = DateTimeFormatter.ofLocalizedDateTime((FormatStyle.SHORT))
                 val currentDate = LocalDateTime.now()
                 val strDate = currentDate.format(formatter)
                 val displayName = userRepo.getUserDisplayName()
                 val newMarker = DBSignMarker(
-                    campaignId = campaign.id,
+                    campaignId = curCampaign.id,
                     createdBy = displayName,
                     dateCreated = strDate,
                     notes = state.signMarkerNotes,
@@ -80,12 +95,13 @@ class MapViewModel(
                 )
                 signMarkersRepo.addSignMarker(newMarker)
                 onDismissBottomSheet()
+                state = state.copy(signMarkerNotes = "", notesCharactersUsed = 0)
             }
         }
     }
 
     fun getCurrentCampaignName(): String {
-        return currentCampaign?.name ?: ""
+        return campaign?.name ?: ""
     }
 
     fun onDismissBottomSheet() {

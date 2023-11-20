@@ -9,14 +9,16 @@ import kotlinx.parcelize.Parcelize
 const val INVALID_CAMPAIGN_ID = 0L
 
 @Parcelize
-@Entity(tableName = "campaigns")
+@Entity(
+    tableName = "campaigns",
+)
 data class DBCampaign(
     @PrimaryKey(autoGenerate = true)
     val id: Long = INVALID_CAMPAIGN_ID,
-    val name: String,
+    val name: String = "",
     @ColumnInfo(name = "created_by")
-    val createdBy: String,
+    val createdBy: String = "",
     @ColumnInfo(name = "date_created")
-    val dateCreated: String,
-    val notes: String,
+    val dateCreated: String = "",
+    val notes: String = "",
 ) : Parcelable

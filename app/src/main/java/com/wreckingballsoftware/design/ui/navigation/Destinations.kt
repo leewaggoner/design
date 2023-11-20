@@ -7,6 +7,6 @@ object Destinations {
     const val AuthScreen = "AuthScreen"
     const val CampaignsScreen = "Campaigns"
     const val CampaignDetailsScreen = "CampaignDetails/{campaignId}"
-    const val MapScreen = "Map"
+    const val MapScreen = "Map/{campaignId}"
     const val SignsScreen = "Signs"
 }
