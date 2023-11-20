@@ -60,11 +60,11 @@ fun Framework(scope: LifecycleCoroutineScope, userRepo: UserRepo) {
             }
         },
         floatingActionButton = frameworkState.fabAction ?: { }
-    ) {
+    ) { innerPadding ->
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(it)
+                .padding(innerPadding)
                 .background(MaterialTheme.customColorsPalette.background),
         ) {
             DeSignHost(navController = navController, actions = actions)

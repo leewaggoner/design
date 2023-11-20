@@ -14,4 +14,5 @@ data class CampaignsScreenState(
     val notesCharactersUsed: Int = 0,
     val campaignNotesErrorId: Int = 0,
     val selectedCampaignId: Long = 0,
+    val scrollToIndex: Int? = null,
 ) : Parcelable

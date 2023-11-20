@@ -39,6 +39,7 @@ class MapViewModel(
         campaignsRepo.getCampaignWithMarkersFlow(campaignId).map { element ->
             if (element.keys.isNotEmpty()) {
                 val curCampaign = element.keys.toTypedArray()[0]
+                campaign = curCampaign
                 CampaignWithMarkers(
                     campaign = curCampaign,
                     markers = element[curCampaign] ?: listOf()
@@ -64,9 +65,6 @@ class MapViewModel(
                 }
             },
         )
-        viewModelScope.launch(Dispatchers.Main) {
-            campaign = campaignsRepo.getCampaign(campaignId)
-        }
     }
 
     fun onNotesValueChanged(text: String) {

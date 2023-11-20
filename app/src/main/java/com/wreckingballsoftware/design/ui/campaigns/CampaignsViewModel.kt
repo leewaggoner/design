@@ -107,13 +107,27 @@ class CampaignsViewModel(
     }
 
     suspend fun onSelectInitialCard() {
-        onSelectCard(campaignId = getInitialSelection())
+        val id = getInitialSelection()
+        onSelectCard(campaignId = id)
+        val index = mapIdToIndex(id)
+        state = state.copy(scrollToIndex = if (index == -1) null else index)
     }
 
     fun onSelectCard(campaignId: Long) {
         viewModelScope.launch(Dispatchers.Main) {
             userRepo.putSelectedCampaignId(campaignId)
             state = state.copy(selectedCampaignId = campaignId)
+        }
+    }
+
+    fun onDoneScrolling() {
+        state = state.copy(scrollToIndex = null)
+    }
+
+    private suspend fun mapIdToIndex(id: Long): Int {
+        val campaignList = campaigns.first()
+        return campaignList.indexOfFirst { campaign ->
+            campaign.id == id
         }
     }
 
