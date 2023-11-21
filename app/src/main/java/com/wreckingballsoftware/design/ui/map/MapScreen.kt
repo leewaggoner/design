@@ -25,7 +25,9 @@ import org.koin.core.parameter.ParametersHolder
 @Composable
 fun MapScreen(
     campaignId: Long,
-    viewModel: MapViewModel = koinViewModel(parameters = { ParametersHolder(mutableListOf(campaignId)) })
+    viewModel: MapViewModel = koinViewModel(
+        parameters = { ParametersHolder(mutableListOf(campaignId)) }
+    )
 ) {
     val campaignWithMarkers = viewModel.campaignWithMarkers.collectAsStateWithLifecycle(
         initialValue = null

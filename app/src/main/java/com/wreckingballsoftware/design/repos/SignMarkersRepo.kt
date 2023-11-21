@@ -6,6 +6,10 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.withContext
 
+/**
+ * This class currently looks like a useless layer, but eventually I'll add online storage and
+ * synchronization.
+ */
 class SignMarkersRepo(private val signMarkersDao: SignMarkersDao) {
     fun getMarkersForCampaign(campaignId: Long): Flow<List<DBSignMarker>> =
         signMarkersDao.getMarkersForCampaign(campaignId)

@@ -34,4 +34,6 @@
     <string name="add_sign_marker_dialog_message">Enter a short note for your new sign. (Optional)</string>
     <string name="sign_marker_notes_label">Sign Marker Notes</string>
     <string name="please_add_campaign">Please add a campaign first.</string>
+    <string name="add_campaign">Add a Campaign</string>
+    <string name="add_sign">Add a Sign From the Map Screen</string>
 </resources>

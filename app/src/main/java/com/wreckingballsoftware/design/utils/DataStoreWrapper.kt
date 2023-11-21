@@ -7,6 +7,8 @@ import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.emptyPreferences
 import androidx.datastore.preferences.core.longPreferencesKey
 import androidx.datastore.preferences.core.stringPreferencesKey
+import com.google.gson.Gson
+import com.wreckingballsoftware.design.repos.SelectedSignId
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.first
@@ -19,7 +21,8 @@ class DataStoreWrapper(private val dataStore: DataStore<Preferences>) {
         val USER_FAMILY_NAME_KEY = stringPreferencesKey("PlayerLastName")
         val USER_FULL_NAME = stringPreferencesKey("PlayerFullName")
         val USER_EMAIL_KEY = stringPreferencesKey("UserEmail")
-        val SELECTED_CAMPAIGN_INDEX_KEY = longPreferencesKey("SelectedCampaignIndex")
+        val SELECTED_CAMPAIGN_ID_KEY = longPreferencesKey("SelectedCampaignIndex")
+        val SELECTED_SIGN_ID_KEY = stringPreferencesKey("SelectedSignId")
     }
 
     suspend fun putUserGivenName(name: String) = withContext(Dispatchers.IO) {
@@ -87,20 +90,41 @@ class DataStoreWrapper(private val dataStore: DataStore<Preferences>) {
         }.first()[PreferencesKey.USER_EMAIL_KEY] ?: default
     }
 
-    suspend fun putSelectedCampaignIndex(index: Long) {
+    suspend fun putSelectedCampaignId(id: Long) {
         dataStore.edit { preferences ->
-            preferences[PreferencesKey.SELECTED_CAMPAIGN_INDEX_KEY] = index
+            preferences[PreferencesKey.SELECTED_CAMPAIGN_ID_KEY] = id
         }
     }
 
-    suspend fun getSelectedCampaignIndex(default: Long): Long = withContext(Dispatchers.IO) {
+    suspend fun getSelectedCampaignId(default: Long): Long = withContext(Dispatchers.IO) {
         dataStore.data.catch { exception ->
             if (exception is IOException) {
                 emit(emptyPreferences())
             } else {
                 throw exception
             }
-        }.first()[PreferencesKey.SELECTED_CAMPAIGN_INDEX_KEY] ?: default
+        }.first()[PreferencesKey.SELECTED_CAMPAIGN_ID_KEY] ?: default
+    }
+
+    suspend fun putSelectedSignId(selectedSignId: SelectedSignId) {
+        val signIn = Gson().toJson(selectedSignId)
+        dataStore.edit { preferences ->
+            preferences[PreferencesKey.SELECTED_SIGN_ID_KEY] = signIn
+        }
+    }
+
+    /**
+     * returns null if the JSON string is not found
+     */
+    suspend fun getSelectedSignId(): SelectedSignId? = withContext(Dispatchers.IO) {
+        val signId = dataStore.data.catch { exception ->
+            if (exception is IOException) {
+                emit(emptyPreferences())
+            } else {
+                throw exception
+            }
+        }.first()[PreferencesKey.SELECTED_SIGN_ID_KEY] ?: ""
+        Gson().fromJson(signId as String, SelectedSignId::class.java)
     }
 
     suspend fun clearAll() = withContext(Dispatchers.IO) {

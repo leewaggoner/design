@@ -1,24 +1,18 @@
-package com.wreckingballsoftware.design.ui.campaigns
+package com.wreckingballsoftware.design.ui.signs
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.focusable
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.relocation.BringIntoViewRequester
 import androidx.compose.foundation.relocation.bringIntoViewRequester
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.Info
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -32,8 +26,8 @@ import androidx.compose.ui.focus.onFocusEvent
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import com.wreckingballsoftware.design.R
-import com.wreckingballsoftware.design.database.DBCampaign
-import com.wreckingballsoftware.design.database.INVALID_CAMPAIGN_ID
+import com.wreckingballsoftware.design.database.DBSignMarker
+import com.wreckingballsoftware.design.database.INVALID_SIGN_MARKER_ID
 import com.wreckingballsoftware.design.ui.theme.AppGold
 import com.wreckingballsoftware.design.ui.theme.customColorsPalette
 import com.wreckingballsoftware.design.ui.theme.customTypography
@@ -42,12 +36,11 @@ import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun CampaignCard(
-    selectedCampaignId: Long,
-    campaign: DBCampaign,
-    onCampaignInfoClick: (Long) -> Unit,
-    onSelectCard: (Long) -> Unit,
-    modifier: Modifier = Modifier,
+fun SignCard(
+    campaignName: String,
+    selectedSignId: Long,
+    sign: DBSignMarker,
+    onSignSelected: (Long) -> Unit,
 ) {
     val scope = rememberCoroutineScope()
     val requester = remember {
@@ -57,26 +50,28 @@ fun CampaignCard(
         FocusRequester()
     }
 
+    if (selectedSignId == sign.id) {
+        focusRequester.requestFocus()
+    }
+
     Card(
-        modifier = modifier.then(
-            Modifier
-                .focusRequester(focusRequester)
-                .bringIntoViewRequester(requester).onFocusEvent {
-                    if (it.isFocused) {
-                        scope.launch {
-                            requester.bringIntoView()
-                        }
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(all = MaterialTheme.dimensions.Space)
+            .focusRequester(focusRequester)
+            .bringIntoViewRequester(requester).onFocusEvent {
+                if (it.isFocused) {
+                    scope.launch {
+                        requester.bringIntoView()
                     }
                 }
-                .focusable()
-                .fillMaxWidth()
-                .padding(all = MaterialTheme.dimensions.SpaceSmall)
-                .clickable {
-                    focusRequester.requestFocus()
-                    onSelectCard(campaign.id)
-                },
-        ),
-        border = if (selectedCampaignId == campaign.id) {
+            }
+            .focusable()
+            .clickable {
+                focusRequester.requestFocus()
+                onSignSelected(sign.id)
+            },
+        border = if (selectedSignId == sign.id) {
             BorderStroke(MaterialTheme.dimensions.CardBorderStrokeWidth, AppGold)
         } else {
             null
@@ -94,53 +89,45 @@ fun CampaignCard(
                 .padding(all = MaterialTheme.dimensions.Space),
             horizontalAlignment = Alignment.Start
         ) {
-            Row(
+            Column(
                 modifier = Modifier
                     .fillMaxWidth(),
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.SpaceBetween
             ) {
                 Text(
-                    text = campaign.name,
+                    text = campaignName,
                     style = MaterialTheme.customTypography.DeSignSubtitle,
                 )
-                IconButton(
-                    onClick = {
-                        onCampaignInfoClick(campaign.id)
-                    }
-                ) {
-                    Icon(
-                        imageVector = Icons.Outlined.Info,
-                        contentDescription = stringResource(id = R.string.campaign_details),
-                        tint = MaterialTheme.colorScheme.onSurface,
+                if (sign.notes.isNotEmpty()) {
+                    Text(
+                        text = sign.notes,
+                        style = MaterialTheme.customTypography.DeSignBody,
                     )
                 }
+                Spacer(modifier = Modifier.height(MaterialTheme.dimensions.SpaceSmall))
+                Text(
+                    text = stringResource(
+                        id = R.string.created_by,
+                        sign.createdBy,
+                        sign.dateCreated
+                    ),
+                    style = MaterialTheme.customTypography.DeSignSmallPrint
+                )
             }
-            Spacer(modifier = Modifier.height(MaterialTheme.dimensions.SpaceSmall))
-            Text(
-                text = stringResource(
-                    id = R.string.created_by,
-                    campaign.createdBy,
-                    campaign.dateCreated,
-                ),
-                style = MaterialTheme.customTypography.DeSignSmallPrint
-            )
         }
     }
 }
 
-@Preview(name = "CampaignCard Preview")
+@Preview(name = "SignCard Preview")
 @Composable
-fun CampaignCardPreview() {
-    CampaignCard(
-        selectedCampaignId = INVALID_CAMPAIGN_ID,
-        campaign = DBCampaign(
-            name = "My Test Campaign",
-            createdBy = "Lee Waggoner",
-            dateCreated = "10-15-2023 10:46:32 AM",
-            notes = "This is my test DeSign campaign."
+fun SignCardPreview() {
+    SignCard(
+        campaignName = "First",
+        selectedSignId = INVALID_SIGN_MARKER_ID,
+        sign = DBSignMarker(
+            notes = "My first campaign notes.",
+            createdBy = "My Mom",
+            dateCreated = "11/21/2023, 10:45 AM"
         ),
-        onCampaignInfoClick = { },
-        onSelectCard = { },
+        onSignSelected = { }
     )
 }

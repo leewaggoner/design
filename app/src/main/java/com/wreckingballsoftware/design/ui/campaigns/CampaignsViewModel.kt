@@ -40,10 +40,6 @@ class CampaignsViewModel(
     }
     val campaigns: Flow<List<DBCampaign>> = campaignsRepo.getAllCampaigns()
 
-    fun updateCampaigns(campaigns: List<DBCampaign>) {
-        state = state.copy(campaigns = campaigns)
-    }
-
     fun onNameValueChanged(text: String) {
         var sanitizedString = text.sanitize()
         sanitizedString = sanitizedString.cutToLength(MAX_NAME_LENGTH)

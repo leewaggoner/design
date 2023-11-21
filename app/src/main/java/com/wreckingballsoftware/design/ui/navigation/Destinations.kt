@@ -8,5 +8,5 @@ object Destinations {
     const val CampaignsScreen = "Campaigns"
     const val CampaignDetailsScreen = "CampaignDetails/{campaignId}"
     const val MapScreen = "Map/{campaignId}"
-    const val SignsScreen = "Signs"
+    const val SignsScreen = "Signs/{campaignId}"
 }

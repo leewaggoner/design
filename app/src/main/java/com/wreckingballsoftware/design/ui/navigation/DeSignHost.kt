@@ -48,7 +48,7 @@ fun NavGraphBuilder.campaignsGraph(actions: Actions) {
         }
 
         composable(
-            Destinations.CampaignDetailsScreen,
+            route = Destinations.CampaignDetailsScreen,
             arguments = listOf(navArgument("campaignId") { type = NavType.LongType })
         ) { backStackEntry ->
             val campaignId = backStackEntry.arguments?.getLong("campaignId")
@@ -68,7 +68,7 @@ fun NavGraphBuilder.mapGraph() {
         startDestination = Destinations.MapScreen
     ) {
         composable(
-            Destinations.MapScreen,
+            route = Destinations.MapScreen,
             arguments = listOf(navArgument("campaignId") { type = NavType.LongType })
         ) {backStackEntry ->
             val campaignId = backStackEntry.arguments?.getLong("campaignId")
@@ -86,8 +86,14 @@ fun NavGraphBuilder.signsGraph(actions: Actions) {
         route = Destinations.SignsGraph,
         startDestination = Destinations.SignsScreen
     ) {
-        composable(Destinations.SignsScreen) {
-            SignsScreen(actions = actions)
+        composable(
+            route = Destinations.SignsScreen,
+            arguments = listOf(navArgument("campaignId") { type = NavType.LongType })
+        ) { backStackEntry ->
+            val campaignId = backStackEntry.arguments?.getLong("campaignId")
+            campaignId?.let { id ->
+                SignsScreen(campaignId = id)
+            }
         }
     }
 }

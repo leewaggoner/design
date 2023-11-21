@@ -45,12 +45,20 @@ class Actions(navController: NavController, scope: LifecycleCoroutineScope, user
         }
     }
     val navigateToSignsGraph: () -> Unit = {
-        navController.navigate(Destinations.SignsGraph) {
-            //clear the whole backstack
-            popUpTo(navController.graph.id) {
-                inclusive = true
+        scope.launch(Dispatchers.Main) {
+            val campaignId = userRepo.getSelectedCampaignId()
+            navController.navigate(
+                Destinations.SignsScreen.replace(
+                    oldValue = "{campaignId}",
+                    newValue = campaignId.toString()
+                )
+            ) {
+                //clear the whole backstack
+                popUpTo(navController.graph.id) {
+                    inclusive = true
+                }
+                launchSingleTop = true
             }
-            launchSingleTop = true
         }
     }
     val navigateToCampaignsScreen: () -> Unit = {

@@ -19,6 +19,7 @@ import com.wreckingballsoftware.design.ui.campaigns.CampaignsViewModel
 import com.wreckingballsoftware.design.ui.details.CampaignDetailsViewModel
 import com.wreckingballsoftware.design.ui.login.AuthViewModel
 import com.wreckingballsoftware.design.ui.map.MapViewModel
+import com.wreckingballsoftware.design.ui.signs.SignsViewModel
 import com.wreckingballsoftware.design.utils.DataStoreWrapper
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -59,6 +60,15 @@ val appModule = module {
             campaignsRepo = get(),
             signMarkersRepo = get(),
             campaignId = params.get(),
+        )
+    }
+
+    viewModel { params ->
+        SignsViewModel(
+            campaignsRepo = get(),
+            signsRepo = get(),
+            userRepo = get(),
+            campaignId = params.get()
         )
     }
 

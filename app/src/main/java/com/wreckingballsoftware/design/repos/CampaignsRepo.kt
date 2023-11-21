@@ -7,6 +7,10 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.withContext
 
+/**
+ * This class currently looks like a useless layer, but eventually I'll add online storage and
+ * synchronization.
+ */
 class CampaignsRepo(private val campaignsDao: CampaignsDao) {
     fun getAllCampaigns(): Flow<List<DBCampaign>> = campaignsDao.getAllCampaigns()
 
@@ -14,8 +18,8 @@ class CampaignsRepo(private val campaignsDao: CampaignsDao) {
         campaignsDao.getCampaign(campaignId)
     }
 
-    fun getCampaignWithMarkersFlow(campaignId: Long): Flow<Map<DBCampaign, List<DBSignMarker>>> =
-        campaignsDao.getCampaignWithMarkersFlow(campaignId)
+    fun getCampaignWithMarkers(campaignId: Long): Flow<Map<DBCampaign, List<DBSignMarker>>> =
+        campaignsDao.getCampaignWithMarkers(campaignId)
 
     suspend fun addCampaign(campaign: DBCampaign) = withContext(Dispatchers.IO) {
         campaignsDao.insertCampaign(campaign)

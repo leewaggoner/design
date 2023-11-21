@@ -36,7 +36,7 @@ class MapViewModel(
 ) : ViewModel() {
     var state: MapScreenState by mutableStateOf(MapScreenState())
     var campaignWithMarkers: Flow<CampaignWithMarkers> =
-        campaignsRepo.getCampaignWithMarkersFlow(campaignId).map { element ->
+        campaignsRepo.getCampaignWithMarkers(campaignId).map { element ->
             if (element.keys.isNotEmpty()) {
                 val curCampaign = element.keys.toTypedArray()[0]
                 campaign = curCampaign
