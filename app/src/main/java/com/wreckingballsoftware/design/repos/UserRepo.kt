@@ -60,7 +60,7 @@ class UserRepo(private val dataStore: DataStoreWrapper) {
         dataStore.putSelectedSignId(SelectedSignId(campaignId, signId))
     }
 
-    suspend fun getSelectedSignId(default: SelectedSignId?): SelectedSignId? = withContext(Dispatchers.IO) {
+    suspend fun getSelectedSignId(default: SelectedSignId): SelectedSignId = withContext(Dispatchers.IO) {
         dataStore.getSelectedSignId() ?: default
     }
 }

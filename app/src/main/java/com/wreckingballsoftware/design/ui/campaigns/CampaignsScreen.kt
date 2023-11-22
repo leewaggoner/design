@@ -52,7 +52,7 @@ fun CampaignsScreen(
     )
 
     LaunchedEffect(key1 = Unit) {
-        viewModel.onSelectInitialCard()
+        viewModel.selectInitialCard()
     }
 
     CampaignsScreenContent(

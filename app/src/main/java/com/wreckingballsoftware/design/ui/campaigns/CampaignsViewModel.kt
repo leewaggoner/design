@@ -102,7 +102,13 @@ class CampaignsViewModel(
         }
     }
 
-    suspend fun onSelectInitialCard() {
+    /**
+     * This whole thing is pretty ugly. Ideally, I'd like to use BringIntoViewRequester to slide
+     * the card into view. But if the card is offscreen, you can't act on it at all. So if
+     * it's offscreen, I need to scroll to the initial selection index and only then can the
+     * BringIntoViewRequester work it's magic. It seems like there should be a better way to do this.
+     */
+    suspend fun selectInitialCard() {
         val id = getInitialSelection()
         onSelectCard(campaignId = id)
         val index = mapIdToIndex(id)
@@ -118,13 +124,6 @@ class CampaignsViewModel(
 
     fun onDoneScrolling() {
         state = state.copy(scrollToInitialIndex = null)
-    }
-
-    private suspend fun mapIdToIndex(id: Long): Int {
-        val campaignList = campaigns.first()
-        return campaignList.indexOfFirst { campaign ->
-            campaign.id == id
-        }
     }
 
     private fun validateCampaignName(campaignName: String): Boolean {
@@ -182,6 +181,13 @@ class CampaignsViewModel(
         // if the campaign list is empty, invalidate the selected campaign
 
         return result
+    }
+
+    private suspend fun mapIdToIndex(id: Long): Int {
+        val campaignList = campaigns.first()
+        return campaignList.indexOfFirst { campaign ->
+            campaign.id == id
+        }
     }
 
     companion object {

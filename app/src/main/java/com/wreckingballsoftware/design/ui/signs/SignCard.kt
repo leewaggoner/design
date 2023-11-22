@@ -43,7 +43,7 @@ fun SignCard(
     onSignSelected: (Long) -> Unit,
 ) {
     val scope = rememberCoroutineScope()
-    val requester = remember {
+    val bringIntoViewRequester = remember {
         BringIntoViewRequester()
     }
     val focusRequester = remember {
@@ -55,10 +55,11 @@ fun SignCard(
             .fillMaxWidth()
             .padding(all = MaterialTheme.dimensions.Space)
             .focusRequester(focusRequester)
-            .bringIntoViewRequester(requester).onFocusEvent {
+            .bringIntoViewRequester(bringIntoViewRequester)
+            .onFocusEvent {
                 if (it.isFocused) {
                     scope.launch {
-                        requester.bringIntoView()
+                        bringIntoViewRequester.bringIntoView()
                     }
                 }
             }
