@@ -106,7 +106,7 @@ class CampaignsViewModel(
         val id = getInitialSelection()
         onSelectCard(campaignId = id)
         val index = mapIdToIndex(id)
-        state = state.copy(scrollToIndex = if (index == -1) null else index)
+        state = state.copy(scrollToInitialIndex = if (index == -1) null else index)
     }
 
     fun onSelectCard(campaignId: Long) {
@@ -117,7 +117,7 @@ class CampaignsViewModel(
     }
 
     fun onDoneScrolling() {
-        state = state.copy(scrollToIndex = null)
+        state = state.copy(scrollToInitialIndex = null)
     }
 
     private suspend fun mapIdToIndex(id: Long): Int {

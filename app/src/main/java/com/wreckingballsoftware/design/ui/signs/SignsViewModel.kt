@@ -48,20 +48,30 @@ class SignsViewModel(
         state = state.copy(selectedSignId = signId, setInitialSelection = false)
     }
 
+    fun onDoneScrolling() {
+        state = state.copy(scrollToInitialIndex = null)
+    }
+
     suspend fun selectInitialSign() {
         campaign?.let { curCampaign ->
+            val signList = signs.first()
             val curSignId = getInitialSignId(
                 campaignId = curCampaign.id,
-                signList = signs.first(),
+                signList = signList,
                 selectedSignId = selectedSignId ?: SelectedSignId()
             )
-            if (curSignId != INVALID_SIGN_MARKER_ID) {
-                userRepo.putSelectedSignId(curCampaign.id, curSignId)
-            }
-            state = state.copy(selectedSignId = curSignId)
+            onSignSelected(curSignId)
+            state = state.copy()
+            val index = mapIdToIndex(curSignId, signList)
+            state = state.copy(scrollToInitialIndex = if (index == -1) null else index)
         }
     }
 
+    private fun mapIdToIndex(id: Long, signList: List<DBSignMarker>): Int {
+        return signList.indexOfFirst { sign ->
+            sign.id == id
+        }
+    }
     private fun getInitialSignId(
         campaignId: Long,
         signList: List<DBSignMarker>,

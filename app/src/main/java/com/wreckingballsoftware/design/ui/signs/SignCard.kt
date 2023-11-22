@@ -50,10 +50,6 @@ fun SignCard(
         FocusRequester()
     }
 
-    if (selectedSignId == sign.id) {
-        focusRequester.requestFocus()
-    }
-
     Card(
         modifier = Modifier
             .fillMaxWidth()
