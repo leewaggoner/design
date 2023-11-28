@@ -5,17 +5,18 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.wreckingballsoftware.design.R
 import com.wreckingballsoftware.design.database.INVALID_CAMPAIGN_ID
+import com.wreckingballsoftware.design.domain.models.CampaignWithMarkers
 import com.wreckingballsoftware.design.repos.UserRepo
 import com.wreckingballsoftware.design.ui.compose.DeSignErrorAlert
 import com.wreckingballsoftware.design.ui.compose.DeSignFab
 import com.wreckingballsoftware.design.ui.framework.FrameworkStateItem
-import com.wreckingballsoftware.design.ui.map.models.MapScreenState
 import com.wreckingballsoftware.design.ui.theme.dimensions
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -29,13 +30,19 @@ fun MapScreen(
         parameters = { ParametersHolder(mutableListOf(campaignId)) }
     )
 ) {
-    val campaignWithMarkers = viewModel.campaignWithMarkers.collectAsStateWithLifecycle(
-        initialValue = null
+    val campaignWithMarkers by viewModel.campaignWithMarkers.collectAsStateWithLifecycle(
+        initialValue = CampaignWithMarkers()
     )
 
-    MapScreenContent(
-        state = viewModel.state
-    )
+    Column(
+        modifier = Modifier
+            .fillMaxSize(),
+    ) {
+        viewModel.DeSignMap(
+            campaignName = campaignWithMarkers.campaign.name,
+            markers = campaignWithMarkers.markers,
+            latLng = viewModel.state.latLng)
+    }
 
     if (MapViewModel.showAddSignBottomSheet) {
         AddSignMarkerBottomSheet(
@@ -52,19 +59,6 @@ fun MapScreen(
             message = stringResource(id = R.string.please_add_campaign),
             onDismissAlert = viewModel::onDismissAddCampaignMessage,
         )
-    }
-}
-
-@Composable
-fun MapScreenContent(
-    state: MapScreenState,
-    viewModel: MapViewModel = koinViewModel()
-) {
-    Column(
-        modifier = Modifier
-            .fillMaxSize(),
-    ) {
-        viewModel.DeSignMap(latLng = state.latLng)
     }
 }
 

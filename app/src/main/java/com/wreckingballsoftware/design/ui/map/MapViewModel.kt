@@ -110,7 +110,13 @@ class MapViewModel(
         showAddCampaignMessage = false
     }
 
-    @Composable fun DeSignMap(latLng: LatLng) = deSignMap.Map(latLng = latLng)
+    @Composable fun DeSignMap(campaignName: String, markers: List<DBSignMarker>, latLng: LatLng) {
+        deSignMap.Map(
+            campaignName = campaignName,
+            markers = markers,
+            latLng = latLng
+        )
+    }
 
     companion object {
         const val MAX_NOTES_LENGTH = 80
