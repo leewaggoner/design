@@ -12,6 +12,7 @@ import com.google.android.gms.location.LocationCallback
 import com.google.android.gms.location.LocationRequest
 import com.google.android.gms.location.Priority
 import com.google.android.gms.maps.CameraUpdateFactory
+import com.google.android.gms.maps.CameraUpdateFactory.newLatLngZoom
 import com.google.android.gms.maps.model.CameraPosition
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.LatLngBounds
@@ -30,9 +31,17 @@ class DeSignMap(
     private val fusedLocationProviderClient: FusedLocationProviderClient,
 ) {
     @Composable
-    fun Map(campaignName: String, latLng: LatLng, markers: List<DBSignMarker>) {
+    fun Map(
+        campaignName: String,
+        latLng: LatLng,
+        markers: List<DBSignMarker>,
+        setMapFocus: (LatLng) -> Unit,
+    ) {
         val cameraPositionState = rememberCameraPositionState {
             position = CameraPosition.fromLatLngZoom(latLng, 15f)
+        }
+        LaunchedEffect(key1 = latLng) {
+            cameraPositionState.animate(newLatLngZoom(latLng, 15f))
         }
 
         val markerStates = mutableListOf<DesignMarker>()
@@ -68,6 +77,7 @@ class DeSignMap(
                     snippet = designState.snippet,
                     onClick = {
                         designState.state.showInfoWindow()
+                        setMapFocus(designState.state.position)
                         false
                     },
                 )

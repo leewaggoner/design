@@ -41,10 +41,13 @@ fun MapScreen(
         viewModel.DeSignMap(
             campaignName = campaignWithMarkers.campaign.name,
             markers = campaignWithMarkers.markers,
-            latLng = viewModel.state.latLng)
+            latLng = viewModel.state.mapLatLng,
+            setMapFocus = viewModel::setMapFocus
+        )
     }
 
     if (MapViewModel.showAddSignBottomSheet) {
+        viewModel.setMapFocus(viewModel.state.myLatLng)
         AddSignMarkerBottomSheet(
             state = viewModel.state,
             campaignName = viewModel.getCurrentCampaignName(),

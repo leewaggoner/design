@@ -56,7 +56,7 @@ class MapViewModel(
                 override fun onLocationResult(result: LocationResult) {
                     result.locations.forEach { location ->
                         state = state.copy(
-                            latLng = LatLng(
+                            myLatLng = LatLng(
                                 location.latitude,
                                 location.longitude
                             ),
@@ -88,8 +88,8 @@ class MapViewModel(
                     createdBy = displayName,
                     dateCreated = strDate,
                     notes = state.signMarkerNotes,
-                    lat = state.latLng.latitude,
-                    lon = state.latLng.longitude,
+                    lat = state.myLatLng.latitude,
+                    lon = state.myLatLng.longitude,
                 )
                 signMarkersRepo.addSignMarker(newMarker)
                 onDismissBottomSheet()
@@ -110,12 +110,22 @@ class MapViewModel(
         showAddCampaignMessage = false
     }
 
-    @Composable fun DeSignMap(campaignName: String, markers: List<DBSignMarker>, latLng: LatLng) {
+    @Composable fun DeSignMap(
+        campaignName: String,
+        markers: List<DBSignMarker>,
+        latLng: LatLng,
+        setMapFocus: (LatLng) -> Unit,
+    ) {
         deSignMap.Map(
             campaignName = campaignName,
             markers = markers,
-            latLng = latLng
+            latLng = latLng,
+            setMapFocus = setMapFocus,
         )
+    }
+
+    fun setMapFocus(latLng: LatLng) {
+        state = state.copy(mapLatLng = latLng)
     }
 
     companion object {
