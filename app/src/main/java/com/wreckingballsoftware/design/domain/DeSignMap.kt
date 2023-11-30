@@ -2,90 +2,75 @@ package com.wreckingballsoftware.design.domain
 
 import android.annotation.SuppressLint
 import android.os.Looper
-import androidx.compose.foundation.BorderStroke
-import androidx.compose.foundation.background
-import androidx.compose.foundation.border
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Info
-import androidx.compose.material3.Icon
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.unit.dp
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.Granularity
 import com.google.android.gms.location.LocationCallback
 import com.google.android.gms.location.LocationRequest
 import com.google.android.gms.location.Priority
+import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.model.CameraPosition
 import com.google.android.gms.maps.model.LatLng
-import com.google.maps.android.compose.CameraPositionState
+import com.google.android.gms.maps.model.LatLngBounds
 import com.google.maps.android.compose.GoogleMap
 import com.google.maps.android.compose.MapProperties
-import com.google.maps.android.compose.MarkerInfoWindow
+import com.google.maps.android.compose.Marker
 import com.google.maps.android.compose.MarkerState
+import com.google.maps.android.compose.rememberCameraPositionState
+import com.google.maps.android.compose.rememberMarkerState
 import com.wreckingballsoftware.design.database.DBSignMarker
 import java.util.concurrent.TimeUnit
+
+data class DesignMarker(val state: MarkerState, val snippet: String)
 
 class DeSignMap(
     private val fusedLocationProviderClient: FusedLocationProviderClient,
 ) {
     @Composable
-    fun Map(campaignName: String, latLng: LatLng, markers: List<DBSignMarker>) =
+    fun Map(campaignName: String, latLng: LatLng, markers: List<DBSignMarker>) {
+        val cameraPositionState = rememberCameraPositionState {
+            position = CameraPosition.fromLatLngZoom(latLng, 15f)
+        }
+
+        val markerStates = mutableListOf<DesignMarker>()
+        val builder = LatLngBounds.Builder()
+        if (markers.isNotEmpty()) {
+            markers.forEach { marker ->
+                markerStates.add(
+                    DesignMarker(
+                        rememberMarkerState(position = LatLng(marker.lat, marker.lon)),
+                        marker.notes
+                    )
+                )
+                builder.include(LatLng(marker.lat, marker.lon))
+            }
+            val bounds = builder.build()
+            cameraPositionState.move(CameraUpdateFactory.newLatLngBounds(bounds, 64))
+        }
+
         GoogleMap(
-            modifier = Modifier.fillMaxSize(),
-            cameraPositionState = CameraPositionState(
-                position = CameraPosition.fromLatLngZoom(latLng, 15f)
-            ),
+            modifier = Modifier
+                .fillMaxSize(),
+            cameraPositionState = cameraPositionState,
             properties = MapProperties(
                 isMyLocationEnabled = true,
             ),
         ) {
-            markers.forEach { marker ->
-                MarkerInfoWindow(
-                    state = MarkerState(position = LatLng(marker.lat, marker.lon))
-                ) { clickMarker ->
-                    Column(
-                        modifier = Modifier
-                            .border(
-                                BorderStroke(1.dp, Color.Black),
-                                RoundedCornerShape(10)
-                            )
-                            .clip(RoundedCornerShape(10))
-                            .background(Color.Red)
-                            .padding(16.dp),
-                        horizontalAlignment = Alignment.CenterHorizontally,
-                        verticalArrangement = Arrangement.Center
-                    ) {
-                        Icon(
-                            Icons.Filled.Info,
-                            contentDescription = "",
-                            modifier = Modifier.size(24.dp)
-                        )
-                        Text(clickMarker.title ?: "Default")
-                        Text(clickMarker.snippet ?: "Default snippet")
+            markerStates.forEach { designState ->
+                Marker(
+                    state = designState.state,
+                    title = campaignName,
+                    snippet = designState.snippet,
+                    onClick = {
+                        designState.state.showInfoWindow()
+                        false
                     }
-                }
-//                Marker(
-//                    state = MarkerState(position = LatLng(marker.lat, marker.lon)),
-//                    title = campaignName,
-//                    snippet = marker.notes,
-//                    onClick = { clickMarker ->
-//                        Log.e("-----LEE-----", clickMarker.snippet ?: "")
-//                        false
-//                    }
-//                )
+                )
             }
         }
+    }
 
     @SuppressLint("MissingPermission")
     fun requestLocationUpdates(locationCallback: LocationCallback) {
