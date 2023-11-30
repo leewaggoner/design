@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.os.Looper
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.Granularity
@@ -47,7 +48,9 @@ class DeSignMap(
                 builder.include(LatLng(marker.lat, marker.lon))
             }
             val bounds = builder.build()
-            cameraPositionState.move(CameraUpdateFactory.newLatLngBounds(bounds, 64))
+            LaunchedEffect(key1 = markerStates) {
+                cameraPositionState.move(CameraUpdateFactory.newLatLngBounds(bounds, 64))
+            }
         }
 
         GoogleMap(
@@ -66,7 +69,7 @@ class DeSignMap(
                     onClick = {
                         designState.state.showInfoWindow()
                         false
-                    }
+                    },
                 )
             }
         }
