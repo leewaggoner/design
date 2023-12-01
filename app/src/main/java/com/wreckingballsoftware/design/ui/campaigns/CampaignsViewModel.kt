@@ -77,7 +77,7 @@ class CampaignsViewModel(
                     notes = state.campaignNotes,
                 )
                 val id = campaignsRepo.addCampaign(newCampaign)
-                onSelectCard(campaignId = id)
+                selectCard(campaignId = id)
                 onDismissBottomSheet()
             }
             result = true
@@ -97,7 +97,7 @@ class CampaignsViewModel(
 
     fun onCampaignInfoClick(campaignId: Long) {
         viewModelScope.launch(Dispatchers.Main) {
-            onSelectCard(campaignId = campaignId)
+            selectCard(campaignId = campaignId)
             navigation.emit(CampaignsScreenNavigation.DisplayCampaign(campaignId))
         }
     }
@@ -110,20 +110,24 @@ class CampaignsViewModel(
      */
     suspend fun selectInitialCard() {
         val id = getInitialSelection()
-        onSelectCard(campaignId = id)
+        selectCard(campaignId = id)
         val index = mapIdToIndex(id)
         state = state.copy(scrollToInitialIndex = if (index == -1) null else index)
     }
 
     fun onSelectCard(campaignId: Long) {
         viewModelScope.launch(Dispatchers.Main) {
-            userRepo.putSelectedCampaignId(campaignId)
-            state = state.copy(selectedCampaignId = campaignId)
+            selectCard(campaignId)
         }
     }
 
     fun onDoneScrolling() {
         state = state.copy(scrollToInitialIndex = null)
+    }
+
+    private suspend fun selectCard(campaignId: Long) {
+        userRepo.putSelectedCampaignId(campaignId)
+        state = state.copy(selectedCampaignId = campaignId)
     }
 
     private fun validateCampaignName(campaignName: String): Boolean {

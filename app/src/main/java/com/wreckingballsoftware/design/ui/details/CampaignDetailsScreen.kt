@@ -40,7 +40,7 @@ fun CampaignDetailsScreen(
     navigation.value?.let { nav ->
         when (nav) {
             CampaignDetailsNavigation.Back -> {
-                actions.navigateToCampaignsScreen()
+                actions.navigateUp()
             }
         }
     }
