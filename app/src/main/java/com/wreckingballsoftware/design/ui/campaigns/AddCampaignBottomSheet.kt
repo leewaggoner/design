@@ -9,8 +9,10 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -69,100 +71,101 @@ fun AddCampaignBottomSheet(
         Column(
             modifier = Modifier
                 .fillMaxSize()
+                .verticalScroll(rememberScrollState() )
                 .padding(all = MaterialTheme.dimensions.Space),
             horizontalAlignment = Alignment.CenterHorizontally,
+
         ) {
-            Column(modifier = Modifier.weight(1.0f)) {
-                Text(
-                    modifier = Modifier.fillMaxWidth(),
-                    text = stringResource(id = R.string.add_campaign_dialog_title),
-                    style = MaterialTheme.customTypography.DeSignSubtitle,
-                    textAlign = TextAlign.Center,
-                )
+            Text(
+                modifier = Modifier.fillMaxWidth(),
+                text = stringResource(id = R.string.add_campaign_dialog_title),
+                style = MaterialTheme.customTypography.DeSignSubtitle,
+                textAlign = TextAlign.Center,
+            )
 
-                Spacer(modifier = Modifier.height(MaterialTheme.dimensions.SpaceSmall))
+            Spacer(modifier = Modifier.height(MaterialTheme.dimensions.SpaceSmall))
 
-                Text(
-                    modifier = Modifier.fillMaxWidth(),
-                    text = stringResource(id = R.string.add_campaign_dialog_message),
-                    style = MaterialTheme.customTypography.DeSignBody,
-                    textAlign = TextAlign.Center,
-                )
+            Text(
+                modifier = Modifier.fillMaxWidth(),
+                text = stringResource(id = R.string.add_campaign_dialog_message),
+                style = MaterialTheme.customTypography.DeSignBody,
+                textAlign = TextAlign.Center,
+            )
 
-                Spacer(modifier = Modifier.height(MaterialTheme.dimensions.SpaceLarge))
+            Spacer(modifier = Modifier.height(MaterialTheme.dimensions.SpaceLarge))
 
-                val nameLabel = stringResource(id = R.string.campaign_name_label)
-                OutlinedTextField(
-                    modifier = Modifier
-                        .focusRequester(focusRequester)
-                        .fillMaxWidth(),
-                    value = state.campaignName,
-                    label = {
-                        Text(text = nameLabel)
-                    },
-                    placeholder = {
-                        Text(text = nameLabel)
-                    },
-                    supportingText = {
-                        if (state.campaignNameErrorId == 0) {
-                            Text(
-                                text = "${state.nameCharactersUsed}/${CampaignsViewModel.MAX_NAME_LENGTH}"
-                            )
-                        } else {
-                            Text(
-                                text = stringResource(id = state.campaignNameErrorId),
-                                color = Color.Red,
-                            )
-                        }
-                    },
-                    singleLine = true,
-                    onValueChange = { text -> onNameValueChanged(text) },
-                    keyboardOptions = KeyboardOptions(
-                        keyboardType = KeyboardType.Text,
-                        imeAction = ImeAction.Next,
-                    ),
-                )
+            val nameLabel = stringResource(id = R.string.campaign_name_label)
+            OutlinedTextField(
+                modifier = Modifier
+                    .focusRequester(focusRequester)
+                    .fillMaxWidth(),
+                value = state.campaignName,
+                label = {
+                    Text(text = nameLabel)
+                },
+                placeholder = {
+                    Text(text = nameLabel)
+                },
+                supportingText = {
+                    if (state.campaignNameErrorId == 0) {
+                        Text(
+                            text = "${state.nameCharactersUsed}/${CampaignsViewModel.MAX_NAME_LENGTH}"
+                        )
+                    } else {
+                        Text(
+                            text = stringResource(id = state.campaignNameErrorId),
+                            color = Color.Red,
+                        )
+                    }
+                },
+                singleLine = true,
+                onValueChange = { text -> onNameValueChanged(text) },
+                keyboardOptions = KeyboardOptions(
+                    keyboardType = KeyboardType.Text,
+                    imeAction = ImeAction.Next,
+                ),
+            )
 
-                Spacer(modifier = Modifier.height(MaterialTheme.dimensions.Space))
+            Spacer(modifier = Modifier.height(MaterialTheme.dimensions.Space))
 
-                val notesLabel = stringResource(id = R.string.campaign_notes_label)
-                OutlinedTextField(
-                    modifier = Modifier.fillMaxWidth(),
-                    value = state.campaignNotes,
-                    label = {
-                        Text(text = notesLabel)
-                    },
-                    placeholder = {
-                        Text(text = notesLabel)
-                    },
-                    supportingText = {
-                        if (state.campaignNotesErrorId == 0) {
-                            Text(
-                                text = "${state.notesCharactersUsed}/${CampaignsViewModel.MAX_NOTES_LENGTH}"
-                            )
-                        } else {
-                            Text(
-                                text = stringResource(id = state.campaignNotesErrorId),
-                                color = Color.Red,
-                            )
-                        }
-                    },
-                    singleLine = false,
-                    onValueChange = { text -> onNotesValueChanged(text) },
-                    keyboardOptions = KeyboardOptions(
-                        keyboardType = KeyboardType.Text,
-                        imeAction = ImeAction.Done,
-                    ),
-                    keyboardActions = KeyboardActions(
-                        onDone = {
-                            onAddCampaign()
+            val notesLabel = stringResource(id = R.string.campaign_notes_label)
+            OutlinedTextField(
+                modifier = Modifier.fillMaxWidth(),
+                value = state.campaignNotes,
+                label = {
+                    Text(text = notesLabel)
+                },
+                placeholder = {
+                    Text(text = notesLabel)
+                },
+                supportingText = {
+                    if (state.campaignNotesErrorId == 0) {
+                        Text(
+                            text = "${state.notesCharactersUsed}/${CampaignsViewModel.MAX_NOTES_LENGTH}"
+                        )
+                    } else {
+                        Text(
+                            text = stringResource(id = state.campaignNotesErrorId),
+                            color = Color.Red,
+                        )
+                    }
+                },
+                singleLine = false,
+                onValueChange = { text -> onNotesValueChanged(text) },
+                keyboardOptions = KeyboardOptions(
+                    keyboardType = KeyboardType.Text,
+                    imeAction = ImeAction.Done,
+                ),
+                keyboardActions = KeyboardActions(
+                    onDone = {
+                        if (onAddCampaign()) {
                             scope.launch { sheetState.hide() }
                         }
-                    ),
-                )
+                    }
+                ),
+            )
 
-                Spacer(modifier = Modifier.height(MaterialTheme.dimensions.SpaceLarge))
-            }
+            Spacer(modifier = Modifier.height(MaterialTheme.dimensions.SpaceLarge))
 
             Row(
                 modifier = Modifier
@@ -199,6 +202,7 @@ fun AddCampaignBottomSheet(
                 }
             }
         }
+//        }
     }
 }
 
