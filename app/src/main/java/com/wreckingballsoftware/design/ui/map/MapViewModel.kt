@@ -16,6 +16,7 @@ import com.google.android.gms.location.Priority
 import com.google.android.gms.maps.model.LatLng
 import com.wreckingballsoftware.design.database.DBCampaign
 import com.wreckingballsoftware.design.database.DBSignMarker
+import com.wreckingballsoftware.design.database.INVALID_SIGN_MARKER_ID
 import com.wreckingballsoftware.design.domain.models.CampaignWithMarkers
 import com.wreckingballsoftware.design.repos.CampaignsRepo
 import com.wreckingballsoftware.design.repos.SignMarkersRepo
@@ -25,6 +26,7 @@ import com.wreckingballsoftware.design.ui.campaigns.sanitize
 import com.wreckingballsoftware.design.ui.map.models.MapScreenState
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import java.time.LocalDateTime
@@ -38,6 +40,7 @@ class MapViewModel(
     private val fusedLocationProviderClient: FusedLocationProviderClient,
     campaignsRepo: CampaignsRepo,
     campaignId: Long,
+    private val signId: Long,
 ) : ViewModel() {
     var state: MapScreenState by mutableStateOf(MapScreenState())
     var campaignWithMarkers: Flow<CampaignWithMarkers> =
@@ -110,6 +113,17 @@ class MapViewModel(
 
     fun onDismissAddCampaignMessage() {
         showAddCampaignMessage = false
+    }
+
+    fun focusOnChosenSign() {
+        viewModelScope.launch(Dispatchers.Main) {
+            if (signId != INVALID_SIGN_MARKER_ID) {
+                val marker = campaignWithMarkers.first().markers.first { marker ->
+                    marker.id == signId
+                }
+                setMapFocus(LatLng(marker.lat, marker.lon))
+            }
+        }
     }
 
     fun setMapFocus(latLng: LatLng) {

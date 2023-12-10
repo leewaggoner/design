@@ -14,6 +14,7 @@ data class Dimensions(
 
     val BorderStrokeWidth: Dp = 1.dp,
     val ButtonWidth: Dp = 160.dp,
+    val SmallButtonWidth: Dp = 120.dp,
     val CardElevation: Dp = 4.dp,
     val CardBorderStrokeWidth: Dp = 2.dp,
 

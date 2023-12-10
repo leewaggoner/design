@@ -25,6 +25,8 @@ import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 import java.time.format.FormatStyle
 
+private const val NO_INDEX = -1
+
 class CampaignsViewModel(
     handle: SavedStateHandle,
     private val campaignsRepo: CampaignsRepo,
@@ -108,11 +110,11 @@ class CampaignsViewModel(
      * it's offscreen, I need to scroll to the initial selection index and only then can the
      * BringIntoViewRequester work it's magic. It seems like there should be a better way to do this.
      */
-    suspend fun selectInitialCard() {
+    suspend fun selectInitialCampaign() {
         val id = getInitialSelection()
         selectCard(campaignId = id)
         val index = mapIdToIndex(id)
-        state = state.copy(scrollToInitialIndex = if (index == -1) null else index)
+        state = state.copy(scrollToInitialIndex = if (index == NO_INDEX) null else index)
     }
 
     fun onSelectCard(campaignId: Long) {

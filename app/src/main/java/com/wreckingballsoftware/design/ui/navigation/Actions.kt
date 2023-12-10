@@ -30,8 +30,12 @@ class Actions(navController: NavController, scope: LifecycleCoroutineScope, user
     val navigateToMapGraph: () -> Unit = {
         scope.launch(Dispatchers.Main) {
             val campaignId = userRepo.getSelectedCampaignId()
+            val destination = Destinations.MapScreen.replace(
+                oldValue = "{signId}",
+                newValue = "0"
+            )
             navController.navigate(
-                Destinations.MapScreen.replace(
+                destination.replace(
                     oldValue = "{campaignId}",
                     newValue = campaignId.toString()
                 )
@@ -73,8 +77,24 @@ class Actions(navController: NavController, scope: LifecycleCoroutineScope, user
             )
         )
     }
-    val navigateToMapScreen: () -> Unit = {
-        navController.navigate(Destinations.MapScreen) {
+    val navigateToMapScreen: (Long?) -> Unit = { signId ->
+        scope.launch(Dispatchers.Main) {
+            val campaignId = userRepo.getSelectedCampaignId()
+            val destination = Destinations.MapScreen.replace(
+                oldValue = "{signId}",
+                newValue = signId?.toString() ?: "0")
+            navController.navigate(
+                destination.replace(
+                    oldValue = "{campaignId}",
+                    newValue = campaignId.toString()
+                )
+            ) {
+                //clear the whole backstack
+                popUpTo(navController.graph.id) {
+                    inclusive = true
+                }
+                launchSingleTop = true
+            }
         }
     }
     val navigateToSignsScreen: () -> Unit = {

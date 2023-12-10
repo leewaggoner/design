@@ -4,6 +4,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.items
@@ -22,8 +23,11 @@ import androidx.compose.ui.unit.toIntRect
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.wreckingballsoftware.design.R
 import com.wreckingballsoftware.design.database.DBSignMarker
+import com.wreckingballsoftware.design.ui.navigation.Actions
+import com.wreckingballsoftware.design.ui.signs.models.SignsScreenNavigation
 import com.wreckingballsoftware.design.ui.signs.models.SignsScreenState
 import com.wreckingballsoftware.design.ui.theme.customTypography
+import com.wreckingballsoftware.design.ui.theme.dimensions
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -32,11 +36,21 @@ import org.koin.core.parameter.ParametersHolder
 
 @Composable
 fun SignsScreen(
+    actions: Actions,
     campaignId: Long,
     viewModel: SignsViewModel = koinViewModel(
         parameters = { ParametersHolder(mutableListOf(campaignId)) }
     )
 ) {
+    val navigation = viewModel.navigation.collectAsStateWithLifecycle(initialValue = null)
+    navigation.value?.let { nav ->
+        when (nav) {
+            is SignsScreenNavigation.DisplaySignOnMap -> {
+                actions.navigateToMapScreen(nav.signId)
+            }
+        }
+    }
+
     val signs by viewModel.signs.collectAsStateWithLifecycle(
         initialValue = listOf()
     )
@@ -52,6 +66,8 @@ fun SignsScreen(
         signs = signs,
         onSignSelected = viewModel::onSignSelected,
         onDoneScrolling = viewModel::onDoneScrolling,
+        onViewMarker = viewModel::onViewMarker,
+        onDeleteMarker = viewModel::onDeleteMarker,
     )
 }
 
@@ -61,6 +77,8 @@ fun SignScreenContent(
     signs: List<DBSignMarker>,
     onSignSelected: (Long) -> Unit,
     onDoneScrolling: () -> Unit,
+    onViewMarker: (Long) -> Unit,
+    onDeleteMarker: (Long) -> Unit,
 ) {
     val listState = rememberLazyListState()
     val scope = rememberCoroutineScope { Dispatchers.Main }
@@ -75,7 +93,8 @@ fun SignScreenContent(
     if (signs.isEmpty()) {
         Column(
             modifier = Modifier
-                .fillMaxSize(),
+                .fillMaxSize()
+                .padding(horizontal = MaterialTheme.dimensions.Space),
             verticalArrangement = Arrangement.Center,
         ) {
             Text(
@@ -100,6 +119,8 @@ fun SignScreenContent(
                     selectedSignId = state.selectedSignId,
                     sign = sign,
                     onSignSelected = onSignSelected,
+                    onViewMarker = onViewMarker,
+                    onDeleteMarker = onDeleteMarker,
                 )
             }
         }
@@ -136,5 +157,7 @@ fun SignScreenContentPreview() {
         signs = listOf(),
         onSignSelected = { },
         onDoneScrolling = { },
+        onViewMarker = { },
+        onDeleteMarker = { },
     )
 }

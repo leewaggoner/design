@@ -4,6 +4,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.items
@@ -29,6 +30,7 @@ import com.wreckingballsoftware.design.ui.compose.DeSignFab
 import com.wreckingballsoftware.design.ui.framework.FrameworkStateItem
 import com.wreckingballsoftware.design.ui.navigation.Actions
 import com.wreckingballsoftware.design.ui.theme.customTypography
+import com.wreckingballsoftware.design.ui.theme.dimensions
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -53,7 +55,7 @@ fun CampaignsScreen(
     )
 
     LaunchedEffect(key1 = Unit) {
-        viewModel.selectInitialCard()
+        viewModel.selectInitialCampaign()
     }
 
     CampaignsScreenContent(
@@ -96,7 +98,8 @@ fun CampaignsScreenContent(
     if (campaigns.isEmpty()) {
         Column(
             modifier = Modifier
-                .fillMaxSize(),
+                .fillMaxSize()
+                .padding(horizontal = MaterialTheme.dimensions.Space),
             verticalArrangement = Arrangement.Center,
         ) {
             Text(

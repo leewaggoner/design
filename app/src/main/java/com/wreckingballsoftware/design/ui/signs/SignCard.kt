@@ -4,13 +4,18 @@ import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.focusable
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.relocation.BringIntoViewRequester
 import androidx.compose.foundation.relocation.bringIntoViewRequester
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.MaterialTheme
@@ -42,6 +47,8 @@ fun SignCard(
     selectedSignId: Long,
     sign: DBSignMarker,
     onSignSelected: (Long) -> Unit,
+    onViewMarker: (Long) -> Unit,
+    onDeleteMarker: (Long) -> Unit,
 ) {
     val scope = rememberCoroutineScope { Dispatchers.Main }
     val bringIntoViewRequester = remember {
@@ -110,6 +117,36 @@ fun SignCard(
                     ),
                     style = MaterialTheme.customTypography.DeSignSmallPrint
                 )
+                Spacer(modifier = Modifier.height(MaterialTheme.dimensions.SpaceSmall))
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth(),
+                    horizontalArrangement = Arrangement.SpaceAround,
+                ) {
+                    Button(
+                        modifier = Modifier.width(MaterialTheme.dimensions.SmallButtonWidth),
+                        onClick = {
+                            onDeleteMarker(sign.id)
+                        },
+                        colors = ButtonDefaults.buttonColors(
+                            containerColor = MaterialTheme.colorScheme.secondary,
+                        ),
+                    ) {
+                        Text(text = stringResource(id = R.string.delete))
+                    }
+
+                    Button(
+                        modifier = Modifier.width(MaterialTheme.dimensions.SmallButtonWidth),
+                        onClick = {
+                            onViewMarker(sign.id)
+                        },
+                        colors = ButtonDefaults.buttonColors(
+                            containerColor = MaterialTheme.colorScheme.primary,
+                        ),
+                    ) {
+                        Text(text = stringResource(id = R.string.view))
+                    }
+                }
             }
         }
     }
@@ -126,6 +163,8 @@ fun SignCardPreview() {
             createdBy = "My Mom",
             dateCreated = "11/21/2023, 10:45 AM"
         ),
-        onSignSelected = { }
+        onSignSelected = { },
+        onViewMarker = { },
+        onDeleteMarker = { },
     )
 }

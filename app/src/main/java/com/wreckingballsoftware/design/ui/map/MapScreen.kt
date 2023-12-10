@@ -27,8 +27,9 @@ import org.koin.core.parameter.ParametersHolder
 @Composable
 fun MapScreen(
     campaignId: Long,
+    signId: Long,
     viewModel: MapViewModel = koinViewModel(
-        parameters = { ParametersHolder(mutableListOf(campaignId)) }
+        parameters = { ParametersHolder(mutableListOf(campaignId, signId)) }
     )
 ) {
     val campaignWithMarkers by viewModel.campaignWithMarkers.collectAsStateWithLifecycle(
@@ -45,6 +46,7 @@ fun MapScreen(
             mapLatLng = viewModel.state.mapLatLng,
             myLatLng = viewModel.state.myLatLng,
             setMapFocus = viewModel::setMapFocus,
+            onMapLoaded = viewModel::focusOnChosenSign,
         )
     }
 

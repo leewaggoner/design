@@ -23,6 +23,7 @@ fun DeSignMap(
     myLatLng: LatLng,
     markers: List<DBSignMarker>,
     setMapFocus: (LatLng) -> Unit,
+    onMapLoaded: () -> Unit,
 ) {
     val cameraPositionState = rememberCameraPositionState {
         position = CameraPosition.fromLatLngZoom(myLatLng, 15f)
@@ -46,15 +47,19 @@ fun DeSignMap(
         properties = MapProperties(
             isMyLocationEnabled = true,
         ),
+        onMapLoaded = {
+            onMapLoaded()
+        }
     ) {
-        markerStates.forEach { designState ->
+        markerStates.forEach { marker ->
             Marker(
-                state = designState.state,
+                tag = marker.id,
+                state = marker.state,
                 title = campaignName,
-                snippet = designState.snippet,
+                snippet = marker.snippet,
                 onClick = {
-                    designState.state.showInfoWindow()
-                    setMapFocus(designState.state.position)
+                    marker.state.showInfoWindow()
+                    setMapFocus(marker.state.position)
                     false
                 },
             )
@@ -82,8 +87,9 @@ private fun createMarkerList(markers: List<DBSignMarker>): List<DesignMarker> {
     markers.forEach { marker ->
         designMarkers.add(
             DesignMarker(
-                rememberMarkerState(position = LatLng(marker.lat, marker.lon)),
-                marker.notes
+                id = marker.id,
+                state = rememberMarkerState(position = LatLng(marker.lat, marker.lon)),
+                snippet = marker.notes
             )
         )
     }

@@ -58,7 +58,8 @@ val appModule = module {
             signMarkersRepo = get(),
             fusedLocationProviderClient = get(),
             campaignsRepo = get(),
-            campaignId = params.get(),
+            campaignId = params[0],
+            signId = params[1]
         )
     }
 

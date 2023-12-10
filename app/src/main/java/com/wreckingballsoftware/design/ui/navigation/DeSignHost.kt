@@ -69,12 +69,16 @@ fun NavGraphBuilder.mapGraph() {
     ) {
         composable(
             route = Destinations.MapScreen,
-            arguments = listOf(navArgument("campaignId") { type = NavType.LongType })
+            arguments = listOf(
+                navArgument("campaignId") { type = NavType.LongType },
+                navArgument("signId") { type = NavType.LongType }
+            )
         ) {backStackEntry ->
             val campaignId = backStackEntry.arguments?.getLong("campaignId")
+            val signId = backStackEntry.arguments?.getLong("signId")
             campaignId?.let { id ->
                 CheckPermissions {
-                    MapScreen(id)
+                    MapScreen(campaignId = id, signId = signId ?: 0L)
                 }
             }
         }
@@ -92,7 +96,7 @@ fun NavGraphBuilder.signsGraph(actions: Actions) {
         ) { backStackEntry ->
             val campaignId = backStackEntry.arguments?.getLong("campaignId")
             campaignId?.let { id ->
-                SignsScreen(campaignId = id)
+                SignsScreen(actions = actions, campaignId = id)
             }
         }
     }

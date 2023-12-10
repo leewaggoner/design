@@ -47,7 +47,7 @@ fun AddSignMarkerBottomSheet(
     modifier: Modifier = Modifier,
 ) {
     val scope = rememberCoroutineScope{ Dispatchers.Main }
-    val sheetState = rememberModalBottomSheetState()
+    val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
 
     ModalBottomSheet(
         modifier = modifier,

@@ -12,11 +12,17 @@ import com.wreckingballsoftware.design.repos.CampaignsRepo
 import com.wreckingballsoftware.design.repos.SelectedSignId
 import com.wreckingballsoftware.design.repos.SignMarkersRepo
 import com.wreckingballsoftware.design.repos.UserRepo
+import com.wreckingballsoftware.design.ui.signs.models.SignsScreenNavigation
 import com.wreckingballsoftware.design.ui.signs.models.SignsScreenState
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.channels.BufferOverflow
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
+
+
+private const val NO_INDEX = -1
 
 class SignsViewModel(
     campaignsRepo: CampaignsRepo,
@@ -24,6 +30,10 @@ class SignsViewModel(
     private val userRepo: UserRepo,
     campaignId: Long,
 ) : ViewModel() {
+    val navigation = MutableSharedFlow<SignsScreenNavigation>(
+        extraBufferCapacity = 1,
+        onBufferOverflow = BufferOverflow.DROP_LATEST,
+    )
     var state: SignsScreenState by mutableStateOf(SignsScreenState())
     val signs: Flow<List<DBSignMarker>> = signsRepo.getMarkersForCampaign(campaignId = campaignId)
     private var campaign: DBCampaign? = null
@@ -46,6 +56,16 @@ class SignsViewModel(
         state = state.copy(selectedSignId = signId, setInitialSelection = false)
     }
 
+    fun onViewMarker(signId: Long) {
+        viewModelScope.launch(Dispatchers.Main) {
+            navigation.emit(SignsScreenNavigation.DisplaySignOnMap(signId))
+        }
+    }
+
+    fun onDeleteMarker(signId: Long) {
+
+    }
+
     fun onDoneScrolling() {
         state = state.copy(scrollToInitialIndex = null)
     }
@@ -61,7 +81,7 @@ class SignsViewModel(
             val curSignId = getInitialSignId(campaignId = curCampaign.id)
             onSignSelected(curSignId)
             val index = mapIdToIndex(id = curSignId)
-            state = state.copy(scrollToInitialIndex = if (index == -1) null else index)
+            state = state.copy(scrollToInitialIndex = if (index == NO_INDEX) null else index)
         }
     }
 
