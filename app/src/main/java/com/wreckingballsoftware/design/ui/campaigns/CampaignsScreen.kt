@@ -30,6 +30,7 @@ import com.wreckingballsoftware.design.ui.framework.FrameworkStateItem
 import com.wreckingballsoftware.design.ui.navigation.Actions
 import com.wreckingballsoftware.design.ui.theme.customTypography
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import org.koin.androidx.compose.koinViewModel
 
@@ -83,7 +84,7 @@ fun CampaignsScreenContent(
     onDoneScrolling: () -> Unit,
 ) {
     val listState = rememberLazyListState()
-    val scope = rememberCoroutineScope()
+    val scope = rememberCoroutineScope { Dispatchers.Main }
 
     //on startup, scroll to the initially selected card
     state.scrollToInitialIndex?.let { index ->

@@ -56,10 +56,7 @@ class MapViewModel(
                 override fun onLocationResult(result: LocationResult) {
                     result.locations.forEach { location ->
                         state = state.copy(
-                            myLatLng = LatLng(
-                                location.latitude,
-                                location.longitude
-                            ),
+                            myLatLng = LatLng(location.latitude, location.longitude),
                         )
                     }
                 }
@@ -113,13 +110,15 @@ class MapViewModel(
     @Composable fun DeSignMap(
         campaignName: String,
         markers: List<DBSignMarker>,
-        latLng: LatLng,
+        mapLatLng: LatLng,
+        myLatLng: LatLng,
         setMapFocus: (LatLng) -> Unit,
     ) {
         deSignMap.Map(
             campaignName = campaignName,
             markers = markers,
-            latLng = latLng,
+            mapLatLng = mapLatLng,
+            myLatLng = myLatLng,
             setMapFocus = setMapFocus,
         )
     }

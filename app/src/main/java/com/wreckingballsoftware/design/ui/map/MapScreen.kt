@@ -41,13 +41,13 @@ fun MapScreen(
         viewModel.DeSignMap(
             campaignName = campaignWithMarkers.campaign.name,
             markers = campaignWithMarkers.markers,
-            latLng = viewModel.state.mapLatLng,
-            setMapFocus = viewModel::setMapFocus
+            mapLatLng = viewModel.state.mapLatLng,
+            myLatLng = viewModel.state.myLatLng,
+            setMapFocus = viewModel::setMapFocus,
         )
     }
 
     if (MapViewModel.showAddSignBottomSheet) {
-        viewModel.setMapFocus(viewModel.state.myLatLng)
         AddSignMarkerBottomSheet(
             state = viewModel.state,
             campaignName = viewModel.getCurrentCampaignName(),
@@ -67,12 +67,12 @@ fun MapScreen(
 
 @Composable
 fun getMapFrameworkStateItem(userRepo: UserRepo): FrameworkStateItem.MapFrameworkStateItem {
-    val scope = rememberCoroutineScope()
+    val scope = rememberCoroutineScope { Dispatchers.Main }
     return FrameworkStateItem.MapFrameworkStateItem() {
         DeSignFab(
             modifier = Modifier.padding(end = MaterialTheme.dimensions.MapZoomOffset)
         ) {
-            scope.launch(Dispatchers.Main) {
+            scope.launch {
                 if (userRepo.getSelectedCampaignId() == INVALID_CAMPAIGN_ID) {
                     MapViewModel.showAddCampaignMessage()
                 } else {

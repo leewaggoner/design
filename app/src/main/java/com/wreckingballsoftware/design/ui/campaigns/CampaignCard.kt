@@ -38,6 +38,7 @@ import com.wreckingballsoftware.design.ui.theme.AppGold
 import com.wreckingballsoftware.design.ui.theme.customColorsPalette
 import com.wreckingballsoftware.design.ui.theme.customTypography
 import com.wreckingballsoftware.design.ui.theme.dimensions
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalFoundationApi::class)
@@ -49,7 +50,7 @@ fun CampaignCard(
     onSelectCard: (Long) -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    val scope = rememberCoroutineScope()
+    val scope = rememberCoroutineScope { Dispatchers.Main }
     val requester = remember {
         BringIntoViewRequester()
     }

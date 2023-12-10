@@ -12,7 +12,6 @@ import com.google.android.gms.location.LocationCallback
 import com.google.android.gms.location.LocationRequest
 import com.google.android.gms.location.Priority
 import com.google.android.gms.maps.CameraUpdateFactory
-import com.google.android.gms.maps.CameraUpdateFactory.newLatLngZoom
 import com.google.android.gms.maps.model.CameraPosition
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.LatLngBounds
@@ -33,33 +32,25 @@ class DeSignMap(
     @Composable
     fun Map(
         campaignName: String,
-        latLng: LatLng,
+        mapLatLng: LatLng,
+        myLatLng: LatLng,
         markers: List<DBSignMarker>,
         setMapFocus: (LatLng) -> Unit,
     ) {
         val cameraPositionState = rememberCameraPositionState {
-            position = CameraPosition.fromLatLngZoom(latLng, 15f)
-        }
-        LaunchedEffect(key1 = latLng) {
-            cameraPositionState.animate(newLatLngZoom(latLng, 15f))
+            position = CameraPosition.fromLatLngZoom(myLatLng, 15f)
         }
 
         val markerStates = mutableListOf<DesignMarker>()
         val builder = LatLngBounds.Builder()
-        if (markers.isNotEmpty()) {
-            markers.forEach { marker ->
-                markerStates.add(
-                    DesignMarker(
-                        rememberMarkerState(position = LatLng(marker.lat, marker.lon)),
-                        marker.notes
-                    )
+        markers.forEach { marker ->
+            markerStates.add(
+                DesignMarker(
+                    rememberMarkerState(position = LatLng(marker.lat, marker.lon)),
+                    marker.notes
                 )
-                builder.include(LatLng(marker.lat, marker.lon))
-            }
-            val bounds = builder.build()
-            LaunchedEffect(key1 = markerStates) {
-                cameraPositionState.move(CameraUpdateFactory.newLatLngBounds(bounds, 64))
-            }
+            )
+            builder.include(LatLng(marker.lat, marker.lon))
         }
 
         GoogleMap(
@@ -81,6 +72,20 @@ class DeSignMap(
                         false
                     },
                 )
+            }
+        }
+
+        LaunchedEffect(key1 = mapLatLng) {
+            cameraPositionState.animate(CameraUpdateFactory.newLatLngZoom(mapLatLng, 15f))
+        }
+        if (markers.isNotEmpty()) {
+            LaunchedEffect(key1 = markerStates) {
+                val bounds = builder.build()
+                cameraPositionState.move(CameraUpdateFactory.newLatLngBounds(bounds, 64))
+            }
+        } else {
+            LaunchedEffect(key1 = myLatLng) {
+                cameraPositionState.move(CameraUpdateFactory.newLatLngZoom(myLatLng, 15f))
             }
         }
     }

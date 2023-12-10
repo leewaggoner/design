@@ -32,6 +32,7 @@ import com.wreckingballsoftware.design.ui.theme.AppGold
 import com.wreckingballsoftware.design.ui.theme.customColorsPalette
 import com.wreckingballsoftware.design.ui.theme.customTypography
 import com.wreckingballsoftware.design.ui.theme.dimensions
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalFoundationApi::class)
@@ -42,7 +43,7 @@ fun SignCard(
     sign: DBSignMarker,
     onSignSelected: (Long) -> Unit,
 ) {
-    val scope = rememberCoroutineScope()
+    val scope = rememberCoroutineScope { Dispatchers.Main }
     val bringIntoViewRequester = remember {
         BringIntoViewRequester()
     }

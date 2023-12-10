@@ -33,6 +33,7 @@ import com.wreckingballsoftware.design.ui.map.models.MapScreenState
 import com.wreckingballsoftware.design.ui.theme.customColorsPalette
 import com.wreckingballsoftware.design.ui.theme.customTypography
 import com.wreckingballsoftware.design.ui.theme.dimensions
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -45,7 +46,7 @@ fun AddSignMarkerBottomSheet(
     onDismissBottomSheet: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    val scope = rememberCoroutineScope()
+    val scope = rememberCoroutineScope{ Dispatchers.Main }
     val sheetState = rememberModalBottomSheetState()
 
     ModalBottomSheet(
@@ -157,7 +158,7 @@ fun AddSignMarkerBottomSheetPreview() {
         state = MapScreenState(),
         campaignName = "My Campaign",
         onNotesValueChanged = { },
-        onAddSignMarker = { true },
+        onAddSignMarker = { },
         onDismissBottomSheet = { },
     )
 }

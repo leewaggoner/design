@@ -25,6 +25,7 @@ import com.wreckingballsoftware.design.database.DBSignMarker
 import com.wreckingballsoftware.design.ui.signs.models.SignsScreenState
 import com.wreckingballsoftware.design.ui.theme.customTypography
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import org.koin.androidx.compose.koinViewModel
 import org.koin.core.parameter.ParametersHolder
@@ -62,7 +63,7 @@ fun SignScreenContent(
     onDoneScrolling: () -> Unit,
 ) {
     val listState = rememberLazyListState()
-    val scope = rememberCoroutineScope()
+    val scope = rememberCoroutineScope { Dispatchers.Main }
 
     //on startup, scroll to the initially selected sign
     state.scrollToInitialIndex?.let { index ->
