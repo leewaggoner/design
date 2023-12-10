@@ -16,6 +16,7 @@ import com.wreckingballsoftware.design.domain.models.CampaignWithMarkers
 import com.wreckingballsoftware.design.repos.UserRepo
 import com.wreckingballsoftware.design.ui.compose.DeSignErrorAlert
 import com.wreckingballsoftware.design.ui.compose.DeSignFab
+import com.wreckingballsoftware.design.ui.compose.DeSignMap
 import com.wreckingballsoftware.design.ui.framework.FrameworkStateItem
 import com.wreckingballsoftware.design.ui.theme.dimensions
 import kotlinx.coroutines.Dispatchers
@@ -38,7 +39,7 @@ fun MapScreen(
         modifier = Modifier
             .fillMaxSize(),
     ) {
-        viewModel.DeSignMap(
+        DeSignMap(
             campaignName = campaignWithMarkers.campaign.name,
             markers = campaignWithMarkers.markers,
             mapLatLng = viewModel.state.mapLatLng,

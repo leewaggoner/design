@@ -1,17 +1,21 @@
 package com.wreckingballsoftware.design.ui.map
 
-import androidx.compose.runtime.Composable
+import android.annotation.SuppressLint
+import android.os.Looper
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.google.android.gms.location.FusedLocationProviderClient
+import com.google.android.gms.location.Granularity
 import com.google.android.gms.location.LocationCallback
+import com.google.android.gms.location.LocationRequest
 import com.google.android.gms.location.LocationResult
+import com.google.android.gms.location.Priority
 import com.google.android.gms.maps.model.LatLng
 import com.wreckingballsoftware.design.database.DBCampaign
 import com.wreckingballsoftware.design.database.DBSignMarker
-import com.wreckingballsoftware.design.domain.DeSignMap
 import com.wreckingballsoftware.design.domain.models.CampaignWithMarkers
 import com.wreckingballsoftware.design.repos.CampaignsRepo
 import com.wreckingballsoftware.design.repos.SignMarkersRepo
@@ -26,11 +30,12 @@ import kotlinx.coroutines.launch
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 import java.time.format.FormatStyle
+import java.util.concurrent.TimeUnit
 
 class MapViewModel(
-    private val deSignMap: DeSignMap,
     private val userRepo: UserRepo,
     private val signMarkersRepo: SignMarkersRepo,
+    private val fusedLocationProviderClient: FusedLocationProviderClient,
     campaignsRepo: CampaignsRepo,
     campaignId: Long,
 ) : ViewModel() {
@@ -51,7 +56,7 @@ class MapViewModel(
     private var campaign: DBCampaign? = null
 
     init {
-        deSignMap.requestLocationUpdates(
+        requestLocationUpdates(
             locationCallback = object : LocationCallback() {
                 override fun onLocationResult(result: LocationResult) {
                     result.locations.forEach { location ->
@@ -107,24 +112,24 @@ class MapViewModel(
         showAddCampaignMessage = false
     }
 
-    @Composable fun DeSignMap(
-        campaignName: String,
-        markers: List<DBSignMarker>,
-        mapLatLng: LatLng,
-        myLatLng: LatLng,
-        setMapFocus: (LatLng) -> Unit,
-    ) {
-        deSignMap.Map(
-            campaignName = campaignName,
-            markers = markers,
-            mapLatLng = mapLatLng,
-            myLatLng = myLatLng,
-            setMapFocus = setMapFocus,
-        )
-    }
-
     fun setMapFocus(latLng: LatLng) {
         state = state.copy(mapLatLng = latLng)
+    }
+
+    @SuppressLint("MissingPermission")
+    fun requestLocationUpdates(locationCallback: LocationCallback) {
+        fusedLocationProviderClient.requestLocationUpdates(
+            LocationRequest.Builder(
+                Priority.PRIORITY_HIGH_ACCURACY,
+                TimeUnit.SECONDS.toMillis(30)
+            ).apply {
+                setMinUpdateDistanceMeters(1f)
+                setGranularity(Granularity.GRANULARITY_PERMISSION_LEVEL)
+                setWaitForAccurateLocation(true)
+            }.build(),
+            locationCallback,
+            Looper.getMainLooper(),
+        )
     }
 
     companion object {

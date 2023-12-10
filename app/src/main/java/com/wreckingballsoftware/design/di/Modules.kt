@@ -10,7 +10,6 @@ import androidx.datastore.preferences.preferencesDataStoreFile
 import androidx.room.Room
 import com.google.android.gms.location.LocationServices
 import com.wreckingballsoftware.design.database.DeSignDatabase
-import com.wreckingballsoftware.design.domain.DeSignMap
 import com.wreckingballsoftware.design.domain.GoogleAuth
 import com.wreckingballsoftware.design.repos.CampaignsRepo
 import com.wreckingballsoftware.design.repos.SignMarkersRepo
@@ -55,10 +54,10 @@ val appModule = module {
 
     viewModel {params ->
         MapViewModel(
-            deSignMap = get(),
             userRepo = get(),
-            campaignsRepo = get(),
             signMarkersRepo = get(),
+            fusedLocationProviderClient = get(),
+            campaignsRepo = get(),
             campaignId = params.get(),
         )
     }
@@ -87,12 +86,6 @@ val appModule = module {
     single {
         SignMarkersRepo(
             signMarkersDao = get()
-        )
-    }
-
-    single {
-        DeSignMap(
-            fusedLocationProviderClient = get(),
         )
     }
 
