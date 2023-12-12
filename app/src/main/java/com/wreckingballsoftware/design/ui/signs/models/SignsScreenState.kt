@@ -7,4 +7,5 @@ data class SignsScreenState(
     val setInitialSelection: Boolean = false,
     val scrollToInitialIndex: Int? = null,
     val selectedSignId: Long = INVALID_SIGN_MARKER_ID,
+    val showConfirmDialog: Boolean = false,
 )

@@ -26,7 +26,7 @@ private const val NO_INDEX = -1
 
 class SignsViewModel(
     campaignsRepo: CampaignsRepo,
-    signsRepo: SignMarkersRepo,
+    private val signsRepo: SignMarkersRepo,
     private val userRepo: UserRepo,
     campaignId: Long,
 ) : ViewModel() {
@@ -37,6 +37,7 @@ class SignsViewModel(
     var state: SignsScreenState by mutableStateOf(SignsScreenState())
     val signs: Flow<List<DBSignMarker>> = signsRepo.getMarkersForCampaign(campaignId = campaignId)
     private var campaign: DBCampaign? = null
+    private var markerToDelete = INVALID_SIGN_MARKER_ID
 
     init {
         viewModelScope.launch(Dispatchers.Main) {
@@ -62,8 +63,22 @@ class SignsViewModel(
         }
     }
 
-    fun onDeleteMarker(signId: Long) {
+    fun onDeleteMarker() {
+        onDismissDialog()
+        if (markerToDelete != INVALID_SIGN_MARKER_ID) {
+            viewModelScope.launch(Dispatchers.Main) {
+                signsRepo.deleteSignMarker(DBSignMarker(id = markerToDelete))
+            }
+        }
+    }
 
+    fun onConfirmDelete(markerId: Long) {
+        markerToDelete = markerId
+        state = state.copy(showConfirmDialog = true)
+    }
+
+    fun onDismissDialog() {
+        state = state.copy(showConfirmDialog = false)
     }
 
     fun onDoneScrolling() {

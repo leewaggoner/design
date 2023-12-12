@@ -49,7 +49,7 @@ fun SignCard(
     sign: DBSignMarker,
     onSignSelected: (Long) -> Unit,
     onViewMarker: (Long) -> Unit,
-    onDeleteMarker: (Long) -> Unit,
+    onConfirmDelete: (Long) -> Unit,
 ) {
     val scope = rememberCoroutineScope { Dispatchers.Main }
     val bringIntoViewRequester = remember {
@@ -127,7 +127,7 @@ fun SignCard(
                     Button(
                         modifier = Modifier.width(MaterialTheme.dimensions.SmallButtonWidth),
                         onClick = {
-                            onDeleteMarker(sign.id)
+                            onConfirmDelete(sign.id)
                         },
                         colors = ButtonDefaults.buttonColors(
                             containerColor = DangerRed,
@@ -166,6 +166,6 @@ fun SignCardPreview() {
         ),
         onSignSelected = { },
         onViewMarker = { },
-        onDeleteMarker = { },
+        onConfirmDelete = { },
     )
 }

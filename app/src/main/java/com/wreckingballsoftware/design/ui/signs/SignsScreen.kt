@@ -23,6 +23,7 @@ import androidx.compose.ui.unit.toIntRect
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.wreckingballsoftware.design.R
 import com.wreckingballsoftware.design.database.DBSignMarker
+import com.wreckingballsoftware.design.ui.compose.DeSignAlert
 import com.wreckingballsoftware.design.ui.navigation.Actions
 import com.wreckingballsoftware.design.ui.signs.models.SignsScreenNavigation
 import com.wreckingballsoftware.design.ui.signs.models.SignsScreenState
@@ -67,6 +68,8 @@ fun SignsScreen(
         onSignSelected = viewModel::onSignSelected,
         onDoneScrolling = viewModel::onDoneScrolling,
         onViewMarker = viewModel::onViewMarker,
+        onDismissDialog = viewModel::onDismissDialog,
+        onConfirmDelete = viewModel::onConfirmDelete,
         onDeleteMarker = viewModel::onDeleteMarker,
     )
 }
@@ -78,7 +81,9 @@ fun SignScreenContent(
     onSignSelected: (Long) -> Unit,
     onDoneScrolling: () -> Unit,
     onViewMarker: (Long) -> Unit,
-    onDeleteMarker: (Long) -> Unit,
+    onDismissDialog: () -> Unit,
+    onConfirmDelete: (Long) -> Unit,
+    onDeleteMarker: () -> Unit,
 ) {
     val listState = rememberLazyListState()
     val scope = rememberCoroutineScope { Dispatchers.Main }
@@ -120,10 +125,20 @@ fun SignScreenContent(
                     sign = sign,
                     onSignSelected = onSignSelected,
                     onViewMarker = onViewMarker,
-                    onDeleteMarker = onDeleteMarker,
+                    onConfirmDelete = onConfirmDelete,
                 )
             }
         }
+    }
+
+    if (state.showConfirmDialog) {
+        DeSignAlert(
+            title = stringResource(id = R.string.confirm_delete_title),
+            message = stringResource(id = R.string.confirm_delete_message),
+            onDismissRequest = onDismissDialog,
+            onConfirmAlert = onDeleteMarker,
+            onDismissAlert = onDismissDialog,
+        )
     }
 }
 
@@ -158,6 +173,8 @@ fun SignScreenContentPreview() {
         onSignSelected = { },
         onDoneScrolling = { },
         onViewMarker = { },
+        onDismissDialog = { },
+        onConfirmDelete = { },
         onDeleteMarker = { },
     )
 }
