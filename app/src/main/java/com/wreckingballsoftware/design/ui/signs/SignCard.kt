@@ -34,6 +34,7 @@ import com.wreckingballsoftware.design.R
 import com.wreckingballsoftware.design.database.DBSignMarker
 import com.wreckingballsoftware.design.database.INVALID_SIGN_MARKER_ID
 import com.wreckingballsoftware.design.ui.theme.AppGold
+import com.wreckingballsoftware.design.ui.theme.DangerRed
 import com.wreckingballsoftware.design.ui.theme.customColorsPalette
 import com.wreckingballsoftware.design.ui.theme.customTypography
 import com.wreckingballsoftware.design.ui.theme.dimensions
@@ -129,7 +130,7 @@ fun SignCard(
                             onDeleteMarker(sign.id)
                         },
                         colors = ButtonDefaults.buttonColors(
-                            containerColor = MaterialTheme.colorScheme.secondary,
+                            containerColor = DangerRed,
                         ),
                     ) {
                         Text(text = stringResource(id = R.string.delete))

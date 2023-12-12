@@ -130,6 +130,10 @@ class MapViewModel(
         state = state.copy(mapLatLng = latLng)
     }
 
+    fun onDeleteMarker(markerId: Long) {
+
+    }
+
     @SuppressLint("MissingPermission")
     fun requestLocationUpdates(locationCallback: LocationCallback) {
         fusedLocationProviderClient.requestLocationUpdates(

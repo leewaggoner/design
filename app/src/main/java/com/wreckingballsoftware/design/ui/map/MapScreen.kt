@@ -47,6 +47,7 @@ fun MapScreen(
             myLatLng = viewModel.state.myLatLng,
             setMapFocus = viewModel::setMapFocus,
             onMapLoaded = viewModel::focusOnChosenSign,
+            onDeleteMarker = viewModel::onDeleteMarker,
         )
     }
 

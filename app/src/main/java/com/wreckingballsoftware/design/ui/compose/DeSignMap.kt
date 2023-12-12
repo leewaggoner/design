@@ -10,7 +10,7 @@ import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.LatLngBounds
 import com.google.maps.android.compose.GoogleMap
 import com.google.maps.android.compose.MapProperties
-import com.google.maps.android.compose.Marker
+import com.google.maps.android.compose.MarkerInfoWindow
 import com.google.maps.android.compose.rememberCameraPositionState
 import com.google.maps.android.compose.rememberMarkerState
 import com.wreckingballsoftware.design.database.DBSignMarker
@@ -24,6 +24,7 @@ fun DeSignMap(
     markers: List<DBSignMarker>,
     setMapFocus: (LatLng) -> Unit,
     onMapLoaded: () -> Unit,
+    onDeleteMarker: (Long) -> Unit,
 ) {
     val cameraPositionState = rememberCameraPositionState {
         position = CameraPosition.fromLatLngZoom(myLatLng, 15f)
@@ -52,17 +53,22 @@ fun DeSignMap(
         }
     ) {
         markerStates.forEach { marker ->
-            Marker(
+            MarkerInfoWindow(
                 tag = marker.id,
                 state = marker.state,
-                title = campaignName,
-                snippet = marker.snippet,
                 onClick = {
                     marker.state.showInfoWindow()
                     setMapFocus(marker.state.position)
                     false
                 },
-            )
+            ) {
+                MarkerInfoView(
+                    title = campaignName,
+                    snippet = marker.snippet
+                ) {
+                    onDeleteMarker(marker.id)
+                }
+            }
         }
     }
 

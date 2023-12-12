@@ -42,6 +42,19 @@ data class CustomTypeStyles(
         color = Color.LightGray,
         lineHeight = 28.sp,
     ),
+    val InfoTitle: TextStyle = TextStyle(
+        fontFamily = FontFamily.Default,
+        fontWeight = FontWeight.SemiBold,
+        fontSize = 16.sp,
+        lineHeight = 20.sp,
+    ),
+    val InfoSnippet: TextStyle = TextStyle(
+        fontFamily = FontFamily.Default,
+        fontWeight = FontWeight.Normal,
+        fontSize = 14.sp,
+        color = Color.DarkGray,
+        lineHeight = 18.sp,
+    ),
 )
 
 val CustomTypography = CustomTypeStyles()
