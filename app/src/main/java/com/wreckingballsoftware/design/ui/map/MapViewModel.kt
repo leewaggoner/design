@@ -26,7 +26,6 @@ import com.wreckingballsoftware.design.ui.campaigns.sanitize
 import com.wreckingballsoftware.design.ui.map.models.MapScreenState
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import java.time.LocalDateTime
@@ -37,10 +36,11 @@ import java.util.concurrent.TimeUnit
 class MapViewModel(
     private val userRepo: UserRepo,
     private val signMarkersRepo: SignMarkersRepo,
+    private val signsRepo: SignMarkersRepo,
     private val fusedLocationProviderClient: FusedLocationProviderClient,
     campaignsRepo: CampaignsRepo,
     campaignId: Long,
-    private val signId: Long,
+    signId: Long,
 ) : ViewModel() {
     var state: MapScreenState by mutableStateOf(MapScreenState())
     var campaignWithMarkers: Flow<CampaignWithMarkers> =
@@ -59,6 +59,9 @@ class MapViewModel(
     private var campaign: DBCampaign? = null
 
     init {
+        if (signId != INVALID_SIGN_MARKER_ID) {
+            state = state.copy(focusMarkerId = signId)
+        }
         requestLocationUpdates(
             locationCallback = object : LocationCallback() {
                 override fun onLocationResult(result: LocationResult) {
@@ -115,23 +118,16 @@ class MapViewModel(
         showAddCampaignMessage = false
     }
 
-    fun focusOnChosenSign() {
-        viewModelScope.launch(Dispatchers.Main) {
-            if (signId != INVALID_SIGN_MARKER_ID) {
-                val marker = campaignWithMarkers.first().markers.first { marker ->
-                    marker.id == signId
-                }
-                setMapFocus(LatLng(marker.lat, marker.lon))
-            }
-        }
-    }
-
     fun setMapFocus(latLng: LatLng) {
         state = state.copy(mapLatLng = latLng)
     }
 
     fun onDeleteMarker(markerId: Long) {
-
+        if (markerId != INVALID_SIGN_MARKER_ID) {
+            viewModelScope.launch(Dispatchers.Main) {
+                signsRepo.deleteSignMarker(DBSignMarker(id = markerId))
+            }
+        }
     }
 
     @SuppressLint("MissingPermission")

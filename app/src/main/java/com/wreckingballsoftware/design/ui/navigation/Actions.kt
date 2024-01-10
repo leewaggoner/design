@@ -2,6 +2,7 @@ package com.wreckingballsoftware.design.ui.navigation
 
 import androidx.lifecycle.LifecycleCoroutineScope
 import androidx.navigation.NavController
+import com.wreckingballsoftware.design.database.INVALID_SIGN_MARKER_ID
 import com.wreckingballsoftware.design.repos.UserRepo
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -32,7 +33,7 @@ class Actions(navController: NavController, scope: LifecycleCoroutineScope, user
             val campaignId = userRepo.getSelectedCampaignId()
             val destination = Destinations.MapScreen.replace(
                 oldValue = "{signId}",
-                newValue = "0"
+                newValue = INVALID_SIGN_MARKER_ID.toString()
             )
             navController.navigate(
                 destination.replace(
@@ -82,7 +83,7 @@ class Actions(navController: NavController, scope: LifecycleCoroutineScope, user
             val campaignId = userRepo.getSelectedCampaignId()
             val destination = Destinations.MapScreen.replace(
                 oldValue = "{signId}",
-                newValue = signId?.toString() ?: "0")
+                newValue = signId?.toString() ?: INVALID_SIGN_MARKER_ID.toString())
             navController.navigate(
                 destination.replace(
                     oldValue = "{campaignId}",

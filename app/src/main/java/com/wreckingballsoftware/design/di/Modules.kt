@@ -56,6 +56,7 @@ val appModule = module {
         MapViewModel(
             userRepo = get(),
             signMarkersRepo = get(),
+            signsRepo = get(),
             fusedLocationProviderClient = get(),
             campaignsRepo = get(),
             campaignId = params[0],

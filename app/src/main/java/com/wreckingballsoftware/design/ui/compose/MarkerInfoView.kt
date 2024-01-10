@@ -28,7 +28,6 @@ import com.wreckingballsoftware.design.ui.theme.dimensions
 fun MarkerInfoView(
     title: String,
     snippet: String,
-    onDeleteMarker: () -> Unit,
 ) {
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -51,7 +50,7 @@ fun MarkerInfoView(
             style = MaterialTheme.customTypography.InfoSnippet
         )
         Button(
-            onClick = onDeleteMarker,
+            onClick = { },
             colors = ButtonDefaults.buttonColors(
                 containerColor = DangerRed,
             ),
@@ -69,6 +68,5 @@ fun MarkerInfoViewPreview() {
     MarkerInfoView(
         title = "Campaign 1",
         snippet = "Marker on Main Street",
-        onDeleteMarker = { }
     )
 }

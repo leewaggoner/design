@@ -45,8 +45,8 @@ fun MapScreen(
             markers = campaignWithMarkers.markers,
             mapLatLng = viewModel.state.mapLatLng,
             myLatLng = viewModel.state.myLatLng,
+            focusMarkerId = viewModel.state.focusMarkerId,
             setMapFocus = viewModel::setMapFocus,
-            onMapLoaded = viewModel::focusOnChosenSign,
             onDeleteMarker = viewModel::onDeleteMarker,
         )
     }

@@ -14,6 +14,7 @@ import com.google.maps.android.compose.MarkerInfoWindow
 import com.google.maps.android.compose.rememberCameraPositionState
 import com.google.maps.android.compose.rememberMarkerState
 import com.wreckingballsoftware.design.database.DBSignMarker
+import com.wreckingballsoftware.design.database.INVALID_SIGN_MARKER_ID
 import com.wreckingballsoftware.design.ui.map.models.DesignMarker
 
 @Composable
@@ -22,8 +23,8 @@ fun DeSignMap(
     mapLatLng: LatLng,
     myLatLng: LatLng,
     markers: List<DBSignMarker>,
+    focusMarkerId: Long,
     setMapFocus: (LatLng) -> Unit,
-    onMapLoaded: () -> Unit,
     onDeleteMarker: (Long) -> Unit,
 ) {
     val cameraPositionState = rememberCameraPositionState {
@@ -41,6 +42,14 @@ fun DeSignMap(
         )
     }
 
+    if (focusMarkerId != INVALID_SIGN_MARKER_ID) {
+        //set focus on the given marker
+        val marker = markerStates.firstOrNull { it.id == focusMarkerId }
+        marker?.let {state ->
+            setMapFocus(state.state.position)
+        }
+    }
+
     GoogleMap(
         modifier = Modifier
             .fillMaxSize(),
@@ -48,9 +57,6 @@ fun DeSignMap(
         properties = MapProperties(
             isMyLocationEnabled = true,
         ),
-        onMapLoaded = {
-            onMapLoaded()
-        }
     ) {
         markerStates.forEach { marker ->
             MarkerInfoWindow(
@@ -61,20 +67,21 @@ fun DeSignMap(
                     setMapFocus(marker.state.position)
                     false
                 },
+                onInfoWindowClick = {
+                    //Google displays the custom marker view as a snapshot - need to handle the
+                    //delete button here rather than in MarkerInfoView. Not optimal, but it's ok
+                    //for now.
+                    onDeleteMarker(marker.id)
+                }
             ) {
                 MarkerInfoView(
                     title = campaignName,
                     snippet = marker.snippet
-                ) {
-                    onDeleteMarker(marker.id)
-                }
+                )
             }
         }
     }
 
-    LaunchedEffect(key1 = mapLatLng) {
-        cameraPositionState.animate(CameraUpdateFactory.newLatLngZoom(mapLatLng, 15f))
-    }
     if (markers.isNotEmpty()) {
         LaunchedEffect(key1 = markerStates) {
             val bounds = builder.build()
@@ -84,6 +91,9 @@ fun DeSignMap(
         LaunchedEffect(key1 = myLatLng) {
             cameraPositionState.move(CameraUpdateFactory.newLatLngZoom(myLatLng, 15f))
         }
+    }
+    LaunchedEffect(key1 = mapLatLng) {
+        cameraPositionState.move(CameraUpdateFactory.newLatLngZoom(mapLatLng, 15f))
     }
 }
 
