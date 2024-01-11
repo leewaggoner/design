@@ -68,6 +68,8 @@ class SignsViewModel(
         if (markerToDelete != INVALID_SIGN_MARKER_ID) {
             viewModelScope.launch(Dispatchers.Main) {
                 signsRepo.deleteSignMarker(DBSignMarker(id = markerToDelete))
+                markerToDelete = INVALID_SIGN_MARKER_ID
+                state = state.copy(showConfirmDialog = false)
             }
         }
     }

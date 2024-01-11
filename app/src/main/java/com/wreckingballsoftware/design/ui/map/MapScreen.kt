@@ -14,6 +14,7 @@ import com.wreckingballsoftware.design.R
 import com.wreckingballsoftware.design.database.INVALID_CAMPAIGN_ID
 import com.wreckingballsoftware.design.domain.models.CampaignWithMarkers
 import com.wreckingballsoftware.design.repos.UserRepo
+import com.wreckingballsoftware.design.ui.compose.DeSignAlert
 import com.wreckingballsoftware.design.ui.compose.DeSignErrorAlert
 import com.wreckingballsoftware.design.ui.compose.DeSignFab
 import com.wreckingballsoftware.design.ui.compose.DeSignMap
@@ -47,7 +48,17 @@ fun MapScreen(
             myLatLng = viewModel.state.myLatLng,
             focusMarkerId = viewModel.state.focusMarkerId,
             setMapFocus = viewModel::setMapFocus,
-            onDeleteMarker = viewModel::onDeleteMarker,
+            onDeleteMarker = viewModel::onConfirmDelete,
+        )
+    }
+
+    if (viewModel.state.showConfirmDialog) {
+        DeSignAlert(
+            title = stringResource(id = R.string.confirm_delete_title),
+            message = stringResource(id = R.string.confirm_delete_message),
+            onDismissRequest = viewModel::onDismissDialog,
+            onConfirmAlert = viewModel::onDeleteMarker,
+            onDismissAlert = viewModel::onDismissDialog,
         )
     }
 

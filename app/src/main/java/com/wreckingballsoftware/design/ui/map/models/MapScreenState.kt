@@ -11,4 +11,5 @@ data class MapScreenState(
     val signMarkerNotes: String = "",
     val notesCharactersUsed: Int = 0,
     val focusMarkerId: Long = INVALID_SIGN_MARKER_ID,
+    val showConfirmDialog: Boolean = false,
 )

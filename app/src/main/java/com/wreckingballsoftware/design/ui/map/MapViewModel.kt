@@ -57,6 +57,7 @@ class MapViewModel(
             }
         }
     private var campaign: DBCampaign? = null
+    private var markerToDelete = INVALID_SIGN_MARKER_ID
 
     init {
         if (signId != INVALID_SIGN_MARKER_ID) {
@@ -122,14 +123,6 @@ class MapViewModel(
         state = state.copy(mapLatLng = latLng)
     }
 
-    fun onDeleteMarker(markerId: Long) {
-        if (markerId != INVALID_SIGN_MARKER_ID) {
-            viewModelScope.launch(Dispatchers.Main) {
-                signsRepo.deleteSignMarker(DBSignMarker(id = markerId))
-            }
-        }
-    }
-
     @SuppressLint("MissingPermission")
     fun requestLocationUpdates(locationCallback: LocationCallback) {
         fusedLocationProviderClient.requestLocationUpdates(
@@ -144,6 +137,25 @@ class MapViewModel(
             locationCallback,
             Looper.getMainLooper(),
         )
+    }
+
+    fun onConfirmDelete(markerId: Long) {
+        markerToDelete = markerId
+        state = state.copy(showConfirmDialog = true)
+    }
+
+    fun onDismissDialog() {
+        state = state.copy(showConfirmDialog = false)
+    }
+
+    fun onDeleteMarker() {
+        if (markerToDelete != INVALID_SIGN_MARKER_ID) {
+            viewModelScope.launch(Dispatchers.Main) {
+                signsRepo.deleteSignMarker(DBSignMarker(id = markerToDelete))
+                markerToDelete = INVALID_SIGN_MARKER_ID
+                state = state.copy(showConfirmDialog = false)
+            }
+        }
     }
 
     companion object {
