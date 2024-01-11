@@ -1,6 +1,7 @@
 package com.wreckingballsoftware.design.di
 
 import android.content.Context
+import android.net.ConnectivityManager
 import androidx.datastore.core.DataStore
 import androidx.datastore.core.handlers.ReplaceFileCorruptionHandler
 import androidx.datastore.preferences.core.PreferenceDataStoreFactory
@@ -20,6 +21,7 @@ import com.wreckingballsoftware.design.ui.login.AuthViewModel
 import com.wreckingballsoftware.design.ui.map.MapViewModel
 import com.wreckingballsoftware.design.ui.signs.SignsViewModel
 import com.wreckingballsoftware.design.utils.DataStoreWrapper
+import com.wreckingballsoftware.design.utils.NetworkConnection
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
@@ -122,6 +124,10 @@ val appModule = module {
             .fallbackToDestructiveMigration()
             .build()
     }
+
+    single { params ->
+        NetworkConnection(getConnectivityManager(androidContext()), params[0])
+    }
 }
 
 private fun getDataStore(context: Context) : DataStore<Preferences> =
@@ -130,4 +136,7 @@ private fun getDataStore(context: Context) : DataStore<Preferences> =
         produceFile = { context.preferencesDataStoreFile(DATA_STORE_NAME) },
         scope = CoroutineScope(Dispatchers.IO + SupervisorJob())
     )
+
+private fun getConnectivityManager(context: Context): ConnectivityManager =
+    context.getSystemService(ConnectivityManager::class.java)
 

@@ -37,4 +37,5 @@
     <string name="add_campaign">Add a Campaign</string>
     <string name="add_sign">Add a Sign From the Map Screen</string>
     <string name="view">View</string>
+    <string name="network_warning">No Internet connection detected!Please check your connection.</string>
 </resources>

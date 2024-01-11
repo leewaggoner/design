@@ -1,5 +1,6 @@
 package com.wreckingballsoftware.design.ui.framework
 
+import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -9,6 +10,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.lifecycle.LifecycleCoroutineScope
 import androidx.navigation.compose.rememberNavController
@@ -27,7 +29,7 @@ import com.wreckingballsoftware.design.ui.theme.customColorsPalette
  * The app container, which includes the top bar and the bottom navigation bar
  */
 @Composable
-fun Framework(scope: LifecycleCoroutineScope, userRepo: UserRepo) {
+fun Framework(scope: LifecycleCoroutineScope, userRepo: UserRepo, connectionState: Boolean) {
     val navController = rememberNavController()
     val actions = remember(navController) { Actions(navController, scope, userRepo) }
     val frameworkState = rememberFrameworkState(
@@ -59,7 +61,13 @@ fun Framework(scope: LifecycleCoroutineScope, userRepo: UserRepo) {
                 )
             }
         },
-        floatingActionButton = frameworkState.fabAction ?: { }
+        floatingActionButton = frameworkState.fabAction ?: { },
+        snackbarHost = {
+            if (!connectionState) {
+                Toast.makeText(LocalContext.current, R.string.network_warning, Toast.LENGTH_SHORT)
+                    .show()
+            }
+        },
     ) { innerPadding ->
         Column(
             modifier = Modifier
