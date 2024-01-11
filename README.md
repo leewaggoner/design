@@ -3,10 +3,6 @@ App to show where signs are placed so they can be tracked and removed later.
 
 I am calling MVP done pending testing.
 
-Things found in testing:
-* Need to put up confirmation message before deleting sign markers from map.
-* Need to detect when there is no internet connection and warn users that the app requires it.
-
 ## MVP
 
 ### Login
